@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyStore</string>
+    <string name="app_name">Firebase App</string>
     <string name="facebook_app_id">352301278607654</string>
     <string name="fb_login_protocol_scheme">fb352301278607654</string>
     <string name="input_email_register">Nhập Email Đăng Ký</string>

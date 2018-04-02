@@ -7,6 +7,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.listener.RegisterListener;
@@ -71,12 +73,14 @@ public class RegisterActivity extends BaseActivity {
                     builder.setIcon(R.drawable.my_logo);
                     builder.setMessage(getResources().getString(R.string.verifiation));
                     builder.create().show();
+                    LogUtils.d("Register success");
                 }
 
                 @Override
                 public void registerFailure(String message) {
                     hideProgressDialog();
                     Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+                    LogUtils.d("Register Failure");
                 }
             });
         }
