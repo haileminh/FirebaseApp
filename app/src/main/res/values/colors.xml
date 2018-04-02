@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#D81B60</color>
+    <color name="colorPrimaryDark">#AD1457</color>
+    <!--<color name="colorAccent">#E91E63</color>-->
+    <color name="colorAccent">#E91E63</color>
+    <color name="white_smoke">#F7F7F7</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="fb_backgound">#3b5998</color>
+    <color name="gg_backgound">#d34836</color>
+    <color name="home_color">#D81B60</color>
+    <color name="com_facebook_blue">#3B5998</color>
+    <color name="background_home">#1845a6</color>
+
 </resources>
