@@ -15,10 +15,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -44,6 +47,8 @@ import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.listener.LoginListener;
 import net.hailm.firebaseapp.service.LoginService;
 import net.hailm.firebaseapp.utils.Utils;
+
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -105,8 +110,6 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         mAuth.signOut();
         mLoginService = new LoginService();
         mCallbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().logOut();
 
         mSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -172,31 +175,48 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         btnLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String tokenID = loginResult.getAccessToken().getToken();
-                AuthCredential credential = FacebookAuthProvider.getCredential(tokenID);
-                mAuth.signInWithCredential(credential)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    LogUtils.d("Login facebook success...");
-                                } else {
-                                    LogUtils.d("Login facebook failure...");
-                                }
-                            }
-                        });
+//                String tokenID = loginResult.getAccessToken().getToken();
+//                AuthCredential credential = FacebookAuthProvider.getCredential(tokenID);
+//                mAuth.signInWithCredential(credential)
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if (task.isSuccessful()) {
+//                                    LogUtils.d("Login facebook success...");
+//                                } else {
+//                                    LogUtils.d("Login facebook failure...");
+//                                }
+//                            }
+//                        });
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+                result();
             }
 
             @Override
             public void onCancel() {
-
+                LogUtils.d("Login facebook cancel...");
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                LogUtils.d("Login facebook error...");
             }
         });
+    }
+
+    private void result() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        LogUtils.d("JSON", response.getJSONObject().toString());
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "name, email, first_name");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
     /**
@@ -252,12 +272,17 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(this);
+        LoginManager.getInstance().logOut();
+        if (mAuth != null) {
+            mAuth.addAuthStateListener(this);
+        }
     }
 
     @Override
     protected void onStop() {
-        mAuth.removeAuthStateListener(this);
+        if (mAuth != null) {
+            mAuth.removeAuthStateListener(this);
+        }
         super.onStop();
     }
 
