@@ -1,5 +1,6 @@
 package net.hailm.firebaseapp.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -50,8 +51,10 @@ public class RegisterActivity extends BaseActivity {
                 registerAccountEmail();
                 break;
             case R.id.btn_back_login:
+                finish();
                 break;
             case R.id.btn_reset_password:
+                startActivity(new Intent(this, ResetPassActivity.class));
                 break;
             default:
                 break;

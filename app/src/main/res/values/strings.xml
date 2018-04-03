@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Firebase App</string>
-    <string name="facebook_app_id">352301278607654</string>
-    <string name="fb_login_protocol_scheme">fb352301278607654</string>
+    <string name="facebook_app_id">191550791625017</string>
+    <string name="fb_login_protocol_scheme">fb191550791625017</string>
+
     <string name="input_email_register">Nhập Email Đăng Ký</string>
     <string name="input_pass">Nhập Mật Khẩu</string>
     <string name="input_re_pass">Nhập Lại Mật Khẩu</string>
@@ -18,4 +19,6 @@
     <string name="pass_erro">Mật khẩu quá ngắn!</string>
     <string name="pass_no_duplicate">Mật khẩu chưa giống nhau!</string>
     <string name="msg_login_success">Đăng nhập thành công!</string>
+
+
 </resources>

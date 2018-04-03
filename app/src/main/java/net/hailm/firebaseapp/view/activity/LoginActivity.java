@@ -1,14 +1,27 @@
 package net.hailm.firebaseapp.view.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +32,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -30,6 +45,9 @@ import net.hailm.firebaseapp.listener.LoginListener;
 import net.hailm.firebaseapp.service.LoginService;
 import net.hailm.firebaseapp.utils.Utils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +58,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     EditText edtUsername;
     @BindView(R.id.edt_password)
     EditText edtPass;
+    @BindView(R.id.login_button_facebook)
+    LoginButton btnLoginFacebook;
 
     private String email;
     private String password;
@@ -48,12 +68,35 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     private FirebaseAuth mAuth;
     private GoogleSignInOptions mSignInOptions;
     private GoogleApiClient mApiClient;
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         initializeComponents();
+        getKeyHash();
+    }
+
+    private void getKeyHash() {
+        try {
+            PackageInfo info = null;
+            try {
+                info = getPackageManager().getPackageInfo(
+                        "net.hailm.firebaseapp",
+                        PackageManager.GET_SIGNATURES);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     private void initializeComponents() {
@@ -61,8 +104,9 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         mLoginService = new LoginService();
+        mCallbackManager = CallbackManager.Factory.create();
 
-
+        LoginManager.getInstance().logOut();
 
         mSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -76,7 +120,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 .build();
     }
 
-    @OnClick({R.id.btn_login_email, R.id.btn_login_google, R.id.btn_register, R.id.tv_lost_pass})
+    @OnClick({R.id.btn_login_email, R.id.btn_login_google, R.id.btn_register, R.id.tv_lost_pass, R.id.login_button_facebook})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_login_email:
@@ -90,7 +134,13 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.tv_lost_pass:
-
+                startActivity(new Intent(this, ResetPassActivity.class));
+                break;
+            case R.id.login_button_facebook:
+                loginFacebook();
+                break;
+            default:
+                break;
         }
     }
 
@@ -109,7 +159,44 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                     }
                 });
             }
+        } else {
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    /**
+     * loginFacebook
+     */
+    private void loginFacebook() {
+        btnLoginFacebook.setReadPermissions("email", "public_profile");
+        btnLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String tokenID = loginResult.getAccessToken().getToken();
+                AuthCredential credential = FacebookAuthProvider.getCredential(tokenID);
+                mAuth.signInWithCredential(credential)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    LogUtils.d("Login facebook success...");
+                                } else {
+                                    LogUtils.d("Login facebook failure...");
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
     }
 
     /**
