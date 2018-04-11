@@ -12,6 +12,7 @@
     <string name="lostpass">Mất Mật Khẩu?</string>
     <string name="input_email">Nhập Email</string>
     <string name="login_title">Đăng Nhập</string>
+    <string name="login_google">Đăng Nhập Google</string>
     <string name="login_facebook">Đăng Nhập Facebook</string>
     <string name="fblogin">Đăng Nhập FaceBook</string>
     <string name="register_new">Đăng Ký Mới</string>

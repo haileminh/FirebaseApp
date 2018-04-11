@@ -72,11 +72,15 @@
             android:text="@string/login_title"
             android:textColor="@color/white" />
 
-        <com.google.android.gms.common.SignInButton
+        <Button
             android:id="@+id/btn_login_google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin" />
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/bg_face"
+            android:text="@string/login_google"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_login_facebook"
@@ -85,7 +89,8 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/bg_face"
             android:text="@string/login_facebook"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
 
         <View
             android:layout_width="match_parent"

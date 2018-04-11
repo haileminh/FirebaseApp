@@ -66,9 +66,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     EditText edtUsername;
     @BindView(R.id.edt_password)
     EditText edtPass;
-    @BindView(R.id.btn_login_facebook)
-    Button btnLoginFacebook;
 
+    boolean flag = false;
     private String email;
     private String password;
 
@@ -139,6 +138,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 loginGoogle();
                 break;
             case R.id.btn_login_facebook:
+                flag = true;
                 loginFacebook();
                 break;
             case R.id.btn_register:
@@ -210,10 +210,10 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
             public void onSuccess(LoginResult loginResult) {
                 CHECK_PROVIDE_LOGIN = 2;
                 String tokenID = loginResult.getAccessToken().getToken();
-//                credentialLoginFirebase(tokenID);
-
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                credentialLoginFirebase(tokenID);
+//
+//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                finish();
                 result();
             }
 
@@ -315,7 +315,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             // Kiem tra da active hay chua
-            if (user.isEmailVerified()) {
+            if (user.isEmailVerified() || flag == true) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {
