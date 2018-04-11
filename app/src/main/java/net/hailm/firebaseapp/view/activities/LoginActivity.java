@@ -1,4 +1,4 @@
-package net.hailm.firebaseapp.view.activity;
+package net.hailm.firebaseapp.view.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -35,8 +33,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -105,7 +101,6 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     }
 
     private void initializeComponents() {
-        ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         mLoginService = new LoginService();

@@ -1,4 +1,4 @@
-package net.hailm.firebaseapp.view.activity;
+package net.hailm.firebaseapp.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +40,6 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
         mRegisterService = new RegisterService(this);
     }
 

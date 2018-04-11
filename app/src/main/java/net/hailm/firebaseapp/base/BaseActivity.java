@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.Utils;
 
+import butterknife.ButterKnife;
+
 
 /**
  * Created by hai_l on 25/03/2018.
@@ -17,6 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.init(this);
+        ButterKnife.bind(this);
     }
 
     public ProgressDialog mProgressDialog;

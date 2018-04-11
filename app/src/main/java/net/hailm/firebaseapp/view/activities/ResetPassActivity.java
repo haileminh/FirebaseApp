@@ -1,6 +1,5 @@
-package net.hailm.firebaseapp.view.activity;
+package net.hailm.firebaseapp.view.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -22,7 +21,6 @@ public class ResetPassActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pass);
-        ButterKnife.bind(this);
         mRegisterService = new RegisterService(this);
     }
 
