@@ -21,6 +21,7 @@ public class ResetPassActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pass);
+        ButterKnife.bind(this);
         mRegisterService = new RegisterService(this);
     }
 

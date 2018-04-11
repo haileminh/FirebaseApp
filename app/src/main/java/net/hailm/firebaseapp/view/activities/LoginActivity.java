@@ -53,8 +53,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStateListener, GoogleApiClient.OnConnectionFailedListener {
-    private static final int RC_SIGN_IN = 1000;
+public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStateListener,
+        GoogleApiClient.OnConnectionFailedListener {
+    private static final int REQUEST_CODE_SIGN_IN = 1000;
+    private static int CHECK_PROVIDE_LOGIN = 0;
     @BindView(R.id.edt_username)
     EditText edtUsername;
     @BindView(R.id.edt_password)
@@ -76,6 +78,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         initializeComponents();
         getKeyHash();
     }
@@ -106,6 +109,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         mLoginService = new LoginService();
         mCallbackManager = CallbackManager.Factory.create();
 
+        // Khoi tao client cho login google
         mSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -125,17 +129,16 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 loginAccountEmail();
                 break;
             case R.id.btn_login_google:
-                Intent iLoginGoogle = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
-                startActivityForResult(iLoginGoogle, RC_SIGN_IN);
+                loginGoogle();
+                break;
+            case R.id.login_button_facebook:
+                loginFacebook();
                 break;
             case R.id.btn_register:
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.tv_lost_pass:
                 startActivity(new Intent(this, ResetPassActivity.class));
-                break;
-            case R.id.login_button_facebook:
-                loginFacebook();
                 break;
             default:
                 break;
@@ -145,21 +148,33 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQUEST_CODE_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 String idToken = result.getSignInAccount().getIdToken();
-                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-                mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        LogUtils.d("Login google success....");
-                    }
-                });
+                credentialLoginFirebase(idToken);
             }
         } else {
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void credentialLoginFirebase(String idToken) {
+        if (CHECK_PROVIDE_LOGIN == 1) {
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    LogUtils.d("Login google success....");
+                }
+            });
+        }
+    }
+
+    private void loginGoogle() {
+        CHECK_PROVIDE_LOGIN = 1;
+        Intent iLoginGoogle = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
+        startActivityForResult(iLoginGoogle, REQUEST_CODE_SIGN_IN);
     }
 
     /**
