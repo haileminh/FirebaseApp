@@ -78,13 +78,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin" />
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button_facebook"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btn_login_facebook"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/bg_face"
+            android:text="@string/login_facebook"
+            android:textAllCaps="false" />
 
         <View
             android:layout_width="match_parent"

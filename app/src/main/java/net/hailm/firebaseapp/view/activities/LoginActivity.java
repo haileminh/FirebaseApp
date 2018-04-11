@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -48,6 +50,9 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,8 +66,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     EditText edtUsername;
     @BindView(R.id.edt_password)
     EditText edtPass;
-    @BindView(R.id.login_button_facebook)
-    LoginButton btnLoginFacebook;
+    @BindView(R.id.btn_login_facebook)
+    Button btnLoginFacebook;
 
     private String email;
     private String password;
@@ -72,6 +77,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     private GoogleSignInOptions mSignInOptions;
     private GoogleApiClient mApiClient;
     private CallbackManager mCallbackManager;
+    private LoginManager mLoginManager;
+    private List<String> permissionFacebook = Arrays.asList("email", "public_profile");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +129,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 .build();
     }
 
-    @OnClick({R.id.btn_login_email, R.id.btn_login_google, R.id.btn_register, R.id.tv_lost_pass, R.id.login_button_facebook})
+    @OnClick({R.id.btn_login_email, R.id.btn_login_google, R.id.btn_register, R.id.tv_lost_pass, R.id.btn_login_facebook})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_login_email:
@@ -131,7 +138,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
             case R.id.btn_login_google:
                 loginGoogle();
                 break;
-            case R.id.login_button_facebook:
+            case R.id.btn_login_facebook:
                 loginFacebook();
                 break;
             case R.id.btn_register:
@@ -162,12 +169,26 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     private void credentialLoginFirebase(String idToken) {
         if (CHECK_PROVIDE_LOGIN == 1) {
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-            mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    LogUtils.d("Login google success....");
-                }
-            });
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            LogUtils.d("Login google success....");
+                        }
+                    });
+        } else if (CHECK_PROVIDE_LOGIN == 2) {
+            AuthCredential credential = FacebookAuthProvider.getCredential(idToken);
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                LogUtils.d("Login facebook success...");
+                            } else {
+                                LogUtils.d("Login facebook failure...");
+                            }
+                        }
+                    });
         }
     }
 
@@ -181,23 +202,16 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
      * loginFacebook
      */
     private void loginFacebook() {
-        btnLoginFacebook.setReadPermissions("email", "public_profile");
-        btnLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        mLoginManager = LoginManager.getInstance();
+        mLoginManager.logInWithReadPermissions(this, permissionFacebook);
+//        btnLoginFacebook.setReadPermissions("email", "public_profile");
+        mLoginManager.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-//                String tokenID = loginResult.getAccessToken().getToken();
-//                AuthCredential credential = FacebookAuthProvider.getCredential(tokenID);
-//                mAuth.signInWithCredential(credential)
-//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if (task.isSuccessful()) {
-//                                    LogUtils.d("Login facebook success...");
-//                                } else {
-//                                    LogUtils.d("Login facebook failure...");
-//                                }
-//                            }
-//                        });
+                CHECK_PROVIDE_LOGIN = 2;
+                String tokenID = loginResult.getAccessToken().getToken();
+//                credentialLoginFirebase(tokenID);
+
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
                 result();
