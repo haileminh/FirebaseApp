@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="12dp">
 
     <ImageView
         android:layout_width="150dp"
@@ -12,17 +12,24 @@
         android:scaleType="centerCrop"
         android:src="@drawable/logo_dse2" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/khoi_phuc_mat_khau"
+        android:textColor="@color/home_color"
+        android:textSize="@dimen/txt_14sp" />
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tvInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="@dimen/padding_content">
 
         <EditText
             android:id="@+id/txt_email_reset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/padding_content"
             android:hint="@string/input_email"
             android:singleLine="true"
             android:textSize="@dimen/normal_text" />
@@ -34,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
+        android:background="@color/colorAccent"
         android:padding="16dp"
-        android:text="Gửi yêu cầu" />
-
+        android:text="Gửi yêu cầu"
+        android:textColor="@color/white" />
 </LinearLayout>

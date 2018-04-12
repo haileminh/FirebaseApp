@@ -7,6 +7,7 @@ import android.widget.EditText;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.service.RegisterService;
+import net.hailm.firebaseapp.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,11 +29,15 @@ public class ResetPassActivity extends BaseActivity {
     @OnClick(R.id.btn_send_email)
     public void resetPass() {
         String email = edtEmail.getText().toString().trim();
-        if (!TextUtils.isEmpty(email)) {
-            mRegisterService.resetPass(email);
-        } else {
+
+        if (TextUtils.isEmpty(email)) {
             edtEmail.requestFocus();
-            edtEmail.setError("Bạn chưa nhập email");
+            edtEmail.setError(getResources().getString(R.string.email_null));
+        } else if (!Utils.isEmailValid(email)) {
+            edtEmail.requestFocus();
+            edtEmail.setError(getResources().getString(R.string.email_error));
+        } else {
+            mRegisterService.resetPass(email);
         }
     }
 }

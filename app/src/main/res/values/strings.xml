@@ -18,9 +18,11 @@
     <string name="register_new">Đăng Ký Mới</string>
     <string name="verifiation">Truy cập Email để xác thực tài khoản</string>
     <string name="email_error">Email không đúng định dạng!</string>
+    <string name="email_null">Email không được để trống!</string>
     <string name="pass_erro">Mật khẩu quá ngắn!</string>
     <string name="pass_no_duplicate">Mật khẩu chưa giống nhau!</string>
     <string name="msg_login_success">Đăng nhập thành công!</string>
-
+    <string name="khoi_phuc_mat_khau">Bạn vui lòng nhập địa chỉ Email vào khung bên dưới để tiến hành khôi phục mật khẩu.</string>
+    <string name="khong_phai_thanh_vien">Bạn không phải là thành viên ?.</string>
 
 </resources>
