@@ -25,4 +25,15 @@
     <string name="khoi_phuc_mat_khau">Bạn vui lòng nhập địa chỉ Email vào khung bên dưới để tiến hành khôi phục mật khẩu.</string>
     <string name="khong_phai_thanh_vien">Bạn không phải là thành viên ?.</string>
 
+    <string name="house">House</string>
+    <string name="place">Place</string>
+    <string name="latest">Latest</string>
+    <string name="category">Category</string>
+    <string name="area">Area</string>
+    <string name="nearby">Nearby</string>
+    <string name="top_member">Top member</string>
+    <string name="reviews">Reviews</string>
+    <string name="blog">Blogs</string>
+
+
 </resources>

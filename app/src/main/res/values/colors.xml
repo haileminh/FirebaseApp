@@ -15,4 +15,6 @@
     <color name="com_facebook_blue">#3B5998</color>
     <color name="background_home">#1845a6</color>
 
+    <color name="background">#CCC</color>
+
 </resources>
