@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,7 +23,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -39,7 +37,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import net.hailm.firebaseapp.MainActivity;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.listener.LoginListener;
@@ -50,7 +47,6 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -212,7 +208,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 String tokenID = loginResult.getAccessToken().getToken();
                 credentialLoginFirebase(tokenID);
 //
-//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 //                finish();
                 result();
             }
@@ -316,7 +312,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         if (user != null) {
             // Kiem tra da active hay chua
             if (user.isEmailVerified() || flag == true) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
             } else {
                 mAuth.signOut();
