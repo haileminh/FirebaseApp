@@ -33,4 +33,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TvItemHouse1">
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14dp"
+        android:layout_marginTop="@dimen/_2dp"
+    </style>
 </resources>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:src="@drawable/user2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minh Hải"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14dp" />
+
+            <TextView
+                android:id="@+id/txt_date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày 08 tháng 04 lúc 22:45"
+                android:textColor="@color/divider"
+                android:textSize="@dimen/_12dp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2dp"
+            android:drawableLeft="@drawable/ic_place_black_24dp"
+            android:drawablePadding="@dimen/_2dp"
+            android:text=" 5 km"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="Số nhà 19, ngách 56/46 phố Lê Văn Hiến, Từ Liêm Hà Nội"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="Giá phòng: 2.000.000 đ"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+
+        <TextView
+            android:id="@+id/txt_m2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="Điên tích: 18 m2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+
+        <TextView
+            android:id="@+id/txt_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="Số điên thoại: 01655 303 878"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+
+        <ImageView
+            android:id="@+id/img_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180dp"
+            android:layout_marginTop="@dimen/_4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/nhatro1" />
+
+        <Button
+            android:id="@+id/btn_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:background="@drawable/btn_radius_house"
+            android:drawableLeft="@drawable/ic_local_phone_white_24dp"
+            android:text="Liên hệ ngay"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/_12dp"
+        android:paddingRight="@dimen/_12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:src="@drawable/logo_dse2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_title_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhà đẹp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14dp" />
+
+            <TextView
+                android:id="@+id/txt_detail_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày 08 tháng 04 lúc 22:45"
+                android:textSize="@dimen/_12dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
+            android:drawablePadding="@dimen/_5dp"
+            android:text="99"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8dp"
+            android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
+            android:drawablePadding="@dimen/_5dp"
+            android:text="109"
+            android:textAlignment="center" />
+    </LinearLayout>
+</LinearLayout>

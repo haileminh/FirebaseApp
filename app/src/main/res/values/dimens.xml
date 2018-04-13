@@ -8,6 +8,7 @@
     <dimen name="_3dp">3dp</dimen>
     <dimen name="_4dp">4dp</dimen>
     <dimen name="_5dp">5dp</dimen>
+    <dimen name="_8dp">8dp</dimen>
     <dimen name="_10dp">10dp</dimen>
     <dimen name="_12dp">12dp</dimen>
     <dimen name="_14dp">14dp</dimen>
@@ -16,6 +17,8 @@
     <dimen name="_24dp">24dp</dimen>
     <dimen name="_32dp">32dp</dimen>
     <dimen name="_40dp">40dp</dimen>
+    <dimen name="_180dp">180dp</dimen>
+    <dimen name="_200dp">200dp</dimen>
 
     <!--Text-->
     <dimen name="txt_14sp">14sp</dimen>
