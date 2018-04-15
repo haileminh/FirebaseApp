@@ -9,7 +9,9 @@ import com.google.firebase.database.ValueEventListener;
 import net.hailm.firebaseapp.base.BaseFireBase;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
+import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.model.dbmodels.Users;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +36,42 @@ public class HouseDbHelper extends BaseFireBase {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get list house
                 DataSnapshot dataHouses = dataSnapshot.child(Constants.HOUSES);
                 for (DataSnapshot values : dataHouses.getChildren()) {
 
                     HouseModel houseModel = values.getValue(HouseModel.class);
-                    houseModel.setHouuseId(values.getKey());
+                    houseModel.setHouseId(values.getKey());
 
+                    // Get list image by id
                     DataSnapshot dataImage = dataSnapshot.child(Constants.HOUSE_IMAGES).child(values.getKey());
                     List<String> houseImages = new ArrayList<>();
                     for (DataSnapshot valueImages : dataImage.getChildren()) {
                         houseImages.add(valueImages.getValue(String.class));
                     }
-
                     houseModel.setHouseImages(houseImages);
+
+                    // Get list comment
+                    DataSnapshot dataComment = dataSnapshot.child(Constants.COMMENTS).child(houseModel.getHouseId());
+                    List<CommentModel> commentModelList = new ArrayList<>();
+
+                    for (DataSnapshot valueComment : dataComment.getChildren()) {
+                        CommentModel commentModel = valueComment.getValue(CommentModel.class);
+                        commentModel.setCommentId(valueComment.getKey());
+                        Users users = dataSnapshot.child(Constants.USERS).child(commentModel.getUid()).getValue(Users.class);
+                        commentModel.setUsers(users);
+
+                        List<String> listImageComment = new ArrayList<>();
+                        DataSnapshot dataImageComment = dataSnapshot.child(Constants.COMMENT_IMAGES)
+                                .child(commentModel.getCommentId());
+                        for (DataSnapshot valueImageComment : dataImageComment.getChildren()) {
+                            listImageComment.add(valueImageComment.getValue(String.class));
+                        }
+                        commentModel.setListCommentImages(listImageComment);
+                        commentModelList.add(commentModel);
+                    }
+                    houseModel.setCommentModelList(commentModelList);
+
                     houseListener.getListHouseModel(houseModel);
                 }
             }

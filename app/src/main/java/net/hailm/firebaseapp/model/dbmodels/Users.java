@@ -1,4 +1,4 @@
-package net.hailm.firebaseapp.model;
+package net.hailm.firebaseapp.model.dbmodels;
 
 import java.io.Serializable;
 

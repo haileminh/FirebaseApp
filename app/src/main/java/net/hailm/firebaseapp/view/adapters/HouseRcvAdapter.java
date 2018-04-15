@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -18,12 +19,14 @@ import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by hai.lm on 14/04/2018.
@@ -56,6 +59,30 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         Button btnContact;
         @BindView(R.id.img_image)
         ImageView imgHouseImage;
+        @BindView(R.id.ll_comment1)
+        LinearLayout llComment1;
+        @BindView(R.id.ll_comment2)
+        LinearLayout llComment2;
+        @BindView(R.id.txt_score)
+        TextView txtScore;
+        @BindView(R.id.txt_score2)
+        TextView txtScore2;
+        @BindView(R.id.txt_total_comment)
+        TextView txtTotalComment;
+        @BindView(R.id.txt_total_images)
+        TextView getTxtTotalImages;
+        @BindView(R.id.img_avatar_comment)
+        CircleImageView imgAvatar;
+        @BindView(R.id.txt_title_comment)
+        TextView txtTitleComment;
+        @BindView(R.id.txt_detail_comment)
+        TextView txtDetailComment;
+        @BindView(R.id.img_avatar_comment2)
+        CircleImageView imgAvatar2;
+        @BindView(R.id.txt_title_comment2)
+        TextView txtTitleComment2;
+        @BindView(R.id.txt_detail_comment2)
+        TextView txtDetailComment2;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -100,6 +127,58 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 }
             });
         }
+
+        if (houseModel.getCommentModelList().size() > 0) {
+            CommentModel commentModel = houseModel.getCommentModelList().get(0);
+            holder.txtTitleComment.setText(commentModel.getTitle());
+            holder.txtScore.setText(String.valueOf(commentModel.getScore()));
+            holder.txtDetailComment.setText(commentModel.getContents());
+            setAvatarComment(holder.imgAvatar, commentModel.getUsers().getAvatar());
+            if (houseModel.getCommentModelList().size() >= 2) {
+                CommentModel commentMode2 = houseModel.getCommentModelList().get(1);
+                holder.txtTitleComment2.setText(commentMode2.getTitle());
+                holder.txtDetailComment2.setText(commentMode2.getContents());
+                holder.txtScore2.setText(String.valueOf(commentMode2.getScore()));
+                setAvatarComment(holder.imgAvatar2, commentMode2.getUsers().getAvatar());
+            }
+            holder.txtTotalComment.setText(String.valueOf(houseModel.getCommentModelList().size()));
+
+            int totalImageComment = 0;
+            for (CommentModel values : houseModel.getCommentModelList()) {
+                totalImageComment += values.getListCommentImages().size();
+            }
+
+            if (totalImageComment > 0) {
+                holder.getTxtTotalImages.setText(String.valueOf(totalImageComment));
+            } else {
+                holder.getTxtTotalImages.setText("0");
+            }
+        } else {
+            holder.llComment1.setVisibility(View.GONE);
+            holder.llComment2.setVisibility(View.GONE);
+            holder.txtTotalComment.setText("0");
+            holder.getTxtTotalImages.setText("0");
+        }
+    }
+
+    /**
+     * set avatar comment
+     *
+     * @param imageView
+     * @param url
+     */
+    private void setAvatarComment(final CircleImageView imageView, String url) {
+        StorageReference mStorageAvatar = FirebaseStorage.getInstance().getReference()
+                .child(Constants.MEMBERS)
+                .child(url);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        mStorageAvatar.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                imageView.setImageBitmap(bitmap);
+            }
+        });
     }
 
     @Override

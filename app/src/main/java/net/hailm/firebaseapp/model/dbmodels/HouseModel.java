@@ -20,14 +20,15 @@ import java.util.List;
 public class HouseModel {
     private String landlord;
     private String tel;
-    private String houuseId;
+    private String houseId;
     private long acreage;
     private long price;
     private long quantity;
     private String videoIntro;
     private String contents;
     private long likeNumber;
-    List<String> utility, houseImages;
+    private List<String> utility, houseImages;
+    private List<CommentModel> commentModelList;
 
     public HouseModel() {
     }
@@ -35,6 +36,14 @@ public class HouseModel {
     public HouseModel(String contents, long likeNumber) {
         this.contents = contents;
         this.likeNumber = likeNumber;
+    }
+
+    public List<CommentModel> getCommentModelList() {
+        return commentModelList;
+    }
+
+    public void setCommentModelList(List<CommentModel> commentModelList) {
+        this.commentModelList = commentModelList;
     }
 
     public List<String> getHouseImages() {
@@ -45,12 +54,12 @@ public class HouseModel {
         this.houseImages = houseImages;
     }
 
-    public String getHouuseId() {
-        return houuseId;
+    public String getHouseId() {
+        return houseId;
     }
 
-    public void setHouuseId(String houuseId) {
-        this.houuseId = houuseId;
+    public void setHouseId(String houseId) {
+        this.houseId = houseId;
     }
 
     public String getLandlord() {

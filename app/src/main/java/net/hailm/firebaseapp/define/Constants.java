@@ -22,4 +22,5 @@ public class Constants {
     public static final String HOUSES = "Houses";
     public static final String UTILITIES = "Utilities";
     public static final String IMAGES = "images";
+    public static final String MEMBERS = "members";
 }

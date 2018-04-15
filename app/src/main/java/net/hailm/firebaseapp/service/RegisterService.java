@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import net.hailm.firebaseapp.base.BaseFireBase;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.RegisterListener;
-import net.hailm.firebaseapp.model.Users;
+import net.hailm.firebaseapp.model.dbmodels.Users;
 
 /**
  * Created by hai.lm on 02/04/2018.
