@@ -140,6 +140,13 @@
                         android:textAllCaps="false" />
                 </LinearLayout>
 
+                <ProgressBar
+                    android:id="@+id/pgb_house"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_2dp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rcv_house"
                     android:layout_width="match_parent"

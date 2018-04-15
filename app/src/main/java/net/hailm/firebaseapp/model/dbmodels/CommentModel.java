@@ -11,7 +11,7 @@ public class CommentModel {
     private String title;
     private String contents;
     private long likeNumber;
-    private long score;
+    private double score;
     private String uid;
     private Users users;
     private List<String> listCommentImages;
@@ -67,11 +67,11 @@ public class CommentModel {
         this.likeNumber = likeNumber;
     }
 
-    public long getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(long score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

@@ -130,6 +130,7 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             });
         }
 
+        // Fill data comment house
         if (houseModel.getCommentModelList().size() > 0) {
             CommentModel commentModel = houseModel.getCommentModelList().get(0);
             holder.txtTitleComment.setText(commentModel.getTitle());

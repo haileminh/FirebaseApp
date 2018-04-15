@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
@@ -33,6 +34,8 @@ import butterknife.Unbinder;
 public class HouseFragment extends Fragment {
     @BindView(R.id.rcv_house)
     RecyclerView mRcvHouse;
+    @BindView(R.id.pgb_house)
+    ProgressBar pgbHouse;
 
     Unbinder unbinder;
     private View rootView;
@@ -76,6 +79,7 @@ public class HouseFragment extends Fragment {
                 LogUtils.d("Kiem tra: " + houseModel.getTel());
                 houseModelList.add(houseModel);
                 mHouseRcvAdapter.notifyDataSetChanged();
+                pgbHouse.setVisibility(View.GONE);
             }
         };
         mDbHelper.getListHostuse(listener);
