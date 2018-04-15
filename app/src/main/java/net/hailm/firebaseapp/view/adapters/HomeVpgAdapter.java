@@ -11,9 +11,9 @@ import net.hailm.firebaseapp.view.fragments.PlaceFragment;
  * Created by hai.lm on 13/04/2018.
  */
 
-public class HomeAdapter extends FragmentStatePagerAdapter {
+public class HomeVpgAdapter extends FragmentStatePagerAdapter {
 
-    public HomeAdapter(FragmentManager fm) {
+    public HomeVpgAdapter(FragmentManager fm) {
         super(fm);
     }
 

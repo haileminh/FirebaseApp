@@ -1,16 +1,13 @@
 package net.hailm.firebaseapp.view.activities;
 
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.blankj.utilcode.util.LogUtils;
-
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
-import net.hailm.firebaseapp.view.adapters.HomeAdapter;
+import net.hailm.firebaseapp.view.adapters.HomeVpgAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +22,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     @BindView(R.id.rd_house_place)
     RadioGroup mRdHousePlace;
 
-    private HomeAdapter mHomeAdapter;
+    private HomeVpgAdapter mHomeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private void initializeComponents() {
         ButterKnife.bind(this);
-        mHomeAdapter = new HomeAdapter(getSupportFragmentManager());
+        mHomeAdapter = new HomeVpgAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mHomeAdapter);
 
         mViewPager.addOnPageChangeListener(this);
