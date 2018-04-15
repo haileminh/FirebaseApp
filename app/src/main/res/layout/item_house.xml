@@ -12,10 +12,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <TextView
+            android:id="@+id/txt_score_medium"
             android:layout_width="@dimen/_40dp"
             android:layout_height="@dimen/_40dp"
-            android:src="@drawable/user2" />
+            android:background="@drawable/bg_score"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

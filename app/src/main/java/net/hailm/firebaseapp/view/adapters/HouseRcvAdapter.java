@@ -67,6 +67,8 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         TextView txtScore;
         @BindView(R.id.txt_score2)
         TextView txtScore2;
+        @BindView(R.id.txt_score_medium)
+        TextView txtScoreMedium;
         @BindView(R.id.txt_total_comment)
         TextView txtTotalComment;
         @BindView(R.id.txt_total_images)
@@ -144,9 +146,15 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             holder.txtTotalComment.setText(String.valueOf(houseModel.getCommentModelList().size()));
 
             int totalImageComment = 0;
+            double totalScore = 0;
+            double totalScoreMedium = 0;
             for (CommentModel values : houseModel.getCommentModelList()) {
                 totalImageComment += values.getListCommentImages().size();
+                totalScore += values.getScore();
             }
+
+            totalScoreMedium = totalScore / (houseModel.getCommentModelList().size());
+            holder.txtScoreMedium.setText(String.format("%.1f", totalScoreMedium));
 
             if (totalImageComment > 0) {
                 holder.getTxtTotalImages.setText(String.valueOf(totalImageComment));
