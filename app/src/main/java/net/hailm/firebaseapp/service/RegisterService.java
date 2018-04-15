@@ -54,6 +54,7 @@ public class RegisterService extends BaseFireBase {
                                 Users users = new Users();
                                 users.setUid(userFB.getUid());
                                 users.setName("HaiLeMinh");
+                                users.setAvatar("user2.png");
                                 users.setEmail(userFB.getEmail());
                                 createAccountInDatabase(users, new RegisterListener() {
                                     @Override

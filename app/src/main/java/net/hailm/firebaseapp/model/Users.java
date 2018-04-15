@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class Users implements Serializable {
     private String uid;
     private String name;
+    private String avatar;
     private String email;
 
     public Users() {
@@ -18,6 +19,14 @@ public class Users implements Serializable {
         this.uid = uid;
         this.name = name;
         this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getUid() {
