@@ -3,6 +3,8 @@
     package="net.hailm.firebaseapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -32,18 +34,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.HomeActivity">
+        </activity>
+        <activity android:name=".view.activities.RegisterActivity" />
+        <activity android:name=".view.activities.LoginActivity"></activity>
+        <activity android:name=".view.activities.ResetPassActivity" />
+        <activity android:name=".view.activities.MainActivity" />
+        <activity android:name=".view.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.RegisterActivity" />
-        <activity android:name=".view.activities.LoginActivity">
-
-        </activity>
-        <activity android:name=".view.activities.ResetPassActivity" />
-        <activity android:name=".view.activities.MainActivity"></activity>
     </application>
 
 </manifest>
