@@ -46,6 +46,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
     ImageView imgLogo;
     @BindView(R.id.txt_version)
     TextView txtVersion;
+    private boolean checkChangeActivity = false;
 
     private GoogleApiClient mGoogleApiClient;
     // Lấy myLocation
@@ -74,6 +75,8 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
         boolean granted = checkPermissionGranted();
         if (granted) {
             mGoogleApiClient.connect();
+            checkChangeActivity = true;
+            setAnimSplash();
         } else {
             requestPermission();
         }
@@ -139,7 +142,6 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         getMyLocation();
-        setAnimSplash();
     }
 
     @Override
@@ -167,6 +169,10 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
 
     @Override
     public void onAnimationEnd(Animation animation) {
+        delay3s();
+    }
+
+    private void delay3s() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -175,6 +181,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
             }
         }, 3000);
     }
+
 
     @Override
     public void onAnimationRepeat(Animation animation) {
@@ -193,6 +200,9 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
                     editor.putFloat(Constants.LATITUDE, (float) location.getLatitude());
                     editor.putFloat(Constants.LONGITUDE, (float) location.getLongitude());
+                    if (!checkChangeActivity) {
+                        delay3s();
+                    }
                 }
             });
         } catch (SecurityException e) {
