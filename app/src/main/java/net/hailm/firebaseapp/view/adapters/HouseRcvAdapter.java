@@ -20,8 +20,11 @@ import com.google.firebase.storage.StorageReference;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
+import net.hailm.firebaseapp.model.dbmodels.HouseBranchModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +52,8 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         TextView txtLandlord;
         @BindView(R.id.txt_address)
         TextView txtAddress;
+        @BindView(R.id.txt_distance)
+        TextView txtDistance;
         @BindView(R.id.txt_price)
         TextView txtPrice;
         @BindView(R.id.txt_acreage)
@@ -167,6 +172,30 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             holder.llComment2.setVisibility(View.GONE);
             holder.txtTotalComment.setText("0");
             holder.getTxtTotalImages.setText("0");
+        }
+
+        // get houseBranchs, show data address, distance
+//        List<HouseBranchModel> houseBranchModelList = houseModel.getHouseBranchModelList();
+//        class sortHouseBranch implements Comparator<HouseBranchModel> {
+//
+//            @Override
+//            public int compare(HouseBranchModel o1, HouseBranchModel o2) {
+//                return Double.compare(o1.getDistance(), o2.getDistance());
+//            }
+//        }
+//        Collections.sort(houseBranchModelList, new sortHouseBranch());
+
+        if (houseModel.getHouseBranchModelList().size() > 0) {
+            HouseBranchModel houseBranchModelTemp = houseModel.getHouseBranchModelList().get(0);
+            for (HouseBranchModel houseBranchModel : houseModel.getHouseBranchModelList()) {
+                if (houseBranchModelTemp.getDistance() > houseBranchModel.getDistance()) {
+                    houseBranchModelTemp = houseBranchModel;
+                }
+            }
+
+            holder.txtAddress.setText(houseBranchModelTemp.getAddress());
+            String distance = String.valueOf(String.format("%.2f", houseBranchModelTemp.getDistance())) + context.getString(R.string.km);
+            holder.txtDistance.setText(distance);
         }
     }
 

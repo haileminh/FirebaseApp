@@ -27,8 +27,10 @@ public class HouseModel {
     private String videoIntro;
     private String contents;
     private long likeNumber;
-    private List<String> utility, houseImages;
+    private List<String> utility;
+    private List<String> houseImages;
     private List<CommentModel> commentModelList;
+    private List<HouseBranchModel> houseBranchModelList;
 
     public HouseModel() {
     }
@@ -36,6 +38,14 @@ public class HouseModel {
     public HouseModel(String contents, long likeNumber) {
         this.contents = contents;
         this.likeNumber = likeNumber;
+    }
+
+    public List<HouseBranchModel> getHouseBranchModelList() {
+        return houseBranchModelList;
+    }
+
+    public void setHouseBranchModelList(List<HouseBranchModel> houseBranchModelList) {
+        this.houseBranchModelList = houseBranchModelList;
     }
 
     public List<CommentModel> getCommentModelList() {

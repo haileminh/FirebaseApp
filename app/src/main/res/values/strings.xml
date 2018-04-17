@@ -44,6 +44,7 @@
     <string name="so_dien_thoai">Số điện thoại: </string>
     <string name="dien_tich">Diện tích: </string>
     <string name="location">Location </string>
+    <string name="km">km </string>
 
 
 </resources>

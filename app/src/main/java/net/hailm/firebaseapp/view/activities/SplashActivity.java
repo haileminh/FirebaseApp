@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -64,7 +63,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
 
     private void init() {
         ButterKnife.bind(this);
-        mSharedPreferences = getSharedPreferences(getString(R.string.location), MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(Constants.LOCATION, MODE_PRIVATE);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -198,8 +197,9 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
                     LogUtils.d("Latitude: " + location.getLatitude());
                     LogUtils.d("Longitude: " + location.getLongitude());
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
-                    editor.putFloat(Constants.LATITUDE, (float) location.getLatitude());
-                    editor.putFloat(Constants.LONGITUDE, (float) location.getLongitude());
+                    editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
+                    editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
+                    editor.commit();
                     if (!checkChangeActivity) {
                         delay3s();
                     }

@@ -1,5 +1,7 @@
 package net.hailm.firebaseapp.model.dbhelpers;
 
+import android.location.Location;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,6 +12,7 @@ import net.hailm.firebaseapp.base.BaseFireBase;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
+import net.hailm.firebaseapp.model.dbmodels.HouseBranchModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.model.dbmodels.Users;
 
@@ -31,8 +34,9 @@ public class HouseDbHelper extends BaseFireBase {
      * Get list house fill recycleView
      *
      * @param houseListener
+     * @param currentLocation
      */
-    public void getListHostuse(final HouseListener houseListener) {
+    public void getListHostuse(final HouseListener houseListener, final Location currentLocation) {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -72,6 +76,22 @@ public class HouseDbHelper extends BaseFireBase {
                     }
                     houseModel.setCommentModelList(commentModelList);
 
+                    // Get HouseBranchs
+                    DataSnapshot dataHouseBranch = dataSnapshot.child(Constants.HOUSE_BRANCHS).child(houseModel.getHouseId());
+                    List<HouseBranchModel> houseBranchModelList = new ArrayList<>();
+                    for (DataSnapshot valueHouseBranch : dataHouseBranch.getChildren()) {
+                        HouseBranchModel houseBranchModel = valueHouseBranch.getValue(HouseBranchModel.class);
+                        Location locationHouse = new Location("");
+                        locationHouse.setLongitude(houseBranchModel.getLongitude());
+                        locationHouse.setLatitude(houseBranchModel.getLatitude());
+
+                        float distance = (currentLocation.distanceTo(locationHouse)) / 1000;
+                        LogUtils.d("Distance: " + distance + " - " + houseBranchModel.getAddress());
+                        houseBranchModel.setDistance(distance);
+
+                        houseBranchModelList.add(houseBranchModel);
+                    }
+                    houseModel.setHouseBranchModelList(houseBranchModelList);
                     houseListener.getListHouseModel(houseModel);
                 }
             }

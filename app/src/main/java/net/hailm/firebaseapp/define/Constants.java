@@ -15,6 +15,7 @@ public class Constants {
     public static final String CUSTOMERS = "CUSTOMERS";
 
     // MAP
+    public static final String LOCATION = "Location";
     public static final String LATITUDE = "Latitude";
     public static final String LONGITUDE = "Longitude";
 
