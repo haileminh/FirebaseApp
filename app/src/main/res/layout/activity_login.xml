@@ -82,15 +82,13 @@
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
-        <Button
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/btn_login_facebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/bg_face"
-            android:text="@string/login_facebook"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:layout_marginTop="@dimen/_12dp"
+            android:paddingBottom="@dimen/_14dp"
+            android:paddingTop="@dimen/_14dp" />
 
         <View
             android:layout_width="match_parent"

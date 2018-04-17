@@ -23,6 +23,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -62,6 +63,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     EditText edtUsername;
     @BindView(R.id.edt_password)
     EditText edtPass;
+    @BindView(R.id.btn_login_facebook)
+    LoginButton btnLoginFacebook;
 
     boolean flag = false;
     private String email;
@@ -72,8 +75,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     private GoogleSignInOptions mSignInOptions;
     private GoogleApiClient mApiClient;
     private CallbackManager mCallbackManager;
-    private LoginManager mLoginManager;
-    private List<String> permissionFacebook = Arrays.asList("email", "public_profile");
+//    private LoginManager mLoginManager;
+//    private List<String> permissionFacebook = Arrays.asList("email", "public_profile");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +185,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                                 LogUtils.d("Login facebook success...");
                             } else {
                                 LogUtils.d("Login facebook failure...");
+                                showDialog1(getString(R.string.ton_tai), LoginActivity.this);
                             }
                         }
                     });
@@ -198,10 +202,10 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
      * loginFacebook
      */
     private void loginFacebook() {
-        mLoginManager = LoginManager.getInstance();
-        mLoginManager.logInWithReadPermissions(this, permissionFacebook);
-//        btnLoginFacebook.setReadPermissions("email", "public_profile");
-        mLoginManager.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//        mLoginManager = LoginManager.getInstance();
+//        mLoginManager.logInWithReadPermissions(this, permissionFacebook);
+        btnLoginFacebook.setReadPermissions("email", "public_profile");
+        btnLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 CHECK_PROVIDE_LOGIN = 2;

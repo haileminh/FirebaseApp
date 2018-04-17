@@ -27,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public ProgressDialog mProgressDialog;
+
     public void showDialog1(String message, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Thông báo!");
