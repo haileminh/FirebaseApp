@@ -4,13 +4,13 @@ package net.hailm.firebaseapp.model.dbmodels;
  * Created by hai.lm on 17/04/2018.
  */
 
-public class HouseBranchModel {
+public class AddressModel {
     private String address;
     private double latitude;
     private double longitude;
     private double distance;
 
-    public HouseBranchModel() {
+    public AddressModel() {
     }
 
     public String getAddress() {

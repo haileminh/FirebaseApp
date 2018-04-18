@@ -1,16 +1,5 @@
 package net.hailm.firebaseapp.model.dbmodels;
 
-import android.util.Log;
-
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.Utils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +19,7 @@ public class HouseModel {
     private List<String> utility;
     private List<String> houseImages;
     private List<CommentModel> commentModelList;
-    private List<HouseBranchModel> houseBranchModelList;
+    private AddressModel addressModel;
 
     public HouseModel() {
     }
@@ -40,12 +29,12 @@ public class HouseModel {
         this.likeNumber = likeNumber;
     }
 
-    public List<HouseBranchModel> getHouseBranchModelList() {
-        return houseBranchModelList;
+    public AddressModel getAddressModel() {
+        return addressModel;
     }
 
-    public void setHouseBranchModelList(List<HouseBranchModel> houseBranchModelList) {
-        this.houseBranchModelList = houseBranchModelList;
+    public void setAddressModel(AddressModel addressModel) {
+        this.addressModel = addressModel;
     }
 
     public List<CommentModel> getCommentModelList() {

@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -19,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.common.ConnectionResult;
@@ -71,14 +73,26 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
                 .addApi(LocationServices.API)
                 .build();
         // Check permission
-        boolean granted = checkPermissionGranted();
-        if (granted) {
-            mGoogleApiClient.connect();
-            checkChangeActivity = true;
-            setAnimSplash();
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            boolean granted = checkPermissionGranted();
+            if (granted) {
+                mGoogleApiClient.connect();
+                checkChangeActivity = true;
+                setAnimSplash();
+            } else {
+                requestPermission();
+            }
         } else {
-            requestPermission();
+            if (!isOpenGPS()) {
+                showDialog1(getString(R.string.open_gps), SplashActivity.this);
+                Toast.makeText(this, getString(R.string.open_gps), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            } else {
+                setAnimSplash();
+            }
         }
+
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -132,7 +146,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     mGoogleApiClient.connect();
                 } else {
-                    showDialog1(getResources().getString(R.string.open_jps), this);
+                    showDialog1(getResources().getString(R.string.open_gps), this);
                 }
                 break;
         }
@@ -212,6 +226,7 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
 
     private boolean isOpenGPS() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return locationManager != null
+                && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 }

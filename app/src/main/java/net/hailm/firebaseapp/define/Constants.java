@@ -22,7 +22,7 @@ public class Constants {
     public static final String AREAS = "Areas";
     public static final String COMMENT_IMAGES = "CommentImages";
     public static final String COMMENTS = "Comments";
-    public static final String HOUSE_BRANCHS = "HouseBranchs";
+    public static final String ADDRESS = "Address";
     public static final String HOUSE_IMAGES = "HouseImages";
     public static final String HOUSES = "Houses";
     public static final String UTILITIES = "Utilities";

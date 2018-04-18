@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.Utils;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
@@ -25,10 +24,14 @@ import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -70,33 +73,71 @@ public class HouseFragment extends Fragment {
 
     private void initialize() {
         mDbHelper = new HouseDbHelper();
-        houseModelList = new ArrayList<>();
+
         mSharedPreferences = getContext().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
 
-        LogUtils.d("LOCaTION: "
+        LogUtils.d("LOCATION: "
                 + mSharedPreferences.getString(Constants.LATITUDE, "0")
                 + ", " + mSharedPreferences.getString(Constants.LONGITUDE, "0"));
         Location currentLocation = new Location("");
-        currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE,"0")));
-        currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE,"0")));
+        currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
+        currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRcvHouse.setLayoutManager(llm);
 
+        mRcvHouse.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LogUtils.d("Kiem tra: " + "ddddd");
+            }
+        });
+
+        houseModelList = new ArrayList<>();
         HouseListener listener = new HouseListener() {
             @Override
             public void getListHouseModel(HouseModel houseModel) {
                 LogUtils.d("Tel: " + houseModel.getTel());
                 houseModelList.add(houseModel);
+
+                Collections.sort(houseModelList, new Comparator<HouseModel>() {
+                    @Override
+                    public int compare(HouseModel o1, HouseModel o2) {
+                        return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
+                    }
+                });
+                mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, getContext());
+                mRcvHouse.setAdapter(mHouseRcvAdapter);
                 mHouseRcvAdapter.notifyDataSetChanged();
                 pgbHouse.setVisibility(View.GONE);
+
+                LogUtils.d("houseModelList" + houseModelList);
+
+
             }
         };
-        mDbHelper.getListHostuse(listener, currentLocation);
 
-        mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, getContext());
-        mRcvHouse.setAdapter(mHouseRcvAdapter);
+        mDbHelper.getListHouse(listener, currentLocation, 3, 0);
+        test();
+    }
 
+    private void test() {
+        List<HouseModel> list = new ArrayList<>();
+        list.addAll(houseModelList);
+        Collections.sort(list, new Comparator<HouseModel>() {
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                return 0;
+            }
+        });
+
+        LogUtils.d("ListTest..." + list);
     }
 
     @Override
@@ -109,5 +150,14 @@ public class HouseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.btn_near_by)
+    public void submit(View view) {
+        switch (view.getId()) {
+            case R.id.btn_near_by:
+                test();
+                break;
+        }
     }
 }

@@ -1,72 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RadioGroup
+        android:id="@+id/group_tab_radio"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background"
-        android:orientation="vertical">
+        android:layout_height="@dimen/_40dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <RadioGroup
-            android:id="@+id/group_tab_radio"
+        <RadioButton
+            android:id="@+id/rd_latest"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/change_background_tab"
+            android:button="@android:color/transparent"
+            android:checked="true"
+            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:text="@string/latest"
+            android:textAlignment="center"
+            android:textColor="@drawable/change_text_tab" />
 
-            <RadioButton
-                android:id="@+id/rd_latest"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/change_background_tab"
-                android:button="@android:color/transparent"
-                android:checked="true"
-                android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-                android:text="@string/latest"
-                android:textAlignment="center"
-                android:textColor="@drawable/change_text_tab" />
+        <View
+            android:layout_width="@dimen/_1dp"
+            android:layout_height="match_parent"
+            android:background="@color/background" />
 
-            <View
-                android:layout_width="@dimen/_1dp"
-                android:layout_height="match_parent"
-                android:background="@color/background" />
+        <RadioButton
+            android:id="@+id/rd_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/change_background_tab"
+            android:button="@android:color/transparent"
+            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:text="@string/category"
+            android:textAlignment="center"
+            android:textColor="@drawable/change_text_tab" />
 
-            <RadioButton
-                android:id="@+id/rd_category"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/change_background_tab"
-                android:button="@android:color/transparent"
-                android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-                android:text="@string/category"
-                android:textAlignment="center"
-                android:textColor="@drawable/change_text_tab" />
+        <View
+            android:layout_width="@dimen/_1dp"
+            android:layout_height="match_parent"
+            android:background="@color/background" />
 
-            <View
-                android:layout_width="@dimen/_1dp"
-                android:layout_height="match_parent"
-                android:background="@color/background" />
+        <RadioButton
+            android:id="@+id/rd_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/change_background_tab"
+            android:button="@android:color/transparent"
+            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:text="@string/area"
+            android:textAlignment="center"
+            android:textColor="@drawable/change_text_tab" />
+    </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/rd_area"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/change_background_tab"
-                android:button="@android:color/transparent"
-                android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-                android:text="@string/area"
-                android:textAlignment="center"
-                android:textColor="@drawable/change_text_tab" />
-        </RadioGroup>
-
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -82,6 +79,7 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_near_by"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5dp"
@@ -150,7 +148,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rcv_house"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:scrollbarSize="@dimen/_2dp"
                     android:scrollbarStyle="insideInset"
                     android:scrollbarThumbVertical="@color/home_color"
@@ -159,5 +157,5 @@
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-    </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

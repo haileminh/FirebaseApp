@@ -18,7 +18,7 @@
     <string name="fblogin">Đăng Nhập FaceBook</string>
     <string name="register_new">Đăng Ký Mới</string>
     <string name="verifiation">Truy cập Email để xác thực tài khoản</string>
-    <string name="open_jps">Bạn cần bật GPS để có thể sử dụng ứng dụng</string>
+    <string name="open_gps">Bạn cần bật GPS để có thể sử dụng ứng dụng</string>
     <string name="email_error">Email không đúng định dạng!</string>
     <string name="email_null">Email không được để trống!</string>
     <string name="pass_erro">Mật khẩu quá ngắn!</string>
