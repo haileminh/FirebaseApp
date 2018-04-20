@@ -1,12 +1,18 @@
 package net.hailm.firebaseapp.view.fragments;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +22,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
@@ -44,12 +53,15 @@ public class HouseFragment extends Fragment {
     RecyclerView mRcvHouse;
     @BindView(R.id.pgb_house)
     ProgressBar pgbHouse;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView mNestedScrollView;
 
     Unbinder unbinder;
     private View rootView;
     private HouseDbHelper mDbHelper;
     private HouseRcvAdapter mHouseRcvAdapter;
     private List<HouseModel> houseModelList;
+    private int itemLoaded = 10;
 
     private SharedPreferences mSharedPreferences;
 
@@ -80,7 +92,7 @@ public class HouseFragment extends Fragment {
         LogUtils.d("LOCATION: "
                 + mSharedPreferences.getString(Constants.LATITUDE, "0")
                 + ", " + mSharedPreferences.getString(Constants.LONGITUDE, "0"));
-        Location currentLocation = new Location("");
+        final Location currentLocation = new Location("");
 
         currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
         currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
@@ -88,44 +100,59 @@ public class HouseFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRcvHouse.setLayoutManager(llm);
 
-        mRcvHouse.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LogUtils.d("Kiem tra: " + "ddddd");
-            }
-        });
-
+        pgbHouse.setVisibility(View.VISIBLE);
         houseModelList = new ArrayList<>();
-        HouseListener listener = new HouseListener() {
+        final HouseListener listener = new HouseListener() {
             @Override
-            public void getListHouseModel(HouseModel houseModel) {
-                LogUtils.d("Tel: " + houseModel.getTel());
-                houseModelList.add(houseModel);
+            public void getListHouseModel(final HouseModel houseModel) {
+                final List<Bitmap> bitmapList = new ArrayList<>();
+                for (String url : houseModel.getHouseImages()) {
+                    StorageReference mStorageImage = FirebaseStorage.getInstance().getReference()
+                            .child(Constants.IMAGES)
+                            .child(url);
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            bitmapList.add(bitmap);
+                            houseModel.setBitmapList(bitmapList);
 
-                Collections.sort(houseModelList, new Comparator<HouseModel>() {
-                    @Override
-                    public int compare(HouseModel o1, HouseModel o2) {
-                        return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
-                    }
-                });
-                mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, getContext());
-                mRcvHouse.setAdapter(mHouseRcvAdapter);
-                mHouseRcvAdapter.notifyDataSetChanged();
-                pgbHouse.setVisibility(View.GONE);
+                            if (houseModel.getBitmapList().size() == houseModel.getHouseImages().size()) {
+                                houseModelList.add(houseModel);
 
-                LogUtils.d("houseModelList" + houseModelList);
+                                Collections.sort(houseModelList, new Comparator<HouseModel>() {
+                                    @Override
+                                    public int compare(HouseModel o1, HouseModel o2) {
+                                        return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
+                                    }
+                                });
+                                mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, getContext());
+                                mRcvHouse.setAdapter(mHouseRcvAdapter);
+                                mHouseRcvAdapter.notifyDataSetChanged();
+                                pgbHouse.setVisibility(View.GONE);
 
-
+                                LogUtils.d("houseModelList" + houseModelList);
+                            }
+                        }
+                    });
+                }
             }
         };
 
-        mDbHelper.getListHouse(listener, currentLocation, 3, 0);
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getChildAt(v.getChildCount() - 1) != null) {
+                    if (scrollY >= v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()) {
+                        itemLoaded += 10;
+                        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, itemLoaded - 10);
+                    }
+                }
+            }
+        });
+
+        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, 0);
         test();
     }
 
@@ -139,7 +166,7 @@ public class HouseFragment extends Fragment {
             }
         });
 
-        LogUtils.d("ListTest..." + list);
+        LogUtils.d("ListTest..." + houseModelList.size());
     }
 
     @Override
@@ -152,14 +179,5 @@ public class HouseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @OnClick(R.id.btn_near_by)
-    public void submit(View view) {
-        switch (view.getId()) {
-            case R.id.btn_near_by:
-                test();
-                break;
-        }
     }
 }

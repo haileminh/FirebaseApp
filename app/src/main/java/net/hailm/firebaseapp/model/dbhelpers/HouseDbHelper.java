@@ -61,7 +61,8 @@ public class HouseDbHelper extends BaseFireBase {
         }
     }
 
-    private void getListHouse(DataSnapshot dataSnapshot, HouseListener houseListener, Location currentLocation, int nextItem, int loadedItem) {
+    private void getListHouse(DataSnapshot dataSnapshot, HouseListener houseListener, Location currentLocation,
+                              int nextItem, int loadedItem) {
         // Get list house
         int i = 0;
         DataSnapshot dataHouses = dataSnapshot.child(Constants.HOUSES);

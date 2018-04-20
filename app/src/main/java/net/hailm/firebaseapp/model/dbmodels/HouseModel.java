@@ -1,5 +1,7 @@
 package net.hailm.firebaseapp.model.dbmodels;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ public class HouseModel {
     private List<String> houseImages;
     private List<CommentModel> commentModelList;
     private AddressModel addressModel;
+    private List<Bitmap> bitmapList;
 
     public HouseModel() {
     }
@@ -27,6 +30,14 @@ public class HouseModel {
     public HouseModel(String contents, long likeNumber) {
         this.contents = contents;
         this.likeNumber = likeNumber;
+    }
+
+    public List<Bitmap> getBitmapList() {
+        return bitmapList;
+    }
+
+    public void setBitmapList(List<Bitmap> bitmapList) {
+        this.bitmapList = bitmapList;
     }
 
     public AddressModel getAddressModel() {

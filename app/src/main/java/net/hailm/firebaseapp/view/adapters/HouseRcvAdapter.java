@@ -107,7 +107,7 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
 
         HouseModel houseModel = houseModelList.get(position);
 //        if (houseModel.getAddressModel().getDistance() < 1) {
-            showData(holder, position);
+        showData(holder, position);
 //        }
 
     }
@@ -130,19 +130,24 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             holder.btnContact.setVisibility(View.VISIBLE);
         }
 
-        if (houseModel.getHouseImages().size() > 0) {
-            mStorageImage = FirebaseStorage.getInstance().getReference()
-                    .child(Constants.IMAGES)
-                    .child(houseModel.getHouseImages().get(0));
-            final long ONE_MEGABYTE = 1024 * 1024;
-            mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    holder.imgHouseImage.setImageBitmap(bitmap);
-                }
-            });
+//        if (houseModel.getHouseImages().size() > 0) {
+//            mStorageImage = FirebaseStorage.getInstance().getReference()
+//                    .child(Constants.IMAGES)
+//                    .child(houseModel.getHouseImages().get(0));
+//            final long ONE_MEGABYTE = 1024 * 1024;
+//            mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                @Override
+//                public void onSuccess(byte[] bytes) {
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                    holder.imgHouseImage.setImageBitmap(bitmap);
+//                }
+//            });
+//        }
+
+        if (houseModel.getBitmapList().size() > 0) {
+            holder.imgHouseImage.setImageBitmap(houseModel.getBitmapList().get(0));
         }
+
 
         // Fill data comment house
         if (houseModel.getCommentModelList().size() > 0) {
