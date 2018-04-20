@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,23 +75,28 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
                 .build();
         // Check permission
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            boolean granted = checkPermissionGranted();
-            if (granted) {
-                mGoogleApiClient.connect();
-                checkChangeActivity = true;
-                setAnimSplash();
+        if (isInternetOn()) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                boolean granted = checkPermissionGranted();
+                if (granted) {
+                    mGoogleApiClient.connect();
+                    checkChangeActivity = true;
+                    setAnimSplash();
+                } else {
+                    requestPermission();
+                }
             } else {
-                requestPermission();
+                if (!isOpenGPS()) {
+                    showDialog1(getString(R.string.open_gps), SplashActivity.this);
+                    Toast.makeText(this, getString(R.string.open_gps), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                } else {
+                    mGoogleApiClient.connect();
+                    setAnimSplash();
+                }
             }
         } else {
-            if (!isOpenGPS()) {
-                showDialog1(getString(R.string.open_gps), SplashActivity.this);
-                Toast.makeText(this, getString(R.string.open_gps), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            } else {
-                setAnimSplash();
-            }
+            showDialog1(getString(R.string.open_internet), SplashActivity.this);
         }
 
 
@@ -228,5 +234,24 @@ public class SplashActivity extends BaseActivity implements Animation.AnimationL
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         return locationManager != null
                 && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public final boolean isInternetOn() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec =
+                (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        // Check for network connections
+        if (connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED) {
+            // if connected with internet
+            return true;
+        } else if (
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED) {
+            return false;
+        }
+        return false;
     }
 }

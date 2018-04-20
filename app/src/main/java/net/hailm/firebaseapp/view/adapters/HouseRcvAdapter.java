@@ -106,9 +106,9 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     public void onBindViewHolder(final HouseRcvAdapter.ViewHolder holder, int position) {
 
         HouseModel houseModel = houseModelList.get(position);
-        if (houseModel.getAddressModel().getDistance() < 1) {
+//        if (houseModel.getAddressModel().getDistance() < 1) {
             showData(holder, position);
-        }
+//        }
 
     }
 
