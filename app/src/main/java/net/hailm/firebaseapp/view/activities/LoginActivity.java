@@ -316,7 +316,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         if (user != null) {
             // Kiem tra da active hay chua
             if (user.isEmailVerified() || flag == true) {
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {
                 mAuth.signOut();

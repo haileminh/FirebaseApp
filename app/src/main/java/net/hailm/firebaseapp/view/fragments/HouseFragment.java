@@ -2,6 +2,7 @@ package net.hailm.firebaseapp.view.fragments;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,8 +32,10 @@ import com.google.firebase.storage.StorageReference;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
+import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.view.activities.HouseDetailActivity;
 import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 
 import java.util.ArrayList;
@@ -48,7 +53,7 @@ import butterknife.Unbinder;
  * Created by hai.lm on 13/04/2018.
  */
 
-public class HouseFragment extends Fragment {
+public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     @BindView(R.id.rcv_house)
     RecyclerView mRcvHouse;
     @BindView(R.id.pgb_house)
@@ -64,6 +69,10 @@ public class HouseFragment extends Fragment {
     private int itemLoaded = 10;
 
     private SharedPreferences mSharedPreferences;
+
+
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     public HouseFragment() {
         // Required empty public constructor
@@ -127,10 +136,7 @@ public class HouseFragment extends Fragment {
                                         return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
                                     }
                                 });
-                                mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, getContext());
-                                mRcvHouse.setAdapter(mHouseRcvAdapter);
-                                mHouseRcvAdapter.notifyDataSetChanged();
-                                pgbHouse.setVisibility(View.GONE);
+                                setAdapter(houseModelList,getContext());
 
                                 LogUtils.d("houseModelList" + houseModelList);
                             }
@@ -156,6 +162,13 @@ public class HouseFragment extends Fragment {
         test();
     }
 
+    private void setAdapter(List<HouseModel> houseModelList, Context context) {
+        mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, context, this);
+        mRcvHouse.setAdapter(mHouseRcvAdapter);
+        mHouseRcvAdapter.notifyDataSetChanged();
+        pgbHouse.setVisibility(View.GONE);
+    }
+
     private void test() {
         List<HouseModel> list = new ArrayList<>();
         list.addAll(houseModelList);
@@ -179,5 +192,20 @@ public class HouseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onItemCLick(HouseModel houseModel) {
+        LogUtils.d("onCLick...." + houseModel.getHouseId());
+
+        HouseDetailFragment houseDetailFragment = new HouseDetailFragment();
+        manager = getFragmentManager();
+        transaction = manager.beginTransaction();
+
+        transaction.replace(R.id.frame_container, houseDetailFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+//        startActivity(new Intent(getContext(), HouseDetailActivity.class));
     }
 }

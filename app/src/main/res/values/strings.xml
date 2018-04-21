@@ -46,6 +46,8 @@
     <string name="dien_tich">Diện tích: </string>
     <string name="location">Location </string>
     <string name="km">km </string>
+    <string name="home">Home </string>
+    <string name="setting">Setting </string>
 
 
 </resources>

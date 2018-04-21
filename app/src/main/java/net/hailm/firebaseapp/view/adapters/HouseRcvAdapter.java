@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,15 +21,18 @@ import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
-import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.view.activities.HouseDetailActivity;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 
 /**
  * Created by hai.lm on 14/04/2018.
@@ -38,14 +43,18 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     private Context context;
     private LayoutInflater inflater;
     private StorageReference mStorageImage;
+    private HouseRcvAdapterCallback mCallback;
 
-    public HouseRcvAdapter(List<HouseModel> houseModelList, Context context) {
+    public HouseRcvAdapter(List<HouseModel> houseModelList, Context context,HouseRcvAdapterCallback callback) {
         this.houseModelList = houseModelList;
         this.context = context;
         inflater = LayoutInflater.from(context);
+        this.mCallback = callback;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ll_house)
+        LinearLayout llHouse;
         @BindView(R.id.txt_landlord)
         TextView txtLandlord;
         @BindView(R.id.txt_address)
@@ -105,11 +114,18 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     @Override
     public void onBindViewHolder(final HouseRcvAdapter.ViewHolder holder, int position) {
 
-        HouseModel houseModel = houseModelList.get(position);
+        final HouseModel houseModel = houseModelList.get(position);
 //        if (houseModel.getAddressModel().getDistance() < 1) {
         showData(holder, position);
 //        }
 
+        holder.llHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
+                mCallback.onItemCLick(houseModel);
+            }
+        });
     }
 
     private void showData(final ViewHolder holder, int position) {
