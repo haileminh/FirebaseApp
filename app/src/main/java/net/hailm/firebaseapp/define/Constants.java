@@ -28,4 +28,8 @@ public class Constants {
     public static final String UTILITIES = "Utilities";
     public static final String IMAGES = "images";
     public static final String MEMBERS = "members";
+
+
+    //Bundle
+    public static final String HOUSE_MODEL = "House model";
 }

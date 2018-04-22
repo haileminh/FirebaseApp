@@ -5,16 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.relex.circleindicator.CircleIndicator;
 
@@ -26,6 +31,26 @@ public class HouseDetailFragment extends Fragment {
     ViewPager vpgPhoto;
     @BindView(R.id.circle_indicator)
     CircleIndicator indicator;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.txt_address_detail)
+    TextView txtAddress;
+    @BindView(R.id.txt_landlord_detail)
+    TextView txtLandord;
+    @BindView(R.id.txt_date_time_detail)
+    TextView txtDate;
+    @BindView(R.id.txt_quantity_detail)
+    TextView txtQuantity;
+    @BindView(R.id.txt_acreage_detail)
+    TextView txtAcreage;
+    @BindView(R.id.txt_price_detail)
+    TextView txtPrice;
+    @BindView(R.id.txt_contents_detail)
+    TextView txtContents;
+    @BindView(R.id.txt_tel_detail)
+    TextView txtTel;
+
+    private HouseModel houseModel;
 
     public HouseDetailFragment() {
     }
@@ -42,17 +67,52 @@ public class HouseDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Tesst
-        HouseModel houseModel = new HouseModel();
+        Bundle bundle = getArguments();
+        houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
 
-//
-//        photoVpgAdapter = new PhotoVpgAdapter(getContext(), houseModel);
-//        vpgPhoto.setAdapter(photoVpgAdapter);
-//        indicator.setViewPager(vpgPhoto);
-//        vpgPhoto.setCurrentItem(0);
+        photoVpgAdapter = new PhotoVpgAdapter(getContext(), houseModel);
+        vpgPhoto.setAdapter(photoVpgAdapter);
+        indicator.setViewPager(vpgPhoto);
+        vpgPhoto.setCurrentItem(0);
+        showHouseDetail();
+    }
+
+
+    private void showHouseDetail() {
+        txtLandord.setText(houseModel.getLandlord());
+        if (houseModel.getQuantity() > 1) {
+            String quantity = getString(R.string.con) + " " + String.valueOf(houseModel.getQuantity()) + " " + getString(R.string.phong);
+            txtQuantity.setText(quantity);
+        } else {
+            txtQuantity.setText(getString(R.string.het_phong));
+        }
+        String address = getString(R.string.dia_chi) + " " + houseModel.getAddressModel().getAddress();
+        txtAddress.setText(address);
+        String acreage = getString(R.string.dien_tich) + " " + String.valueOf(houseModel.getAcreage()) + " " + getString(R.string.m2);
+        txtAcreage.setText(acreage);
+        String price = getString(R.string.gia_phong) + " " + String.valueOf(houseModel.getPrice()) + " " + getString(R.string.dong);
+        txtPrice.setText(price);
+        String contents = getString(R.string.chi_tiet) + " " + houseModel.getContents();
+        txtContents.setText(contents);
+        String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel();
+        txtTel.setText(tel);
+    }
+
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail})
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.img_back_house_detail:
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
+            case R.id.txt_tel_detail:
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
+
     public void onStart() {
         super.onStart();
     }

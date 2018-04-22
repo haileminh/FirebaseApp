@@ -1,14 +1,17 @@
 package net.hailm.firebaseapp.model.dbmodels;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by hai.lm on 13/04/2018.
  */
 
-public class HouseModel {
+public class HouseModel implements Serializable {
     private String landlord;
     private String tel;
     private String houseId;
@@ -143,4 +146,5 @@ public class HouseModel {
     public void setUtility(List<String> utility) {
         this.utility = utility;
     }
+
 }

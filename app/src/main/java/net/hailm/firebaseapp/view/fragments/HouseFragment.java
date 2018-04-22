@@ -199,10 +199,14 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     @Override
     public void onItemCLick(HouseModel houseModel) {
         LogUtils.d("onCLick...." + houseModel.getHouseId());
-
+        LogUtils.d("onCLick 2...." + houseModel.getCommentModelList().size());
         HouseDetailFragment houseDetailFragment = new HouseDetailFragment();
         manager = getFragmentManager();
         transaction = manager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.HOUSE_MODEL, houseModel);
+        houseDetailFragment.setArguments(bundle);
 
         transaction.replace(R.id.frame_container, houseDetailFragment);
         transaction.addToBackStack(null);

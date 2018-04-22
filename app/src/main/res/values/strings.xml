@@ -39,9 +39,16 @@
     <string name="reviews">Reviews</string>
     <string name="blog">Blogs</string>
 
+    <string name="thong_tin_chi_tiet">Thông tin chi tiết</string>
     <string name="lien_he_ngay">Liên hệ ngay</string>
     <string name="dia_chi">Địa chỉ: </string>
     <string name="gia_phong">Giá phòng: </string>
+    <string name="m2"> mét vuông </string>
+    <string name="dong"> đ</string>
+    <string name="con"> Còn</string>
+    <string name="phong"> phòng</string>
+    <string name="het_phong">Hết phòng</string>
+    <string name="chi_tiet">Chi tiết: </string>
     <string name="so_dien_thoai">Số điện thoại: </string>
     <string name="dien_tich">Diện tích: </string>
     <string name="location">Location </string>
