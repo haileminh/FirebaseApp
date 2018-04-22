@@ -136,7 +136,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
                                         return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
                                     }
                                 });
-                                setAdapter(houseModelList,getContext());
+                                setAdapter(houseModelList, getActivity());
 
                                 LogUtils.d("houseModelList" + houseModelList);
                             }
@@ -163,10 +163,12 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     }
 
     private void setAdapter(List<HouseModel> houseModelList, Context context) {
-        mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, context, this);
-        mRcvHouse.setAdapter(mHouseRcvAdapter);
-        mHouseRcvAdapter.notifyDataSetChanged();
-        pgbHouse.setVisibility(View.GONE);
+        if (context != null) {
+            mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, context, this);
+            mRcvHouse.setAdapter(mHouseRcvAdapter);
+            mHouseRcvAdapter.notifyDataSetChanged();
+            pgbHouse.setVisibility(View.GONE);
+        }
     }
 
     private void test() {

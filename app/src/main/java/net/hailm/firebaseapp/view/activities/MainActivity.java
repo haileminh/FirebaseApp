@@ -22,6 +22,8 @@ public class MainActivity extends BaseActivity {
     BottomNavigationViewEx mBottomNav;
     FragmentTransaction transaction;
 
+    boolean checkOnClick = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +45,14 @@ public class MainActivity extends BaseActivity {
                 transaction = getSupportFragmentManager().beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.item_home:
-                        transaction.replace(R.id.frame_container, new HomeFragment());
+                        if (!checkOnClick) {
+                            transaction.replace(R.id.frame_container, new HomeFragment());
+                            checkOnClick = true;
+                        }
+                        LogUtils.d("checkOnclick: " + checkOnClick);
                         break;
                     case R.id.item_setting:
+                        checkOnClick = false;
                         break;
                     default:
                         break;
