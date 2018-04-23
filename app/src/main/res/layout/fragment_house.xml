@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -78,7 +78,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rcv_house"
                     android:layout_width="match_parent"
-                    android:layout_height="800dp"
+                    android:layout_height="700dp"
                     android:scrollbarSize="@dimen/_2dp"
                     android:scrollbarStyle="insideInset"
                     android:scrollbarThumbVertical="@color/home_color"
@@ -90,9 +90,10 @@
                     android:id="@+id/pgb_house"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/_2dp" />
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
