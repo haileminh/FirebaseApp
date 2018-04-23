@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -46,7 +47,7 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     private StorageReference mStorageImage;
     private HouseRcvAdapterCallback mCallback;
 
-    public HouseRcvAdapter(List<HouseModel> houseModelList, Context context,HouseRcvAdapterCallback callback) {
+    public HouseRcvAdapter(List<HouseModel> houseModelList, Context context, HouseRcvAdapterCallback callback) {
         this.houseModelList = houseModelList;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -235,16 +236,16 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
 
         LogUtils.d("Url: " + mStorageAvatar);
 
-        final long ONE_MEGABYTE = 1024 * 1024;
-        mStorageAvatar.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                imageView.setImageBitmap(bitmap);
-            }
-        });
+//        final long ONE_MEGABYTE = 1024 * 1024;
+//        mStorageAvatar.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                imageView.setImageBitmap(bitmap);
+//            }
+//        });
 
-//        Glide.with(context).load(mStorageAvatar).into(imageView);
+        Glide.with(context).using(new FirebaseImageLoader()).load(mStorageAvatar).into(imageView);
 
     }
 
