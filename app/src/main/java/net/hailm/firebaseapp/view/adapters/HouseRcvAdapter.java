@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -231,6 +232,9 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         StorageReference mStorageAvatar = FirebaseStorage.getInstance().getReference()
                 .child(Constants.MEMBERS)
                 .child(url);
+
+        LogUtils.d("Url: " + mStorageAvatar);
+
         final long ONE_MEGABYTE = 1024 * 1024;
         mStorageAvatar.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -239,6 +243,9 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 imageView.setImageBitmap(bitmap);
             }
         });
+
+//        Glide.with(context).load(mStorageAvatar).into(imageView);
+
     }
 
     @Override

@@ -5,13 +5,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by hai.lm on 13/04/2018.
  */
 
-public class HouseModel implements Serializable {
+public class HouseModel implements Parcelable {
     private String landlord;
     private String tel;
     private String houseId;
@@ -34,6 +35,34 @@ public class HouseModel implements Serializable {
         this.contents = contents;
         this.likeNumber = likeNumber;
     }
+
+    protected HouseModel(Parcel in) {
+        landlord = in.readString();
+        tel = in.readString();
+        houseId = in.readString();
+        acreage = in.readLong();
+        price = in.readLong();
+        quantity = in.readLong();
+        videoIntro = in.readString();
+        contents = in.readString();
+        likeNumber = in.readLong();
+        utility = in.createStringArrayList();
+        houseImages = in.createStringArrayList();
+        commentModelList = new ArrayList<>();
+        in.readTypedList(commentModelList,CommentModel.CREATOR);
+    }
+
+    public static final Creator<HouseModel> CREATOR = new Creator<HouseModel>() {
+        @Override
+        public HouseModel createFromParcel(Parcel in) {
+            return new HouseModel(in);
+        }
+
+        @Override
+        public HouseModel[] newArray(int size) {
+            return new HouseModel[size];
+        }
+    };
 
     public List<Bitmap> getBitmapList() {
         return bitmapList;
@@ -147,4 +176,24 @@ public class HouseModel implements Serializable {
         this.utility = utility;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(landlord);
+        dest.writeString(tel);
+        dest.writeString(houseId);
+        dest.writeLong(acreage);
+        dest.writeLong(price);
+        dest.writeLong(quantity);
+        dest.writeString(videoIntro);
+        dest.writeString(contents);
+        dest.writeLong(likeNumber);
+        dest.writeStringList(utility);
+        dest.writeStringList(houseImages);
+        dest.writeTypedList(commentModelList);
+    }
 }

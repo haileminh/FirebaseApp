@@ -6,14 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.Utils;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
@@ -49,6 +55,10 @@ public class HouseDetailFragment extends Fragment {
     TextView txtContents;
     @BindView(R.id.txt_tel_detail)
     TextView txtTel;
+    @BindView(R.id.txt_total_images_detail)
+    TextView txtTotalImages;
+    @BindView(R.id.txt_total_comment_detail)
+    TextView txtTotalComments;
 
     private HouseModel houseModel;
 
@@ -80,7 +90,7 @@ public class HouseDetailFragment extends Fragment {
 
     private void showHouseDetail() {
         txtLandord.setText(houseModel.getLandlord());
-        if (houseModel.getQuantity() > 1) {
+        if (houseModel.getQuantity() > 0) {
             String quantity = getString(R.string.con) + " " + String.valueOf(houseModel.getQuantity()) + " " + getString(R.string.phong);
             txtQuantity.setText(quantity);
         } else {
@@ -96,15 +106,39 @@ public class HouseDetailFragment extends Fragment {
         txtContents.setText(contents);
         String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel();
         txtTel.setText(tel);
+
+        int totalComement = houseModel.getCommentModelList().size();
+        if (totalComement >0) {
+            txtTotalComments.setText(String.valueOf(totalComement));
+        } else {
+            txtTotalComments.setText("0");
+        }
+
+        int totalImageComment = 0;
+        for (CommentModel values : houseModel.getCommentModelList()) {
+            totalImageComment += values.getListCommentImages().size();
+        }
+        if (totalImageComment>0) {
+            txtTotalImages.setText(String.valueOf(totalImageComment));
+        } else {
+            txtTotalImages.setText("0");
+        }
+
     }
 
-    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail})
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.img_back_house_detail:
                 getActivity().getSupportFragmentManager().popBackStack();
                 break;
             case R.id.txt_tel_detail:
+                break;
+            case R.id.txt_like_detail:
+                Toast.makeText(getContext(), "LIke", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.txt_share_detail:
+                Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

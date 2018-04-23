@@ -1,12 +1,15 @@
 package net.hailm.firebaseapp.model.dbmodels;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by hai.lm on 15/04/2018.
  */
 
-public class CommentModel {
+public class CommentModel implements Parcelable {
     private String commentId;
     private String title;
     private String contents;
@@ -18,6 +21,29 @@ public class CommentModel {
 
     public CommentModel() {
     }
+
+    protected CommentModel(Parcel in) {
+        commentId = in.readString();
+        title = in.readString();
+        contents = in.readString();
+        likeNumber = in.readLong();
+        score = in.readDouble();
+        uid = in.readString();
+        listCommentImages = in.createStringArrayList();
+        users = in.readParcelable(Users.class.getClassLoader());
+    }
+
+    public static final Creator<CommentModel> CREATOR = new Creator<CommentModel>() {
+        @Override
+        public CommentModel createFromParcel(Parcel in) {
+            return new CommentModel(in);
+        }
+
+        @Override
+        public CommentModel[] newArray(int size) {
+            return new CommentModel[size];
+        }
+    };
 
     public String getCommentId() {
         return commentId;
@@ -81,5 +107,22 @@ public class CommentModel {
 
     public void setUsers(Users users) {
         this.users = users;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(commentId);
+        dest.writeString(title);
+        dest.writeString(contents);
+        dest.writeLong(likeNumber);
+        dest.writeDouble(score);
+        dest.writeString(uid);
+        dest.writeStringList(listCommentImages);
+        dest.writeParcelable(users,flags);
     }
 }

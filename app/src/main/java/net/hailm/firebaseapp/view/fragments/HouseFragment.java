@@ -205,7 +205,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         transaction = manager.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.HOUSE_MODEL, houseModel);
+        bundle.putParcelable(Constants.HOUSE_MODEL, houseModel);
         houseDetailFragment.setArguments(bundle);
 
         transaction.replace(R.id.frame_container, houseDetailFragment);

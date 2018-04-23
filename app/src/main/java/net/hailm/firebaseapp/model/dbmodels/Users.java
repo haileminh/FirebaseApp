@@ -1,12 +1,15 @@
 package net.hailm.firebaseapp.model.dbmodels;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by hai_l on 25/03/2018.
  */
 
-public class Users implements Serializable {
+public class Users implements Serializable, Parcelable {
     private String uid;
     private String name;
     private String avatar;
@@ -20,6 +23,25 @@ public class Users implements Serializable {
         this.name = name;
         this.email = email;
     }
+
+    protected Users(Parcel in) {
+        uid = in.readString();
+        name = in.readString();
+        avatar = in.readString();
+        email = in.readString();
+    }
+
+    public static final Creator<Users> CREATOR = new Creator<Users>() {
+        @Override
+        public Users createFromParcel(Parcel in) {
+            return new Users(in);
+        }
+
+        @Override
+        public Users[] newArray(int size) {
+            return new Users[size];
+        }
+    };
 
     public String getAvatar() {
         return avatar;
@@ -60,5 +82,18 @@ public class Users implements Serializable {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(name);
+        dest.writeString(avatar);
+        dest.writeString(email);
     }
 }

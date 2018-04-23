@@ -49,5 +49,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services:12.0.1'
 
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+
+    implementation ("com.github.bumptech.glide:glide:4.7.1") {
+        exclude group: "com.android.support"
+    }
+    implementation "com.android.support:support-fragment:26.1.0"
 }
 apply plugin: 'com.google.gms.google-services'
