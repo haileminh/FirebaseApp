@@ -3,6 +3,7 @@
     <string name="phien_ban">Phiên bản </string>
     <string name="facebook_app_id">434133683705239</string>
     <string name="fb_login_protocol_scheme">fb434133683705239</string>
+    <string name="api_key">AIzaSyDnxmOszp_1nfrfhnUyNGQjC3aQNUptHyM</string>
 
     <string name="input_email_register">Nhập Email Đăng Ký</string>
     <string name="input_pass">Nhập Mật Khẩu</string>

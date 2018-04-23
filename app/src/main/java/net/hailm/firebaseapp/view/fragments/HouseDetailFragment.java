@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
@@ -32,7 +35,10 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.relex.circleindicator.CircleIndicator;
 
-public class HouseDetailFragment extends Fragment {
+public class HouseDetailFragment extends Fragment implements OnMapReadyCallback {
+    private GoogleMap mGoogleMap;
+    private SupportMapFragment mSupportMapFragment;
+
     private PhotoVpgAdapter photoVpgAdapter;
     Unbinder unbinder;
     private View rootView;
@@ -85,7 +91,8 @@ public class HouseDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
-
+        mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mSupportMapFragment.getMapAsync(this);
         setPhotoAdapter();
         setCommentAdapter();
         showHouseDetail();
@@ -103,7 +110,7 @@ public class HouseDetailFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rcvCommentList.setLayoutManager(llm);
 
-        commentAdapter = new CommentAdapter(getContext(),houseModel.getCommentModelList());
+        commentAdapter = new CommentAdapter(getContext(), houseModel.getCommentModelList());
         rcvCommentList.setAdapter(commentAdapter);
         commentAdapter.notifyDataSetChanged();
     }
@@ -175,5 +182,10 @@ public class HouseDetailFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.mGoogleMap = googleMap;
     }
 }

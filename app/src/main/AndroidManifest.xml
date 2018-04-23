@@ -4,8 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo_dse2"
@@ -13,6 +14,9 @@
         android:roundIcon="@drawable/logo_dse2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -33,11 +37,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.HomeActivity">
-        </activity>
+        <activity android:name=".view.activities.HomeActivity"></activity>
         <activity android:name=".view.activities.RegisterActivity" />
-        <activity android:name=".view.activities.LoginActivity">
-        </activity>
+        <activity android:name=".view.activities.LoginActivity"></activity>
         <activity android:name=".view.activities.ResetPassActivity" />
         <activity android:name=".view.activities.MainActivity">
             <intent-filter>
@@ -49,7 +51,7 @@
         <activity android:name=".view.activities.SplashActivity">
 
         </activity>
-        <activity android:name=".view.activities.HouseDetailActivity"/>
+        <activity android:name=".view.activities.HouseDetailActivity" />
     </application>
 
 </manifest>

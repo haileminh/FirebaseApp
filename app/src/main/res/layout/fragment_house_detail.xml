@@ -258,6 +258,8 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <include layout="@layout/layout_map"/>
+
             <include layout="@layout/layout_comment" />
 
             <include layout="@layout/layout_comment_list" />
