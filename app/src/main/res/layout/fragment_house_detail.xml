@@ -258,17 +258,19 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <include layout="@layout/item_comment" />
+            <include layout="@layout/layout_comment" />
+
+            <include layout="@layout/layout_comment_list" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_action_btn_call"
-        android:src="@drawable/ic_call"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="right|bottom"
-        android:layout_marginRight="@dimen/_12dp"
         android:layout_marginBottom="@dimen/_12dp"
+        android:layout_marginRight="@dimen/_12dp"
+        android:src="@drawable/ic_call"
         app:layout_anchorGravity="bottom|right" />
 </android.support.design.widget.CoordinatorLayout>

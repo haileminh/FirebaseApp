@@ -1,9 +1,6 @@
 package net.hailm.firebaseapp.view.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -26,7 +22,6 @@ import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
-import net.hailm.firebaseapp.view.activities.HouseDetailActivity;
 
 import java.util.List;
 
@@ -34,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 
 /**
  * Created by hai.lm on 14/04/2018.

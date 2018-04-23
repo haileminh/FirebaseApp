@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_comment1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/_12dp"
+        android:paddingRight="@dimen/_12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_avatar_comment_detail"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:src="@drawable/logo_dse2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_title_comment_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhà đẹp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14dp" />
+
+            <TextView
+                android:id="@+id/txt_detail_comment_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày 08 tháng 04 lúc 22:45"
+                android:textSize="@dimen/_12dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_score_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_2dp"
+            android:text="5"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14dp" />
+    </LinearLayout>
+</LinearLayout>

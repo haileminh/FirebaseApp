@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.view.adapters.CommentAdapter;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
 import butterknife.BindView;
@@ -59,8 +62,11 @@ public class HouseDetailFragment extends Fragment {
     TextView txtTotalImages;
     @BindView(R.id.txt_total_comment_detail)
     TextView txtTotalComments;
+    @BindView(R.id.rcv_comment_list)
+    RecyclerView rcvCommentList;
 
     private HouseModel houseModel;
+    private CommentAdapter commentAdapter;
 
     public HouseDetailFragment() {
     }
@@ -80,13 +86,27 @@ public class HouseDetailFragment extends Fragment {
         Bundle bundle = getArguments();
         houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
 
+        setPhotoAdapter();
+        setCommentAdapter();
+        showHouseDetail();
+
+    }
+
+    private void setPhotoAdapter() {
         photoVpgAdapter = new PhotoVpgAdapter(getContext(), houseModel);
         vpgPhoto.setAdapter(photoVpgAdapter);
         indicator.setViewPager(vpgPhoto);
         vpgPhoto.setCurrentItem(0);
-        showHouseDetail();
     }
 
+    private void setCommentAdapter() {
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        rcvCommentList.setLayoutManager(llm);
+
+        commentAdapter = new CommentAdapter(getContext(),houseModel.getCommentModelList());
+        rcvCommentList.setAdapter(commentAdapter);
+        commentAdapter.notifyDataSetChanged();
+    }
 
     private void showHouseDetail() {
         txtLandord.setText(houseModel.getLandlord());
@@ -108,7 +128,7 @@ public class HouseDetailFragment extends Fragment {
         txtTel.setText(tel);
 
         int totalComement = houseModel.getCommentModelList().size();
-        if (totalComement >0) {
+        if (totalComement > 0) {
             txtTotalComments.setText(String.valueOf(totalComement));
         } else {
             txtTotalComments.setText("0");
@@ -118,7 +138,7 @@ public class HouseDetailFragment extends Fragment {
         for (CommentModel values : houseModel.getCommentModelList()) {
             totalImageComment += values.getListCommentImages().size();
         }
-        if (totalImageComment>0) {
+        if (totalImageComment > 0) {
             txtTotalImages.setText(String.valueOf(totalImageComment));
         } else {
             txtTotalImages.setText("0");
