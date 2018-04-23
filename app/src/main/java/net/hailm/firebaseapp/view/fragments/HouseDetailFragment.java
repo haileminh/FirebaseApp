@@ -18,9 +18,13 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
@@ -187,5 +191,27 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mGoogleMap = googleMap;
+        double latitude = houseModel.getAddressModel().getLatitude();
+        double longitude = houseModel.getAddressModel().getLongitude();
+        LatLng latLng = new LatLng(latitude,longitude);
+
+        LogUtils.d("Map:" + latLng);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(latitude,longitude));
+        markerOptions.title(houseModel.getLandlord());
+
+
+        mGoogleMap.addMarker(markerOptions);
+
+        showMyLocation(latitude,longitude,mGoogleMap);
+    }
+
+    private void showMyLocation(double latitude, double longitude, GoogleMap googleMap) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .zoom(15)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }
