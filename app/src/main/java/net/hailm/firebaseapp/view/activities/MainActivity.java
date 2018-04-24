@@ -12,7 +12,9 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
+import net.hailm.firebaseapp.view.fragments.AddHouseFragment;
 import net.hailm.firebaseapp.view.fragments.HomeFragment;
+import net.hailm.firebaseapp.view.fragments.PlaceFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +52,14 @@ public class MainActivity extends BaseActivity {
                             checkOnClick = true;
                         }
                         LogUtils.d("checkOnclick: " + checkOnClick);
+                        break;
+                    case R.id.item_search:
+                        transaction.replace(R.id.frame_container, new PlaceFragment());
+                        checkOnClick = false;
+                        break;
+                    case R.id.item_add:
+                        transaction.replace(R.id.frame_container, new AddHouseFragment());
+                        checkOnClick = false;
                         break;
                     case R.id.item_setting:
                         checkOnClick = false;

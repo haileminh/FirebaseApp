@@ -61,78 +61,10 @@
             android:textColor="@drawable/change_text_tab" />
     </RadioGroup>
 
-    <android.support.v4.widget.NestedScrollView
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/nearby"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:gravity="left|center"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/nearby"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/blog"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:gravity="left|center"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/blog"
-                    android:textAllCaps="false" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/review"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:gravity="left|center"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/reviews"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/user"
-                    android:drawablePadding="@dimen/_10dp"
-                    android:gravity="left|center"
-                    android:padding="@dimen/_10dp"
-                    android:text="@string/top_member"
-                    android:textAllCaps="false" />
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

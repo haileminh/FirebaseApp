@@ -281,6 +281,5 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         transaction.addToBackStack(null);
         transaction.commit();
 
-//        startActivity(new Intent(getContext(), HouseDetailActivity.class));
     }
 }

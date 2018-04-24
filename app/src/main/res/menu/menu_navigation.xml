@@ -8,6 +8,18 @@
         android:title="@string/home"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/item_search"
+        android:enabled="true"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item_add"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_white_24dp"
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/item_setting"
         android:enabled="true"
         android:icon="@drawable/ic_setting"
