@@ -16,6 +16,7 @@ public class HouseModel implements Parcelable {
     private String landlord;
     private String tel;
     private String houseId;
+    private String uid;
     private String updateDate;
     private long acreage;
     private long price;
@@ -41,6 +42,7 @@ public class HouseModel implements Parcelable {
         landlord = in.readString();
         tel = in.readString();
         houseId = in.readString();
+        uid = in.readString();
         updateDate = in.readString();
         acreage = in.readLong();
         price = in.readLong();
@@ -65,6 +67,14 @@ public class HouseModel implements Parcelable {
             return new HouseModel[size];
         }
     };
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getUpdateDate() {
         return updateDate;
@@ -196,6 +206,7 @@ public class HouseModel implements Parcelable {
         dest.writeString(landlord);
         dest.writeString(tel);
         dest.writeString(houseId);
+        dest.writeString(uid);
         dest.writeString(updateDate);
         dest.writeLong(acreage);
         dest.writeLong(price);

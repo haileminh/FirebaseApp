@@ -33,8 +33,10 @@
     <string name="house">House</string>
     <string name="place">Place</string>
     <string name="latest">Latest</string>
+    <string name="recent_date">Date</string>
     <string name="category">Category</string>
     <string name="area">Area</string>
+    <string name="price">Price</string>
     <string name="nearby">Nearby</string>
     <string name="top_member">Top member</string>
     <string name="reviews">Reviews</string>
@@ -64,4 +66,23 @@
     <string name="setting">Setting </string>
 
 
+    <!--Dang tin-->
+    <string name="edt_landlord">Tên chủ nhà</string>
+    <string name="edt_address">Địa chỉ</string>
+    <string name="edt_price">Giá phòng</string>
+    <string name="edt_quantity">Số lượng phòng</string>
+    <string name="edt_acreage">Diện tích (mét vuông)</string>
+    <string name="edt_tel">Số điện thoại</string>
+    <string name="edt_contents">Mô tả chi tiết</string>
+
+
+    <string name="edt_utility">Tiện ích</string>
+    <string name="may_lanh">Máy lạnh</string>
+    <string name="wifi">Wifi</string>
+    <string name="giuong">Giường</string>
+    <string name="tu_quan_ao">Tủ quần áo</string>
+    <string name="nong_lanh">Nóng lạnh</string>
+    <string name="gui_xe">Gửi xe miễn phí</string>
+    <string name="register_house">Đăng tin</string>
+    <string name="note">Lưu ý: Tin có ảnh không liên quan đến nhà trọ sẽ bị xóa mà không có thông báo trước.</string>
 </resources>

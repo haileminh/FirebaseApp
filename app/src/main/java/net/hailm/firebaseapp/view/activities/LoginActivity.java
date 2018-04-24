@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -40,16 +41,15 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
+import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.LoginListener;
-import net.hailm.firebaseapp.service.LoginService;
+import net.hailm.firebaseapp.model.dbhelpers.LoginService;
 import net.hailm.firebaseapp.utils.Utils;
 
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +75,8 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     private GoogleSignInOptions mSignInOptions;
     private GoogleApiClient mApiClient;
     private CallbackManager mCallbackManager;
+
+    private SharedPreferences mSharedPreferences;
 //    private LoginManager mLoginManager;
 //    private List<String> permissionFacebook = Arrays.asList("email", "public_profile");
 
@@ -113,6 +115,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         mAuth.signOut();
         mLoginService = new LoginService();
         mCallbackManager = CallbackManager.Factory.create();
+        mSharedPreferences = getSharedPreferences(Constants.LOCATION, MODE_PRIVATE);
 
         // Khoi tao client cho login google
         mSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -316,6 +319,9 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
         if (user != null) {
             // Kiem tra da active hay chua
             if (user.isEmailVerified() || flag == true) {
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(Constants.UID, String.valueOf(user.getUid()));
+                editor.commit();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {

@@ -1,4 +1,4 @@
-package net.hailm.firebaseapp.service;
+package net.hailm.firebaseapp.model.dbhelpers;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;

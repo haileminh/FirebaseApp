@@ -43,6 +43,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -70,6 +71,10 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
 
     private FragmentManager manager;
     private FragmentTransaction transaction;
+
+    private boolean onClickRecentDate = true;
+    private boolean onClickLocation = false;
+    private boolean onClickPrice = false;
 
     public HouseFragment() {
         // Required empty public constructor
@@ -113,7 +118,15 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
             @Override
             public void getListHouseModel(HouseModel houseModel) {
                 houseModelList.add(houseModel);
-                sortByUpdateDate();
+
+                if (onClickRecentDate) {
+                    sortByUpdateDate();
+                } else if (onClickLocation) {
+                    sortByUpdateLocation();
+                } else if (onClickPrice) {
+                    sortByUpdatePrice();
+                }
+
                 setAdapter(houseModelList, getActivity());
                 LogUtils.d("houseModelList" + houseModelList);
 
@@ -226,6 +239,24 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         });
     }
 
+    private void sortByUpdateLocation() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
+            }
+        });
+    }
+
+    private void sortByUpdatePrice() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                return o1.getPrice() > o2.getPrice() ? 1 : -1;
+            }
+        });
+    }
+
     private void setAdapter(List<HouseModel> houseModelList, Context context) {
         if (context != null) {
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -253,10 +284,38 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         LogUtils.d("ListTest..." + houseModelList.size());
     }
 
+    @OnClick({R.id.rd_recent_date, R.id.rd_location, R.id.rd_price})
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.rd_recent_date:
+                onClickRecentDate = true;
+                onClickLocation = false;
+                onClickPrice = false;
+                LogUtils.d("onClickRecentDate:" + onClickRecentDate);
+                initializeListHouse();
+                break;
+            case R.id.rd_location:
+                onClickLocation = true;
+                onClickRecentDate = false;
+                onClickPrice = false;
+                LogUtils.d("onClickLocation:" + onClickLocation);
+                initializeListHouse();
+                break;
+            case R.id.rd_price:
+                onClickPrice = true;
+                onClickRecentDate = false;
+                onClickLocation = false;
+                LogUtils.d("onClickArea:" + onClickPrice);
+                initializeListHouse();
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override

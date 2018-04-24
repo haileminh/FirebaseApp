@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rd_latest"
+            android:id="@+id/rd_recent_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -22,7 +22,7 @@
             android:button="@android:color/transparent"
             android:checked="true"
             android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/latest"
+            android:text="@string/recent_date"
             android:textAlignment="center"
             android:textColor="@drawable/change_text_tab" />
 
@@ -32,14 +32,14 @@
             android:background="@color/background" />
 
         <RadioButton
-            android:id="@+id/rd_category"
+            android:id="@+id/rd_location"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/change_background_tab"
             android:button="@android:color/transparent"
             android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/category"
+            android:text="@string/location"
             android:textAlignment="center"
             android:textColor="@drawable/change_text_tab" />
 
@@ -49,14 +49,14 @@
             android:background="@color/background" />
 
         <RadioButton
-            android:id="@+id/rd_area"
+            android:id="@+id/rd_price"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/change_background_tab"
             android:button="@android:color/transparent"
             android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/area"
+            android:text="@string/price"
             android:textAlignment="center"
             android:textColor="@drawable/change_text_tab" />
     </RadioGroup>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/_12dp"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:inputType="textPersonName"
+            android:id="@+id/edt_landlord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_landlord"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_address"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="number"
+            android:id="@+id/edt_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_price"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="number"
+            android:id="@+id/edt_acreage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_acreage"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="phone"
+            android:id="@+id/edt_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_tel"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="number"
+            android:id="@+id/edt_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edt_quantity"
+            android:singleLine="true"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp">
+
+        <EditText
+            android:inputType="textMultiLine"
+            android:id="@+id/edt_contents"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="@string/edt_contents"
+            android:textSize="@dimen/txt_15sp" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>

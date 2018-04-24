@@ -19,6 +19,11 @@ public class Constants {
     public static final String LATITUDE = "Latitude";
     public static final String LONGITUDE = "Longitude";
 
+
+    public static final String UID = "Uid";
+
+
+
     public static final String AREAS = "Areas";
     public static final String COMMENT_IMAGES = "CommentImages";
     public static final String COMMENTS = "Comments";

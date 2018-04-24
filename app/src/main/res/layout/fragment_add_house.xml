@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="@dimen/_8dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Hai.lm" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_register_images" />
+
+        <include layout="@layout/layout_register_info_house" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8dp"
+            android:text="@string/edt_utility" />
+
+        <include layout="@layout/layout_register_utility" />
+
+        <include layout="@layout/layout_register_map" />
+
+        <Button
+            android:id="@+id/btn_register_house"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12dp"
+            android:background="@drawable/btn_dang_tin"
+            android:text="@string/register_house"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

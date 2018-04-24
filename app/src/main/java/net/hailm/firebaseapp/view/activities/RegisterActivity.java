@@ -13,7 +13,7 @@ import com.blankj.utilcode.util.LogUtils;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.listener.RegisterListener;
-import net.hailm.firebaseapp.service.RegisterService;
+import net.hailm.firebaseapp.model.dbhelpers.RegisterService;
 import net.hailm.firebaseapp.utils.Utils;
 
 import butterknife.BindView;

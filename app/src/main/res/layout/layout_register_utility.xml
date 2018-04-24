@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <CheckBox
+        android:id="@+id/cb_gui_xe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        android:text="@string/gui_xe" />
+
+    <CheckBox
+        android:id="@+id/cb_wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        android:text="@string/wifi" />
+
+    <CheckBox
+        android:id="@+id/cb_may_lanh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/may_lanh" />
+
+    <CheckBox
+        android:id="@+id/cb_giuong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/giuong" />
+
+    <CheckBox
+        android:id="@+id/cb_nong_lanh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nong_lanh" />
+</LinearLayout>
