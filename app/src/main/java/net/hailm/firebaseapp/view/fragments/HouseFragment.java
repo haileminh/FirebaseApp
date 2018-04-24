@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
@@ -32,9 +33,12 @@ import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,10 +62,11 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     private HouseDbHelper mDbHelper;
     private HouseRcvAdapter mHouseRcvAdapter;
     private List<HouseModel> houseModelList;
+    private List<HouseModel> listData = new ArrayList<>();
     private int itemLoaded = 10;
 
     private SharedPreferences mSharedPreferences;
-
+    private Location currentLocation;
 
     private FragmentManager manager;
     private FragmentTransaction transaction;
@@ -82,7 +87,56 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initialize();
+        initializeComponents();
+        initializeListHouse();
+//        initialize();
+    }
+
+    private void initializeComponents() {
+        mDbHelper = new HouseDbHelper();
+
+        mSharedPreferences = getContext().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+
+        LogUtils.d("LOCATION: "
+                + mSharedPreferences.getString(Constants.LATITUDE, "0")
+                + ", " + mSharedPreferences.getString(Constants.LONGITUDE, "0"));
+        currentLocation = new Location("");
+
+        currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
+        currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
+    }
+
+    private void initializeListHouse() {
+        pgbHouse.setVisibility(View.VISIBLE);
+        houseModelList = new ArrayList<>();
+        final HouseListener listener = new HouseListener() {
+            @Override
+            public void getListHouseModel(HouseModel houseModel) {
+                houseModelList.add(houseModel);
+                sortByUpdateDate();
+                setAdapter(houseModelList, getActivity());
+                LogUtils.d("houseModelList" + houseModelList);
+
+                listData.addAll(houseModelList);
+            }
+        };
+
+        LogUtils.d("houseModelList 2" + listData);
+
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getChildAt(v.getChildCount() - 1) != null) {
+                    if (scrollY >= v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()) {
+                        itemLoaded += 10;
+                        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, itemLoaded - 10);
+                    }
+                }
+            }
+        });
+
+        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, 0);
+        test();
     }
 
     private void initialize() {
@@ -97,9 +151,6 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
 
         currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
         currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
-
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        mRcvHouse.setLayoutManager(llm);
 
         pgbHouse.setVisibility(View.VISIBLE);
         houseModelList = new ArrayList<>();
@@ -154,8 +205,31 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         test();
     }
 
+    private void sortByUpdateDate() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            Date date1;
+            Date date2;
+
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                String updateDate1 = o1.getUpdateDate();
+                String updateDate2 = o2.getUpdateDate();
+                try {
+                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate1);
+                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                LogUtils.d("SortBy Date: " + o1.getUpdateDate());
+                return date2.compareTo(date1);
+            }
+        });
+    }
+
     private void setAdapter(List<HouseModel> houseModelList, Context context) {
         if (context != null) {
+            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            mRcvHouse.setLayoutManager(llm);
             mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, context, this);
             mRcvHouse.setAdapter(mHouseRcvAdapter);
             mHouseRcvAdapter.notifyDataSetChanged();
@@ -165,6 +239,9 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
 
     private void test() {
         List<HouseModel> list = new ArrayList<>();
+
+        LogUtils.d("ListTest: houseModelList" + houseModelList);
+
         list.addAll(houseModelList);
         Collections.sort(list, new Comparator<HouseModel>() {
             @Override
@@ -191,7 +268,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     @Override
     public void onItemCLick(HouseModel houseModel) {
         LogUtils.d("onCLick...." + houseModel.getHouseId());
-        LogUtils.d("onCLick 2...." + houseModel.getCommentModelList().size());
+        LogUtils.d("onCLick 2 totalComment...." + houseModel.getCommentModelList().size());
         HouseDetailFragment houseDetailFragment = new HouseDetailFragment();
         manager = getActivity().getSupportFragmentManager();
         transaction = manager.beginTransaction();

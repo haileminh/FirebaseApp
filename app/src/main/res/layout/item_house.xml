@@ -38,7 +38,7 @@
                 android:textSize="@dimen/_14dp" />
 
             <TextView
-                android:id="@+id/txt_date_time"
+                android:id="@+id/txt_update_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ngày 08 tháng 04 lúc 22:45"

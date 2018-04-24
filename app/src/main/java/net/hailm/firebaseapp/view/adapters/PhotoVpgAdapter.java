@@ -8,7 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 
 
@@ -25,7 +31,8 @@ public class PhotoVpgAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return houseModel.getBitmapList().size();
+//        return houseModel.getBitmapList().size();
+        return houseModel.getHouseImages().size();
     }
 
     @Override
@@ -44,8 +51,13 @@ public class PhotoVpgAdapter extends PagerAdapter {
         ImageView imgPhoto = view.findViewById(R.id.img_photo);
 
         // Fill data
-        imgPhoto.setImageBitmap(houseModel.getBitmapList().get(position));
-
+//        imgPhoto.setImageBitmap(houseModel.getBitmapList().get(position));
+        if (houseModel.getHouseImages().size() > 0) {
+            StorageReference mStorageImage = FirebaseStorage.getInstance().getReference()
+                    .child(Constants.IMAGES)
+                    .child(houseModel.getHouseImages().get(position));
+            Glide.with(context).using(new FirebaseImageLoader()).load(mStorageImage).into(imgPhoto);
+        }
         // Dinh view len Viewpager
         container.addView(view);
         return view;

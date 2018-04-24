@@ -22,7 +22,12 @@ import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.utils.DateUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,6 +58,8 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         LinearLayout llHouse;
         @BindView(R.id.txt_landlord)
         TextView txtLandlord;
+        @BindView(R.id.txt_update_date)
+        TextView txtUpdateDate;
         @BindView(R.id.txt_address)
         TextView txtAddress;
         @BindView(R.id.txt_distance)
@@ -131,6 +138,14 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
 
         String landlord = houseModel.getLandlord();
         holder.txtLandlord.setText(landlord);
+
+        Date date = getDate(houseModel);
+        String updateDate = context.getString(R.string.ngay) + " " + DateUtils.getDay(date) + " "
+                + context.getString(R.string.thang) + " " + DateUtils.getMonth(date) + " "
+                + context.getString(R.string.nam) + " " + DateUtils.getYear(date) + " "
+                + context.getString(R.string.luc) + " " + DateUtils.getTime(date);
+        holder.txtUpdateDate.setText(updateDate);
+
         String price = context.getResources().getString(R.string.gia_phong) + String.valueOf(houseModel.getPrice());
         holder.txtPrice.setText(price);
         String acreage = context.getResources().getString(R.string.dien_tich) + String.valueOf(houseModel.getAcreage());
@@ -142,23 +157,16 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             holder.btnContact.setVisibility(View.VISIBLE);
         }
 
-//        if (houseModel.getHouseImages().size() > 0) {
-//            mStorageImage = FirebaseStorage.getInstance().getReference()
-//                    .child(Constants.IMAGES)
-//                    .child(houseModel.getHouseImages().get(0));
-//            final long ONE_MEGABYTE = 1024 * 1024;
-//            mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                @Override
-//                public void onSuccess(byte[] bytes) {
-//                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                    holder.imgHouseImage.setImageBitmap(bitmap);
-//                }
-//            });
-//        }
-
-        if (houseModel.getBitmapList().size() > 0) {
-            holder.imgHouseImage.setImageBitmap(houseModel.getBitmapList().get(0));
+        if (houseModel.getHouseImages().size() > 0) {
+            mStorageImage = FirebaseStorage.getInstance().getReference()
+                    .child(Constants.IMAGES)
+                    .child(houseModel.getHouseImages().get(0));
+            Glide.with(context).using(new FirebaseImageLoader()).load(mStorageImage).into(holder.imgHouseImage);
         }
+
+//        if (houseModel.getBitmapList().size() > 0) {
+//            holder.imgHouseImage.setImageBitmap(houseModel.getBitmapList().get(0));
+//        }
 
 
         // Fill data comment house
@@ -215,6 +223,24 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         holder.txtAddress.setText(houseModel.getAddressModel().getAddress());
         String distance = String.valueOf(String.format("%.2f", houseModel.getAddressModel().getDistance())) + context.getString(R.string.km);
         holder.txtDistance.setText(distance);
+    }
+
+    /**
+     * getDateTime
+     *
+     * @param houseModel
+     * @return
+     */
+    private Date getDate(HouseModel houseModel) {
+        String updateDate = houseModel.getUpdateDate();
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm 'at' dd.MM.yyyy");
+        try {
+            Date date = format.parse(updateDate);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

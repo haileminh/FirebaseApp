@@ -46,6 +46,10 @@
     <string name="gia_phong">Giá phòng: </string>
     <string name="m2"> mét vuông </string>
     <string name="dong"> đ</string>
+    <string name="ngay">Ngày </string>
+    <string name="thang">tháng </string>
+    <string name="nam">năm </string>
+    <string name="luc">lúc </string>
     <string name="con"> Còn</string>
     <string name="phong"> phòng</string>
     <string name="het_phong">Hết phòng</string>

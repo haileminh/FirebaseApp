@@ -16,6 +16,7 @@ public class HouseModel implements Parcelable {
     private String landlord;
     private String tel;
     private String houseId;
+    private String updateDate;
     private long acreage;
     private long price;
     private long quantity;
@@ -40,6 +41,7 @@ public class HouseModel implements Parcelable {
         landlord = in.readString();
         tel = in.readString();
         houseId = in.readString();
+        updateDate = in.readString();
         acreage = in.readLong();
         price = in.readLong();
         quantity = in.readLong();
@@ -49,7 +51,7 @@ public class HouseModel implements Parcelable {
         utility = in.createStringArrayList();
         houseImages = in.createStringArrayList();
         commentModelList = new ArrayList<>();
-        in.readTypedList(commentModelList,CommentModel.CREATOR);
+        in.readTypedList(commentModelList, CommentModel.CREATOR);
     }
 
     public static final Creator<HouseModel> CREATOR = new Creator<HouseModel>() {
@@ -63,6 +65,14 @@ public class HouseModel implements Parcelable {
             return new HouseModel[size];
         }
     };
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
 
     public List<Bitmap> getBitmapList() {
         return bitmapList;
@@ -186,6 +196,7 @@ public class HouseModel implements Parcelable {
         dest.writeString(landlord);
         dest.writeString(tel);
         dest.writeString(houseId);
+        dest.writeString(updateDate);
         dest.writeLong(acreage);
         dest.writeLong(price);
         dest.writeLong(quantity);
