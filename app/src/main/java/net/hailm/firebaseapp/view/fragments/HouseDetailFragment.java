@@ -3,6 +3,7 @@ package net.hailm.firebaseapp.view.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,9 @@ import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.CommentAdapter;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +78,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     TextView txtTotalComments;
     @BindView(R.id.rcv_comment_list)
     RecyclerView rcvCommentList;
+    @BindView(R.id.floating_action_btn_call)
+    FloatingActionButton btnCall;
 
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
@@ -94,7 +100,11 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
-        houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
+        if (bundle != null) {
+            houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
+        } else {
+            LogUtils.d("Bundle nulll in houseFragment");
+        }
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
         setPhotoAdapter();
@@ -124,18 +134,25 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         if (houseModel.getQuantity() > 0) {
             String quantity = getString(R.string.con) + " " + String.valueOf(houseModel.getQuantity()) + " " + getString(R.string.phong);
             txtQuantity.setText(quantity);
+            btnCall.setVisibility(View.VISIBLE);
         } else {
             txtQuantity.setText(getString(R.string.het_phong));
+            btnCall.setVisibility(View.GONE);
         }
         String address = getString(R.string.dia_chi) + " " + houseModel.getAddressModel().getAddress();
         txtAddress.setText(address);
+
         String acreage = getString(R.string.dien_tich) + " " + String.valueOf(houseModel.getAcreage()) + " " + getString(R.string.m2);
         txtAcreage.setText(acreage);
-        String price = getString(R.string.gia_phong) + " " + String.valueOf(houseModel.getPrice()) + " " + getString(R.string.dong);
+
+        NumberFormat formatPrice = new DecimalFormat("$##,###,###");
+        String price = getString(R.string.gia_phong) + " " + formatPrice.format(houseModel.getPrice()) + " " + getString(R.string.dong);
         txtPrice.setText(price);
+
         String contents = getString(R.string.chi_tiet) + " " + houseModel.getContents();
         txtContents.setText(contents);
-        String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel();
+
+        String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
         txtTel.setText(tel);
 
         int totalComement = houseModel.getCommentModelList().size();
@@ -193,18 +210,18 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         this.mGoogleMap = googleMap;
         double latitude = houseModel.getAddressModel().getLatitude();
         double longitude = houseModel.getAddressModel().getLongitude();
-        LatLng latLng = new LatLng(latitude,longitude);
+        LatLng latLng = new LatLng(latitude, longitude);
 
         LogUtils.d("Map:" + latLng);
 
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(latitude,longitude));
+        markerOptions.position(new LatLng(latitude, longitude));
         markerOptions.title(houseModel.getLandlord());
 
 
         mGoogleMap.addMarker(markerOptions);
 
-        showMyLocation(latitude,longitude,mGoogleMap);
+        showMyLocation(latitude, longitude, mGoogleMap);
     }
 
     private void showMyLocation(double latitude, double longitude, GoogleMap googleMap) {
