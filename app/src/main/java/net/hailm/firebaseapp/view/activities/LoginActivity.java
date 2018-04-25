@@ -321,6 +321,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
             if (user.isEmailVerified() || flag == true) {
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(Constants.UID, String.valueOf(user.getUid()));
+                editor.putString(Constants.USER_NAME, String.valueOf(user.getDisplayName()));
                 editor.commit();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();

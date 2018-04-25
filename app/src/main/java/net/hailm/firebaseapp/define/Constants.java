@@ -21,6 +21,8 @@ public class Constants {
 
 
     public static final String UID = "Uid";
+    public static final String USER_NAME = "Name";
+    public static final String HOUSE_ID = "House Id";
 
 
 

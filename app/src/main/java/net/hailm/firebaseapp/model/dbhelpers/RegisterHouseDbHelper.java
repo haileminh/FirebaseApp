@@ -12,6 +12,7 @@ import net.hailm.firebaseapp.base.BaseFireBase;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
+import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 
 public class RegisterHouseDbHelper extends BaseFireBase {
@@ -49,7 +50,6 @@ public class RegisterHouseDbHelper extends BaseFireBase {
     }
 
     /**
-     *
      * @param addressModel
      * @param houseModel
      * @param listener
@@ -58,6 +58,24 @@ public class RegisterHouseDbHelper extends BaseFireBase {
         mDatabase.child(Constants.ADDRESS)
                 .child(houseModel.getHouseId())
                 .setValue(addressModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.registerSuccess();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.registerFailure(e.getMessage());
+            }
+        });
+    }
+
+    public void registerComment(CommentModel commentModel, String houseId, final RegisterHouseListener listener) {
+        mDatabase.child(Constants.COMMENTS)
+                .child(houseId)
+                .child(commentModel.getCommentId())
+                .setValue(commentModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

@@ -1,5 +1,7 @@
 package net.hailm.firebaseapp.view.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,6 +43,8 @@ import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.RegisterHouseListener;
+import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.model.dbmodels.UtilityModel;
@@ -47,6 +53,7 @@ import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,9 +102,12 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     LinearLayout llUtility;
     @BindView(R.id.txt_utility)
     TextView txtUtility;
+    @BindView(R.id.edt_comment)
+    EditText edtComment;
 
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
+    private RegisterHouseDbHelper mRegisterHouseDbHelper;
 
     public HouseDetailFragment() {
     }
@@ -122,6 +132,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         }
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
+        mRegisterHouseDbHelper = new RegisterHouseDbHelper(getActivity());
         setPhotoAdapter();
         setCommentAdapter();
         showHouseDetail();
@@ -239,7 +250,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
 
     }
 
-    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail})
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.img_back_house_detail:
@@ -253,8 +264,36 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             case R.id.txt_share_detail:
                 Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_comment:
+                registerComment();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void registerComment() {
+        if (!TextUtils.isEmpty(edtComment.getText().toString().trim())) {
+            SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+            String uid = mSharedPreferences.getString(Constants.UID, "");
+            String name = mSharedPreferences.getString(Constants.USER_NAME, "");
+            String commentId = UUID.randomUUID().toString();
+            String contents = edtComment.getText().toString().trim();
+
+            CommentModel commentModel = new CommentModel(commentId, name, contents, 9, uid);
+            String houseId = houseModel.getHouseId();
+            mRegisterHouseDbHelper.registerComment(commentModel, houseId, new RegisterHouseListener() {
+                @Override
+                public void registerSuccess() {
+                    LogUtils.d("Register commnet success");
+                    setCommentAdapter();
+                }
+
+                @Override
+                public void registerFailure(String message) {
+                    LogUtils.d("Register commnet failure");
+                }
+            });
         }
     }
 

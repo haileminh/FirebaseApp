@@ -13,9 +13,20 @@
         android:text="Bình luận" />
 
     <EditText
+        android:id="@+id/edt_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_comment"
         android:hint="Để lại bình luận"
         android:padding="@dimen/_10dp" />
+
+    <Button
+        android:id="@+id/btn_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/_4dp"
+        android:background="@drawable/btn_dang_tin"
+        android:text="@string/gui"
+        android:textColor="@color/white" />
 </LinearLayout>

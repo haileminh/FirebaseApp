@@ -22,6 +22,14 @@ public class CommentModel implements Parcelable {
     public CommentModel() {
     }
 
+    public CommentModel(String commentId, String title, String contents, double score, String uid) {
+        this.commentId = commentId;
+        this.title = title;
+        this.contents = contents;
+        this.score = score;
+        this.uid = uid;
+    }
+
     protected CommentModel(Parcel in) {
         commentId = in.readString();
         title = in.readString();
