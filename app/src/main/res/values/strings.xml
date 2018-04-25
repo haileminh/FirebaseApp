@@ -29,6 +29,7 @@
     <string name="khoi_phuc_mat_khau">Bạn vui lòng nhập địa chỉ Email vào khung bên dưới để tiến hành khôi phục mật khẩu.</string>
     <string name="khong_phai_thanh_vien">Bạn không phải là thành viên ?.</string>
     <string name="ton_tai">Đã tồn tại một tài khoản khác dùng email này.</string>
+    <string name="khong_phai_so_dien_thoai">Số điện thoại không đúng định dạng.</string>
 
     <string name="house">House</string>
     <string name="place">Place</string>
