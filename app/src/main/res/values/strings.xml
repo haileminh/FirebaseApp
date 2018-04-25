@@ -78,9 +78,11 @@
 
 
     <string name="edt_utility">Tiện ích</string>
+    <string name="no_utility">Không có tiện ích</string>
     <string name="may_lanh">Máy lạnh</string>
     <string name="wifi">Wifi</string>
     <string name="giuong">Giường</string>
+    <string name="ban_ghe">Bàn, ghế</string>
     <string name="tu_quan_ao">Tủ quần áo</string>
     <string name="nong_lanh">Nóng lạnh</string>
     <string name="gui_xe">Gửi xe miễn phí</string>

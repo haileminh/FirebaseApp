@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,11 +29,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.model.dbmodels.UtilityModel;
 import net.hailm.firebaseapp.view.adapters.CommentAdapter;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
@@ -80,6 +91,10 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     RecyclerView rcvCommentList;
     @BindView(R.id.floating_action_btn_call)
     FloatingActionButton btnCall;
+    @BindView(R.id.layout_utility)
+    LinearLayout llUtility;
+    @BindView(R.id.txt_utility)
+    TextView txtUtility;
 
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
@@ -172,6 +187,56 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             txtTotalImages.setText("0");
         }
 
+        loadUtility();
+    }
+
+    private void loadUtility() {
+        if (houseModel.getUtility() != null) {
+            for (final String utilityId : houseModel.getUtility()) {
+                DatabaseReference dataUtility = FirebaseDatabase.getInstance().getReference()
+                        .child(Constants.UTILITIES).child(utilityId);
+                dataUtility.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UtilityModel utilityModel = dataSnapshot.getValue(UtilityModel.class);
+
+
+                        LinearLayout llSub = new LinearLayout(getActivity());
+                        llSub.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        llSub.setOrientation(LinearLayout.HORIZONTAL);
+
+                        StorageReference storageImgaeUtility = FirebaseStorage.getInstance().getReference()
+                                .child("utility").child(utilityModel.getImage());
+                        ImageView imageUtility = new ImageView(getActivity());
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(100, 100);
+                        layoutParams.setMargins(10, 10, 10, 10);
+                        imageUtility.setLayoutParams(layoutParams);
+                        imageUtility.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageUtility.setPadding(5, 5, 5, 5);
+                        Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageImgaeUtility).into(imageUtility);
+
+                        TextView txtName = new TextView(getActivity());
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(16, 35, 10, 10);
+                        txtName.setLayoutParams(params);
+                        txtName.setText(utilityModel.getName());
+
+                        llSub.addView(imageUtility);
+                        llSub.addView(txtName);
+
+                        llUtility.addView(llSub);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        } else {
+            txtUtility.setText(getString(R.string.no_utility));
+        }
+
     }
 
     @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail})
@@ -231,4 +296,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
+
+
 }

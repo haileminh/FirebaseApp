@@ -1,12 +1,15 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +42,9 @@ import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -89,6 +94,8 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
     CheckBox cbGiuong;
     @BindView(R.id.cb_nong_lanh)
     CheckBox cbNongLanh;
+    @BindView(R.id.cb_ban_ghe)
+    CheckBox cbBanGhe;
 
     private SharedPreferences mSharedPreferences;
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
@@ -102,6 +109,9 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
     private Marker myMarker;
 
     private boolean onCLickBtnLocation = false;
+
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     @Nullable
     @Override
@@ -169,7 +179,20 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
                     LogUtils.d("Register  address Failure");
                 }
             });
+
+            goHomeFragment();
+        } else {
+            Toast.makeText(getActivity(), "Register fail.......", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void goHomeFragment() {
+        HomeFragment homeFragment = new HomeFragment();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.frame_container, homeFragment);
+//        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private HouseModel createHouseModel() {
@@ -202,6 +225,27 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
         long quantity = Long.parseLong(edtQuantity.getText().toString().trim());
         houseModel.setQuantity(quantity);
 
+        List<String> stringList = new ArrayList<>();
+
+        if (cbWifi.isChecked()) {
+            stringList.add("MaTienIch1");
+        }
+        if (cbMayLanh.isChecked()) {
+            stringList.add("MaTienIch2");
+        }
+        if (cbBanGhe.isChecked()) {
+            stringList.add("MaTienIch3");
+        }
+        if (cbGuiXe.isChecked()) {
+            stringList.add("MaTienIch4");
+        }
+        if (cbNongLanh.isChecked()) {
+            stringList.add("MaTienIch5");
+        }
+        if (cbGiuong.isChecked()) {
+            stringList.add("MaTienIch6");
+        }
+        houseModel.setUtility(stringList);
         return houseModel;
     }
 
@@ -236,6 +280,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
                 return false;
             } else if (!onCLickBtnLocation) {
                 Toast.makeText(getActivity(), "Bạn nhập vị trị nhà trọ", Toast.LENGTH_SHORT).show();
+                return false;
             }
             return true;
         } else {

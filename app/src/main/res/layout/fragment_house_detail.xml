@@ -259,6 +259,16 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/txt_utility"
+                android:layout_marginLeft="@dimen/_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8dp"
+                android:text="@string/edt_utility" />
+
+            <include layout="@layout/layout_utility" />
+
             <include layout="@layout/layout_map" />
 
             <include layout="@layout/layout_comment" />
