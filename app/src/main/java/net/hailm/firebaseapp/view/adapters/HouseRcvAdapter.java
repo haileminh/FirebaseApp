@@ -24,6 +24,8 @@ import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.DateUtils;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,8 +70,6 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
         TextView txtPrice;
         @BindView(R.id.txt_acreage)
         TextView txtAcreage;
-        @BindView(R.id.txt_tel)
-        TextView txtTel;
         @BindView(R.id.btn_contact)
         Button btnContact;
         @BindView(R.id.img_image)
@@ -153,12 +153,14 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 + context.getString(R.string.luc) + " " + DateUtils.getTime(date);
         holder.txtUpdateDate.setText(updateDate);
 
-        String price = context.getResources().getString(R.string.gia_phong) + String.valueOf(houseModel.getPrice());
+        NumberFormat formatPrice = new DecimalFormat("$##,###,###");
+        String price = context.getResources().getString(R.string.gia_phong) + " " + formatPrice.format(houseModel.getPrice()) + " " + context.getString(R.string.dong);
         holder.txtPrice.setText(price);
-        String acreage = context.getResources().getString(R.string.dien_tich) + String.valueOf(houseModel.getAcreage());
+
+        String acreage = context.getResources().getString(R.string.dien_tich) + " " + String.valueOf(houseModel.getAcreage()) + " " + context.getString(R.string.m2);
         holder.txtAcreage.setText(acreage);
-        String tel = context.getResources().getString(R.string.so_dien_thoai) + houseModel.getTel();
-        holder.txtTel.setText(tel);
+//        String tel = context.getResources().getString(R.string.so_dien_thoai) + houseModel.getTel();
+//        holder.txtTel.setText(tel);
 
         if (houseModel.getQuantity() > 0) {
             holder.btnContact.setVisibility(View.VISIBLE);
@@ -215,19 +217,8 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
             holder.getTxtTotalImages.setText("0");
         }
 
-        // get houseBranchs, show data address, distance
-//        List<AddressModel> houseBranchModelList = houseModel.getAddressModelList();
-//        class sortHouseBranch implements Comparator<AddressModel> {
-//
-//            @Override
-//            public int compare(AddressModel o1, AddressModel o2) {
-//                return Double.compare(o1.getDistance(), o2.getDistance());
-//            }
-//        }
-//        Collections.sort(houseBranchModelList, new sortHouseBranch());
-
-
-        holder.txtAddress.setText(houseModel.getAddressModel().getAddress());
+        String address = context.getString(R.string.dia_chi) + " " + houseModel.getAddressModel().getAddress();
+        holder.txtAddress.setText(address);
         String distance = String.valueOf(String.format("%.2f", houseModel.getAddressModel().getDistance())) + context.getString(R.string.km);
         holder.txtDistance.setText(distance);
     }

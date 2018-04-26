@@ -94,15 +94,6 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_14dp" />
 
-        <TextView
-            android:id="@+id/txt_tel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2dp"
-            android:text="Số điên thoại: 01655 303 878"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_14dp" />
-
         <ImageView
             android:id="@+id/img_image"
             android:layout_width="match_parent"
