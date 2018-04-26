@@ -188,8 +188,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 String updateDate1 = o1.getUpdateDate();
                 String updateDate2 = o2.getUpdateDate();
                 try {
-                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate1);
-                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate2);
+                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT_COMMENT).parse(updateDate1);
+                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT_COMMENT).parse(updateDate2);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -326,7 +326,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             String uid = mSharedPreferences.getString(Constants.UID, "");
 
             Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat(AppConst.DATE_FORMAT);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(AppConst.DATE_FORMAT_COMMENT);
             String updateDate = dateFormat.format(date);
 
             String name = mSharedPreferences.getString(Constants.USER_NAME, "");
