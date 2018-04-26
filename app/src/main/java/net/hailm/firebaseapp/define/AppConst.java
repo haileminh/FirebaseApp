@@ -5,6 +5,6 @@ public interface AppConst {
     String FORMATE_YEAR = "yyyy";
 
     String FORMAT_HH_MM = "HH:mm";
-    String DATE_FORMAT = "hh:mm 'at' dd.MM.yyyy";
+    String DATE_FORMAT = "HH:mm 'at' dd.MM.yyyy";
     String GMT = "GMT";
 }

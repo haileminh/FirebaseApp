@@ -42,8 +42,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.CommentListener;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
+import net.hailm.firebaseapp.model.dbhelpers.CommentDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
@@ -53,6 +56,13 @@ import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -108,6 +118,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
+    private CommentDbHelper mDbHelper;
+    private List<CommentModel> commentModelList;
 
     public HouseDetailFragment() {
     }
@@ -133,6 +145,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
         mRegisterHouseDbHelper = new RegisterHouseDbHelper(getActivity());
+        mDbHelper = new CommentDbHelper();
         setPhotoAdapter();
         setCommentAdapter();
         showHouseDetail();
@@ -150,9 +163,40 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rcvCommentList.setLayoutManager(llm);
 
-        commentAdapter = new CommentAdapter(getContext(), houseModel.getCommentModelList());
-        rcvCommentList.setAdapter(commentAdapter);
-        commentAdapter.notifyDataSetChanged();
+        commentModelList = new ArrayList<>();
+        CommentListener listener = new CommentListener() {
+            @Override
+            public void getListHouseModel(CommentModel commentModel) {
+                commentModelList.add(commentModel);
+                sortCommentByDate();
+                commentAdapter = new CommentAdapter(getContext(), commentModelList);
+                rcvCommentList.setAdapter(commentAdapter);
+                commentAdapter.notifyDataSetChanged();
+            }
+        };
+
+        mDbHelper.getCommentList(listener, houseModel.getHouseId());
+    }
+
+    private void sortCommentByDate() {
+        Collections.sort(commentModelList, new Comparator<CommentModel>() {
+            Date date1;
+            Date date2;
+
+            @Override
+            public int compare(CommentModel o1, CommentModel o2) {
+                String updateDate1 = o1.getUpdateDate();
+                String updateDate2 = o2.getUpdateDate();
+                try {
+                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate1);
+                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                LogUtils.d("Sort comment by Date: " + o1.getUpdateDate());
+                return date2.compareTo(date1);
+            }
+        });
     }
 
     private void showHouseDetail() {
@@ -250,7 +294,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
 
     }
 
-    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment,R.id.floating_action_btn_call})
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment, R.id.floating_action_btn_call})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.img_back_house_detail:
@@ -280,16 +324,22 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         if (!TextUtils.isEmpty(edtComment.getText().toString().trim())) {
             SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
             String uid = mSharedPreferences.getString(Constants.UID, "");
+
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat(AppConst.DATE_FORMAT);
+            String updateDate = dateFormat.format(date);
+
             String name = mSharedPreferences.getString(Constants.USER_NAME, "");
             String commentId = UUID.randomUUID().toString();
             String contents = edtComment.getText().toString().trim();
 
-            CommentModel commentModel = new CommentModel(commentId, name, contents, 9, uid);
+            CommentModel commentModel = new CommentModel(commentId, name, contents, updateDate, 9, uid);
             String houseId = houseModel.getHouseId();
             mRegisterHouseDbHelper.registerComment(commentModel, houseId, new RegisterHouseListener() {
                 @Override
                 public void registerSuccess() {
                     LogUtils.d("Register commnet success");
+                    edtComment.setText("");
                     setCommentAdapter();
                 }
 

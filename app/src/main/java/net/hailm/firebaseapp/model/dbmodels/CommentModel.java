@@ -13,6 +13,7 @@ public class CommentModel implements Parcelable {
     private String commentId;
     private String title;
     private String contents;
+    private String updateDate;
     private long likeNumber;
     private double score;
     private String uid;
@@ -22,8 +23,9 @@ public class CommentModel implements Parcelable {
     public CommentModel() {
     }
 
-    public CommentModel(String commentId, String title, String contents, double score, String uid) {
+    public CommentModel(String commentId, String title, String contents,String updateDate, double score, String uid) {
         this.commentId = commentId;
+        this.updateDate = updateDate;
         this.title = title;
         this.contents = contents;
         this.score = score;
@@ -34,6 +36,7 @@ public class CommentModel implements Parcelable {
         commentId = in.readString();
         title = in.readString();
         contents = in.readString();
+        updateDate = in.readString();
         likeNumber = in.readLong();
         score = in.readDouble();
         uid = in.readString();
@@ -52,6 +55,14 @@ public class CommentModel implements Parcelable {
             return new CommentModel[size];
         }
     };
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
 
     public String getCommentId() {
         return commentId;
@@ -127,10 +138,11 @@ public class CommentModel implements Parcelable {
         dest.writeString(commentId);
         dest.writeString(title);
         dest.writeString(contents);
+        dest.writeString(updateDate);
         dest.writeLong(likeNumber);
         dest.writeDouble(score);
         dest.writeString(uid);
         dest.writeStringList(listCommentImages);
-        dest.writeParcelable(users,flags);
+        dest.writeParcelable(users, flags);
     }
 }

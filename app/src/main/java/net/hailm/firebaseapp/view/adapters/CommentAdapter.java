@@ -52,7 +52,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public int getItemCount() {
         int totalComment = commentModelList.size();
-        if (totalComment > 3) {
+        if (totalComment > 10) {
             return 3;
         } else {
             return totalComment;
