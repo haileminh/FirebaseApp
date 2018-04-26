@@ -60,6 +60,16 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_btn_call"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/_12dp"
+        android:layout_marginRight="@dimen/_12dp"
+        android:src="@drawable/ic_call"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScroolView"
         android:layout_width="match_parent"
@@ -261,9 +271,9 @@
 
             <TextView
                 android:id="@+id/txt_utility"
-                android:layout_marginLeft="@dimen/_8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8dp"
                 android:layout_marginTop="@dimen/_8dp"
                 android:text="@string/edt_utility" />
 
@@ -277,14 +287,4 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_action_btn_call"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="@dimen/_12dp"
-        android:layout_marginRight="@dimen/_12dp"
-        android:src="@drawable/ic_call"
-        android:visibility="gone"
-        app:layout_anchorGravity="bottom|right" />
 </android.support.design.widget.CoordinatorLayout>

@@ -6,4 +6,6 @@ public interface HouseRcvAdapterCallback {
 
     void onItemCLick(HouseModel houseModel);
 
+    void onBtnClick(String tel);
+
 }

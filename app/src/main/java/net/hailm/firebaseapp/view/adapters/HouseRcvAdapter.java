@@ -129,6 +129,13 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 mCallback.onItemCLick(houseModel);
             }
         });
+
+        holder.btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onBtnClick(houseModel.getTel());
+            }
+        });
     }
 
     private void showData(final ViewHolder holder, int position) {
@@ -255,16 +262,6 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 .child(url);
 
         LogUtils.d("Url: " + mStorageAvatar);
-
-//        final long ONE_MEGABYTE = 1024 * 1024;
-//        mStorageAvatar.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                imageView.setImageBitmap(bitmap);
-//            }
-//        });
-
         Glide.with(context).using(new FirebaseImageLoader()).load(mStorageAvatar).into(imageView);
 
     }

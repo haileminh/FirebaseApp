@@ -1,7 +1,9 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +17,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -250,7 +250,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
 
     }
 
-    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment})
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment,R.id.floating_action_btn_call})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.img_back_house_detail:
@@ -266,6 +266,10 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 break;
             case R.id.btn_comment:
                 registerComment();
+                break;
+            case R.id.floating_action_btn_call:
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + houseModel.getTel()));
+                startActivity(intent);
                 break;
             default:
                 break;
