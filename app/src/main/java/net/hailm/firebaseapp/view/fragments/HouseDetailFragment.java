@@ -3,12 +3,16 @@ package net.hailm.firebaseapp.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,6 +76,7 @@ import butterknife.Unbinder;
 import me.relex.circleindicator.CircleIndicator;
 
 public class HouseDetailFragment extends Fragment implements OnMapReadyCallback {
+    private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1000;
     private GoogleMap mGoogleMap;
     private SupportMapFragment mSupportMapFragment;
 
@@ -312,8 +317,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 registerComment();
                 break;
             case R.id.floating_action_btn_call:
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + houseModel.getTel()));
-                startActivity(intent);
+                requesPermisions();
                 break;
             default:
                 break;
@@ -390,5 +394,47 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    private void phoneCall() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String call = "tel:" + houseModel.getTel();
+        intent.setData(Uri.parse(call));
+        startActivity(intent);
+    }
 
+    private void requesPermisions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isPermissionGranted(android.Manifest.permission.CALL_PHONE)) {
+                phoneCall();
+            } else {
+                String[] permissions = new String[]{
+                        android.Manifest.permission.CALL_PHONE
+                };
+                ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_CODE_PERMISSION_CALL_PHONE);
+            }
+        } else {
+            phoneCall();
+        }
+    }
+
+    private Boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION_CALL_PHONE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    phoneCall();
+                } else {
+                    Toast.makeText(getActivity(), "Bạn cần cấp quyền để thực hiện chức năng này", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

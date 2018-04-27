@@ -3,16 +3,20 @@ package net.hailm.firebaseapp.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,12 +24,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import net.hailm.firebaseapp.Manifest;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
@@ -53,6 +59,7 @@ import butterknife.Unbinder;
  */
 
 public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
+    private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1000;
     @BindView(R.id.rcv_house)
     RecyclerView mRcvHouse;
     @BindView(R.id.pgb_house)
@@ -77,6 +84,8 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     private boolean onClickRecentDate = true;
     private boolean onClickLocation = false;
     private boolean onClickPrice = false;
+
+    private String mTel;
 
     public HouseFragment() {
         // Required empty public constructor
@@ -346,7 +355,51 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
 
     @Override
     public void onBtnClick(String tel) {
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
+        mTel = tel;
+        requesPermisions();
+    }
+
+    private void phoneCall() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String call = "tel:" + mTel;
+        intent.setData(Uri.parse(call));
         startActivity(intent);
+    }
+
+    private void requesPermisions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isPermissionGranted(android.Manifest.permission.CALL_PHONE)) {
+                phoneCall();
+            } else {
+                String[] permissions = new String[]{
+                        android.Manifest.permission.CALL_PHONE
+                };
+                ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_CODE_PERMISSION_CALL_PHONE);
+            }
+        } else {
+            phoneCall();
+        }
+    }
+
+    private Boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION_CALL_PHONE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    phoneCall();
+                } else {
+                    Toast.makeText(getActivity(), "Bạn cần cấp quyền để thực hiện chức năng này", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
