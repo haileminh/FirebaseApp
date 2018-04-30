@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -299,7 +301,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
 
     }
 
-    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail, R.id.txt_share_detail, R.id.btn_comment, R.id.floating_action_btn_call})
+    @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail,
+            R.id.txt_share_detail, R.id.btn_comment, R.id.floating_action_btn_call, R.id.btn_zoom_map})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.img_back_house_detail:
@@ -319,9 +322,30 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             case R.id.floating_action_btn_call:
                 requesPermisions();
                 break;
+            case R.id.btn_zoom_map:
+                goPolylineFragment();
+                break;
             default:
                 break;
         }
+    }
+
+    private void goPolylineFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putDouble(Constants.Latitude, houseModel.getAddressModel().getLatitude());
+        bundle.putDouble(Constants.Longitude, houseModel.getAddressModel().getLongitude());
+
+        LogUtils.d("LatLng detail: " + houseModel.getAddressModel().getLatitude() + "," + houseModel.getAddressModel().getLongitude());
+
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        PolylineHouseFragment polylineHouseFragment = new PolylineHouseFragment();
+        polylineHouseFragment.setArguments(bundle);
+
+        transaction.replace(android.R.id.content, polylineHouseFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void registerComment() {

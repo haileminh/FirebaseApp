@@ -25,7 +25,6 @@ public class Constants {
     public static final String HOUSE_ID = "House Id";
 
 
-
     public static final String AREAS = "Areas";
     public static final String COMMENT_IMAGES = "CommentImages";
     public static final String COMMENTS = "Comments";
@@ -39,4 +38,7 @@ public class Constants {
 
     //Bundle
     public static final String HOUSE_MODEL = "House model";
+
+    public static final String Latitude = "Latitude";
+    public static final String Longitude = "Longitude";
 }
