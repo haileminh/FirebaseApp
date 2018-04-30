@@ -21,6 +21,8 @@
     <dimen name="_80dp">80dp</dimen>
     <dimen name="_180dp">180dp</dimen>
     <dimen name="_200dp">200dp</dimen>
+    <dimen name="popup_width">300dp</dimen>
+    <dimen name="popup_height">300dp</dimen>
 
     <!--Text-->
     <dimen name="txt_14sp">14sp</dimen>

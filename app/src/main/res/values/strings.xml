@@ -89,4 +89,9 @@
     <string name="gui_xe">Gửi xe miễn phí</string>
     <string name="register_house">Đăng tin</string>
     <string name="note">Lưu ý: Tin có ảnh không liên quan đến nhà trọ sẽ bị xóa mà không có thông báo trước.</string>
+
+
+    <string name="chon_anh">Chọn ảnh</string>
+    <string name="chup_anh_moi">Chụp ảnh mới</string>
+    <string name="chon_album">Chọn từ album</string>
 </resources>

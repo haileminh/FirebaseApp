@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/_4dp"
+        android:text="@string/chon_anh"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/txt_chup_anh"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_4dp"
+        android:text="@string/chup_anh_moi"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/txt_chon_tu_album"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_4dp"
+        android:text="@string/chon_album"
+        android:textColor="@color/black" />
+</LinearLayout>

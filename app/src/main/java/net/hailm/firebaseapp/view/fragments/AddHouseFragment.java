@@ -3,6 +3,7 @@ package net.hailm.firebaseapp.view.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.PopupImageCallback;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
@@ -136,7 +138,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
         mSupportMapFragment.getMapAsync(this);
     }
 
-    @OnClick({R.id.btn_register_house, R.id.btn_location})
+    @OnClick({R.id.btn_register_house, R.id.btn_location, R.id.img_1, R.id.img_2, R.id.img_3, R.id.img_4, R.id.img_5, R.id.img_6})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_register_house:
@@ -146,9 +148,40 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
                 onCLickBtnLocation = true;
                 getMyLocation();
                 break;
+            case R.id.img_1:
+                showPopupImage();
+                new PopupImageCallback() {
+                    @Override
+                    public void onButtonClick(Bitmap bitmap) {
+                        img1.setImageBitmap(bitmap);
+                    }
+                };
+                break;
+            case R.id.img_2:
+                showPopupImage();
+                break;
+            case R.id.img_3:
+                showPopupImage();
+                break;
+            case R.id.img_4:
+                showPopupImage();
+                break;
+            case R.id.img_5:
+                showPopupImage();
+                break;
+            case R.id.img_6:
+                showPopupImage();
+                break;
             default:
                 break;
         }
+    }
+
+    private void showPopupImage() {
+        manager = getActivity().getSupportFragmentManager();
+        PopupImageFragment popupImageFragment = new PopupImageFragment();
+        popupImageFragment.setTargetFragment(this, 0);
+        popupImageFragment.show(manager, "dialog");
     }
 
     private void registerHouse() {
