@@ -31,7 +31,7 @@ public class CommentDbHelper extends BaseFireBase {
                     Users users = dataSnapshot.child(Constants.USERS).child(commentModel.getUid()).getValue(Users.class);
                     commentModel.setUsers(users);
 
-                    
+
                     commentListener.getListHouseModel(commentModel);
                 }
 

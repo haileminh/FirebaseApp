@@ -40,7 +40,7 @@ public class RegisterService extends BaseFireBase {
      * @param password
      * @param listener
      */
-    public void registerAccount(String email, String password, final RegisterListener listener) {
+    public void registerAccount(final String email, String password, final RegisterListener listener) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -53,7 +53,8 @@ public class RegisterService extends BaseFireBase {
                                 //Tiến hành thông tin user vào Database
                                 Users users = new Users();
                                 users.setUid(userFB.getUid());
-                                users.setName("HaiLeMinh");
+                                String name = splitString(email);
+                                users.setName(name);
                                 users.setAvatar("user2.png");
                                 users.setEmail(userFB.getEmail());
                                 createAccountInDatabase(users, new RegisterListener() {
@@ -120,5 +121,10 @@ public class RegisterService extends BaseFireBase {
                 }
             }
         });
+    }
+
+    private String splitString(String email) {
+        String[] split = email.split("@");
+        return split[0];
     }
 }

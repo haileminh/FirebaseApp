@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,17 +44,35 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
         CommentModel commentModel = commentModelList.get(position);
 
-        holder.txtTitle.setText(commentModel.getTitle());
-        holder.txtContents.setText(commentModel.getContents());
-        holder.txtScore.setText(String.valueOf(commentModel.getScore()));
-        setAvatarComment(holder.imgAvatar, commentModel.getUsers().getAvatar());
+//        if (commentModel.getUsers().getName() != null) {
+//            holder.txtTitle.setText(commentModel.getUsers().getName());
+//        } else {
+//            holder.txtTitle.setText(commentModel.getTitle());
+//        }
+//        holder.txtContents.setText(commentModel.getContents());
+//        holder.txtScore.setText(String.valueOf(commentModel.getScore()));
+//        setAvatarComment(holder.imgAvatar, commentModel.getUsers().getAvatar());
+
+        String url = "https://pikmail.herokuapp.com/" + commentModel.getEmail();
+
+        if (commentModel.getUsers() != null) {
+            holder.txtTitle.setText(commentModel.getUsers().getName());
+            holder.txtContents.setText(commentModel.getContents());
+            holder.txtScore.setText(String.valueOf(commentModel.getScore()));
+            setAvatarComment(holder.imgAvatar, commentModel.getUsers().getAvatar());
+        } else {
+            holder.txtTitle.setText(commentModel.getTitle());
+            holder.txtContents.setText(commentModel.getContents());
+            holder.txtScore.setText(String.valueOf(commentModel.getScore()));
+            Glide.with(context).load(url).into(holder.imgAvatar);
+        }
     }
 
     @Override
     public int getItemCount() {
         int totalComment = commentModelList.size();
         if (totalComment > 10) {
-            return 3;
+            return 10;
         } else {
             return totalComment;
         }

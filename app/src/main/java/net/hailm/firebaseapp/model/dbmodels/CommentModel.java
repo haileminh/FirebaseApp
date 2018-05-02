@@ -12,6 +12,7 @@ import java.util.List;
 public class CommentModel implements Parcelable {
     private String commentId;
     private String title;
+    private String email;
     private String contents;
     private String updateDate;
     private long likeNumber;
@@ -23,9 +24,10 @@ public class CommentModel implements Parcelable {
     public CommentModel() {
     }
 
-    public CommentModel(String commentId, String title, String contents,String updateDate, double score, String uid) {
+    public CommentModel(String commentId, String title, String email, String contents, String updateDate, double score, String uid) {
         this.commentId = commentId;
         this.updateDate = updateDate;
+        this.email = email;
         this.title = title;
         this.contents = contents;
         this.score = score;
@@ -35,6 +37,7 @@ public class CommentModel implements Parcelable {
     protected CommentModel(Parcel in) {
         commentId = in.readString();
         title = in.readString();
+        email = in.readString();
         contents = in.readString();
         updateDate = in.readString();
         likeNumber = in.readLong();
@@ -55,6 +58,14 @@ public class CommentModel implements Parcelable {
             return new CommentModel[size];
         }
     };
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUpdateDate() {
         return updateDate;
@@ -137,6 +148,7 @@ public class CommentModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(commentId);
         dest.writeString(title);
+        dest.writeString(email);
         dest.writeString(contents);
         dest.writeString(updateDate);
         dest.writeLong(likeNumber);

@@ -322,6 +322,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(Constants.UID, String.valueOf(user.getUid()));
                 editor.putString(Constants.USER_NAME, String.valueOf(user.getDisplayName()));
+                editor.putString(Constants.EMAIL, String.valueOf(user.getEmail()));
                 editor.commit();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();

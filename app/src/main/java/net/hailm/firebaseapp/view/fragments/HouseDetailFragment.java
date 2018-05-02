@@ -358,10 +358,12 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             String updateDate = dateFormat.format(date);
 
             String name = mSharedPreferences.getString(Constants.USER_NAME, "");
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
             String commentId = UUID.randomUUID().toString();
             String contents = edtComment.getText().toString().trim();
 
-            CommentModel commentModel = new CommentModel(commentId, name, contents, updateDate, 9, uid);
+            CommentModel commentModel = new CommentModel(commentId, name, email, contents, updateDate, 9, uid);
             String houseId = houseModel.getHouseId();
             mRegisterHouseDbHelper.registerComment(commentModel, houseId, new RegisterHouseListener() {
                 @Override
@@ -376,6 +378,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                     LogUtils.d("Register commnet failure");
                 }
             });
+        } else {
+            Toast.makeText(getActivity(), getString(R.string.chua_nhap_noi_dung_binh_luan), Toast.LENGTH_SHORT).show();
         }
     }
 
