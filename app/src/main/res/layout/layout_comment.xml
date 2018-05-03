@@ -18,7 +18,7 @@
             android:layout_gravity="center_vertical"
             android:text="@string/danh_gia"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_18dp" />
+            android:textSize="@dimen/_16dp" />
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Bình luận"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_18dp" />
+        android:textSize="@dimen/_16dp" />
 
     <EditText
         android:id="@+id/edt_comment"
