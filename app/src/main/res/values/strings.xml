@@ -31,6 +31,7 @@
     <string name="ton_tai">Đã tồn tại một tài khoản khác dùng email này.</string>
     <string name="khong_phai_so_dien_thoai">Số điện thoại không đúng định dạng.</string>
     <string name="chua_nhap_noi_dung_binh_luan">Bạn chưa nhập nội dung để bình luận.</string>
+    <string name="danh_gia">Đánh giá</string>
 
     <string name="house">House</string>
     <string name="place">Place</string>

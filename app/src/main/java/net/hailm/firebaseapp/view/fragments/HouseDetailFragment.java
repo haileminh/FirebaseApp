@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +122,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     TextView txtUtility;
     @BindView(R.id.edt_comment)
     EditText edtComment;
+    @BindView(R.id.ratingBar)
+    RatingBar ratingBar;
 
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
@@ -357,13 +360,15 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             SimpleDateFormat dateFormat = new SimpleDateFormat(AppConst.DATE_FORMAT_COMMENT);
             String updateDate = dateFormat.format(date);
 
+            // Get name, email from sharedPreferences in loginActivity
             String name = mSharedPreferences.getString(Constants.USER_NAME, "");
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
             String commentId = UUID.randomUUID().toString();
             String contents = edtComment.getText().toString().trim();
+            Double rating = Double.valueOf(ratingBar.getRating()) * 2;
 
-            CommentModel commentModel = new CommentModel(commentId, name, email, contents, updateDate, 9, uid);
+            CommentModel commentModel = new CommentModel(commentId, name, email, contents, updateDate, rating, uid);
             String houseId = houseModel.getHouseId();
             mRegisterHouseDbHelper.registerComment(commentModel, houseId, new RegisterHouseListener() {
                 @Override
