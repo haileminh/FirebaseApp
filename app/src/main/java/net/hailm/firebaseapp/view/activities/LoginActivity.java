@@ -175,6 +175,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            hideProgressDialog();
                             LogUtils.d("Login google success....");
                         }
                     });
@@ -196,6 +197,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
     }
 
     private void loginGoogle() {
+        showProgressDialog("Đăng nhập ...");
         CHECK_PROVIDE_LOGIN = 1;
         Intent iLoginGoogle = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
         startActivityForResult(iLoginGoogle, REQUEST_CODE_SIGN_IN);

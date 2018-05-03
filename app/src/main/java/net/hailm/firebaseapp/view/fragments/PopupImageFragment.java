@@ -50,7 +50,7 @@ public class PopupImageFragment extends DialogFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_popup_get_image, container, false);
 
-        popupImageCallback = (PopupImageCallback) getFragmentManager();
+        popupImageCallback = (PopupImageCallback) getParentFragment();
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();

@@ -188,6 +188,7 @@
                 android:padding="@dimen/_8dp">
 
                 <LinearLayout
+                    android:id="@+id/txt_like_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -200,12 +201,17 @@
                         android:src="@drawable/ic_like" />
 
                     <TextView
-                        android:id="@+id/txt_like_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="@dimen/_4dp"
                         android:text="Like" />
+
+                    <TextView
+                        android:id="@+id/txt_total_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/_4dp" />
                 </LinearLayout>
 
                 <LinearLayout

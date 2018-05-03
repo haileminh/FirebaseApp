@@ -109,6 +109,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     TextView txtContents;
     @BindView(R.id.txt_tel_detail)
     TextView txtTel;
+    @BindView(R.id.txt_total_like)
+    TextView txtTotalLike;
     @BindView(R.id.txt_total_images_detail)
     TextView txtTotalImages;
     @BindView(R.id.txt_total_comment_detail)
@@ -132,6 +134,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private CommentDbHelper mDbHelper;
     private List<CommentModel> commentModelList;
     private CommentApdaterCallback callback;
+    private boolean isCheckedLike = false;
 
     public HouseDetailFragment() {
     }
@@ -252,6 +255,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         String contents = getString(R.string.chi_tiet) + " " + houseModel.getContents();
         txtContents.setText(contents);
 
+        txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber()));
+
         String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
         txtTel.setText(tel);
 
@@ -334,6 +339,13 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             case R.id.txt_tel_detail:
                 break;
             case R.id.txt_like_detail:
+                if (!isCheckedLike) {
+                    txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber() + 1));
+                    isCheckedLike = true;
+                } else {
+                    txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber()));
+                    isCheckedLike = false;
+                }
                 Toast.makeText(getContext(), "LIke", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.txt_share_detail:
