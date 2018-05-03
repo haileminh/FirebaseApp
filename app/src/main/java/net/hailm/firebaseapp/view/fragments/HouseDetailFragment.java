@@ -51,6 +51,7 @@ import com.google.firebase.storage.StorageReference;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.CommentApdaterCallback;
 import net.hailm.firebaseapp.listener.CommentListener;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.CommentDbHelper;
@@ -130,6 +131,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
     private CommentDbHelper mDbHelper;
     private List<CommentModel> commentModelList;
+    private CommentApdaterCallback callback;
 
     public HouseDetailFragment() {
     }
@@ -170,6 +172,24 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void setCommentAdapter() {
+        callback = new CommentApdaterCallback() {
+            @Override
+            public void onLongItemClick(CommentModel commentModel) {
+                SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+                final String uid = mSharedPreferences.getString(Constants.UID, "");
+                if (commentModel.getUid().equals(uid)) {
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                            .child(Constants.COMMENTS)
+                            .child(houseModel.getHouseId())
+                            .child(commentModel.getCommentId());
+                    databaseReference.setValue(null);
+                    Toast.makeText(getActivity(), getString(R.string.xoa_comment), Toast.LENGTH_SHORT).show();
+                    setCommentAdapter();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.khong_pha_chu_comment), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rcvCommentList.setLayoutManager(llm);
 
@@ -179,7 +199,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             public void getListHouseModel(CommentModel commentModel) {
                 commentModelList.add(commentModel);
                 sortCommentByDate();
-                commentAdapter = new CommentAdapter(getContext(), commentModelList);
+                commentAdapter = new CommentAdapter(getContext(), commentModelList, callback);
                 rcvCommentList.setAdapter(commentAdapter);
                 commentAdapter.notifyDataSetChanged();
             }

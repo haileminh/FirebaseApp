@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
+
     <CheckBox
         android:id="@+id/cb_gui_xe"
         android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/giuong" />
+
     <CheckBox
         android:id="@+id/cb_ban_ghe"
         android:layout_width="wrap_content"

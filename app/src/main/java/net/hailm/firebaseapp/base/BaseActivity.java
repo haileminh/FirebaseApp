@@ -35,6 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         builder.setMessage(message);
         builder.create().show();
     }
+
     public void showProgressDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
