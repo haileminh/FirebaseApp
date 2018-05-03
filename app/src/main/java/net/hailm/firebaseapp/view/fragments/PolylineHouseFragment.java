@@ -38,6 +38,9 @@ public class PolylineHouseFragment extends Fragment implements OnMapReadyCallbac
     private SharedPreferences mSharedPreferences;
     private Location currentLocation;
 
+    public PolylineHouseFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

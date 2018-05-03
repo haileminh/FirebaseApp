@@ -160,73 +160,6 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
         });
 
         mDbHelper.getListHouse(listener, currentLocation, itemLoaded, 0);
-        test();
-    }
-
-    private void initialize() {
-        mDbHelper = new HouseDbHelper();
-
-        mSharedPreferences = getContext().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
-
-        LogUtils.d("LOCATION: "
-                + mSharedPreferences.getString(Constants.LATITUDE, "0")
-                + ", " + mSharedPreferences.getString(Constants.LONGITUDE, "0"));
-        final Location currentLocation = new Location("");
-
-        currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
-        currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
-
-        pgbHouse.setVisibility(View.VISIBLE);
-        houseModelList = new ArrayList<>();
-        final HouseListener listener = new HouseListener() {
-            @Override
-            public void getListHouseModel(final HouseModel houseModel) {
-                final List<Bitmap> bitmapList = new ArrayList<>();
-                for (String url : houseModel.getHouseImages()) {
-                    StorageReference mStorageImage = FirebaseStorage.getInstance().getReference()
-                            .child(Constants.IMAGES)
-                            .child(url);
-                    final long ONE_MEGABYTE = 1024 * 1024;
-                    mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                        @Override
-                        public void onSuccess(byte[] bytes) {
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            bitmapList.add(bitmap);
-                            houseModel.setBitmapList(bitmapList);
-
-                            if (houseModel.getBitmapList().size() == houseModel.getHouseImages().size()) {
-                                houseModelList.add(houseModel);
-
-                                Collections.sort(houseModelList, new Comparator<HouseModel>() {
-                                    @Override
-                                    public int compare(HouseModel o1, HouseModel o2) {
-                                        return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
-                                    }
-                                });
-                                setAdapter(houseModelList, getActivity());
-
-                                LogUtils.d("houseModelList" + houseModelList);
-                            }
-                        }
-                    });
-                }
-            }
-        };
-
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getChildAt(v.getChildCount() - 1) != null) {
-                    if (scrollY >= v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()) {
-                        itemLoaded += 10;
-                        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, itemLoaded - 10);
-                    }
-                }
-            }
-        });
-
-        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, 0);
-        test();
     }
 
     private void sortByUpdateDate() {
@@ -277,22 +210,6 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
             mHouseRcvAdapter.notifyDataSetChanged();
             pgbHouse.setVisibility(View.GONE);
         }
-    }
-
-    private void test() {
-        List<HouseModel> list = new ArrayList<>();
-
-        LogUtils.d("ListTest: houseModelList" + houseModelList);
-
-        list.addAll(houseModelList);
-        Collections.sort(list, new Comparator<HouseModel>() {
-            @Override
-            public int compare(HouseModel o1, HouseModel o2) {
-                return 0;
-            }
-        });
-
-        LogUtils.d("ListTest..." + houseModelList.size());
     }
 
     @OnClick({R.id.rd_recent_date, R.id.rd_location, R.id.rd_price})

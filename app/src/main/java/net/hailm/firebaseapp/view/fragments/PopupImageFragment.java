@@ -42,6 +42,9 @@ public class PopupImageFragment extends DialogFragment implements View.OnClickLi
 
     private Uri imageUri;
 
+    public PopupImageFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

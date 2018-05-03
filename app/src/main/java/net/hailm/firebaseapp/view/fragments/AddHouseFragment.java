@@ -115,6 +115,9 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
+    public AddHouseFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
