@@ -5,62 +5,6 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/group_tab_radio"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rd_latest"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/change_background_tab"
-            android:button="@android:color/transparent"
-            android:checked="true"
-            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/latest"
-            android:textAlignment="center"
-            android:textColor="@drawable/change_text_tab" />
-
-        <View
-            android:layout_width="@dimen/_1dp"
-            android:layout_height="match_parent"
-            android:background="@color/background" />
-
-        <RadioButton
-            android:id="@+id/rd_category"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/change_background_tab"
-            android:button="@android:color/transparent"
-            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/category"
-            android:textAlignment="center"
-            android:textColor="@drawable/change_text_tab" />
-
-        <View
-            android:layout_width="@dimen/_1dp"
-            android:layout_height="match_parent"
-            android:background="@color/background" />
-
-        <RadioButton
-            android:id="@+id/rd_area"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/change_background_tab"
-            android:button="@android:color/transparent"
-            android:drawableBottom="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:text="@string/area"
-            android:textAlignment="center"
-            android:textColor="@drawable/change_text_tab" />
-    </RadioGroup>
-
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"

@@ -1,7 +1,6 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -54,7 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
+public class AddHouseFragment extends Fragment implements OnMapReadyCallback, PopupImageCallback {
     Unbinder unbinder;
     private View rootView;
 
@@ -114,6 +113,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private int checkClickImage = 0;
 
     public AddHouseFragment() {
     }
@@ -152,27 +152,27 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
                 getMyLocation();
                 break;
             case R.id.img_1:
+                checkClickImage = 1;
                 showPopupImage();
-                new PopupImageCallback() {
-                    @Override
-                    public void onButtonClick(Bitmap bitmap) {
-                        img1.setImageBitmap(bitmap);
-                    }
-                };
                 break;
             case R.id.img_2:
+                checkClickImage = 2;
                 showPopupImage();
                 break;
             case R.id.img_3:
+                checkClickImage = 3;
                 showPopupImage();
                 break;
             case R.id.img_4:
+                checkClickImage = 4;
                 showPopupImage();
                 break;
             case R.id.img_5:
+                checkClickImage = 5;
                 showPopupImage();
                 break;
             case R.id.img_6:
+                checkClickImage = 6;
                 showPopupImage();
                 break;
             default:
@@ -183,7 +183,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
     private void showPopupImage() {
         manager = getActivity().getSupportFragmentManager();
         PopupImageFragment popupImageFragment = new PopupImageFragment();
-        popupImageFragment.setTargetFragment(this, 0);
+        popupImageFragment.setTargetFragment(this, 1000);
         popupImageFragment.show(manager, "dialog");
     }
 
@@ -371,5 +371,31 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback {
                 .zoom(15)
                 .build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void onButtonClick(Bitmap bitmap) {
+        switch (checkClickImage) {
+            case 1:
+                img1.setImageBitmap(bitmap);
+                break;
+            case 2:
+                img2.setImageBitmap(bitmap);
+                break;
+            case 3:
+                img3.setImageBitmap(bitmap);
+                break;
+            case 4:
+                img4.setImageBitmap(bitmap);
+                break;
+            case 5:
+                img5.setImageBitmap(bitmap);
+                break;
+            case 6:
+                img6.setImageBitmap(bitmap);
+                break;
+            default:
+                break;
+        }
     }
 }
