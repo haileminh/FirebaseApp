@@ -15,6 +15,8 @@ import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 
+import java.util.List;
+
 public class RegisterHouseDbHelper extends BaseFireBase {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -50,6 +52,8 @@ public class RegisterHouseDbHelper extends BaseFireBase {
     }
 
     /**
+     * registerAddress
+     *
      * @param addressModel
      * @param houseModel
      * @param listener
@@ -71,6 +75,13 @@ public class RegisterHouseDbHelper extends BaseFireBase {
         });
     }
 
+    /**
+     * registerComment
+     *
+     * @param commentModel
+     * @param houseId
+     * @param listener
+     */
     public void registerComment(CommentModel commentModel, String houseId, final RegisterHouseListener listener) {
         mDatabase.child(Constants.COMMENTS)
                 .child(houseId)
@@ -87,5 +98,11 @@ public class RegisterHouseDbHelper extends BaseFireBase {
                 listener.registerFailure(e.getMessage());
             }
         });
+    }
+
+    public void registerHouseImage(List<String> nameImageHouse, String houseId) {
+        for (int i = 0; i < nameImageHouse.size(); i++) {
+            mDatabase.child(Constants.HOUSE_IMAGES).child(houseId).child(nameImageHouse.get(i)).setValue(nameImageHouse.get(i));
+        }
     }
 }

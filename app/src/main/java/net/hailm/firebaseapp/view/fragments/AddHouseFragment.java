@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,8 +30,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
@@ -42,6 +47,7 @@ import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,6 +120,9 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private int checkClickImage = 0;
+    private List<Bitmap> bitmapList;
+    private List<String> nameImageList;
+    private StorageReference storageReference;
 
     public AddHouseFragment() {
     }
@@ -139,6 +148,10 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
 
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        bitmapList = new ArrayList<>();
+        nameImageList = new ArrayList<>();
     }
 
     @OnClick({R.id.btn_register_house, R.id.btn_location, R.id.img_1, R.id.img_2, R.id.img_3, R.id.img_4, R.id.img_5, R.id.img_6})
@@ -191,6 +204,8 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         if (checkInputData()) {
             HouseModel houseModel = createHouseModel();
 
+            uploadImages();
+
             mRegisterHouseDbHelper.registerHouses(houseModel, new RegisterHouseListener() {
                 @Override
                 public void registerSuccess() {
@@ -216,6 +231,8 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
                 }
             });
 
+            mRegisterHouseDbHelper.registerHouseImage(nameImageList,houseModel.getHouseId());
+
             goHomeFragment();
         } else {
             Toast.makeText(getActivity(), "Register fail.......", Toast.LENGTH_SHORT).show();
@@ -227,7 +244,6 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         manager = getActivity().getSupportFragmentManager();
         transaction = manager.beginTransaction();
         transaction.replace(R.id.frame_container, homeFragment);
-//        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -378,24 +394,68 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         switch (checkClickImage) {
             case 1:
                 img1.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             case 2:
                 img2.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             case 3:
                 img3.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             case 4:
                 img4.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             case 5:
                 img5.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             case 6:
                 img6.setImageBitmap(bitmap);
+                bitmapList.add(bitmap);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void uploadImages() {
+        img1.setDrawingCacheEnabled(true);
+        img1.buildDrawingCache();
+        img2.setDrawingCacheEnabled(true);
+        img2.buildDrawingCache();
+        img3.setDrawingCacheEnabled(true);
+        img3.buildDrawingCache();
+        img4.setDrawingCacheEnabled(true);
+        img4.buildDrawingCache();
+        img5.setDrawingCacheEnabled(true);
+        img5.buildDrawingCache();
+        img6.setDrawingCacheEnabled(true);
+        img6.buildDrawingCache();
+
+        for (int i = 0; i < bitmapList.size(); i++) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmapList.get(i).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            String nameImage = UUID.randomUUID().toString();
+            nameImageList.add(nameImage);
+            StorageReference storageRef = this.storageReference.child(Constants.IMAGES).child(nameImage);
+            UploadTask uploadTask = storageRef.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    LogUtils.d("downloadUrl: " + downloadUrl);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    LogUtils.d("Upload image faliure");
+                }
+            });
         }
     }
 }
