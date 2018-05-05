@@ -27,11 +27,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import net.hailm.firebaseapp.Manifest;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
