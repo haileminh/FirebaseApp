@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -231,9 +233,17 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
                 }
             });
 
-            mRegisterHouseDbHelper.registerHouseImage(nameImageList,houseModel.getHouseId());
+            mRegisterHouseDbHelper.registerHouseImage(nameImageList, houseModel.getHouseId());
 
-            goHomeFragment();
+            DialogUtils.showProgressDialog("Register house loading ...", getActivity());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    DialogUtils.hideProgressDialog();
+                    goHomeFragment();
+                }
+            }, 1500);
+
         } else {
             Toast.makeText(getActivity(), "Register fail.......", Toast.LENGTH_SHORT).show();
         }
