@@ -62,6 +62,7 @@
     <string name="phong"> phòng</string>
     <string name="het_phong">Hết phòng</string>
     <string name="chi_tiet">Chi tiết: </string>
+    <string name="chu_nha">Chủ nhà: </string>
     <string name="so_dien_thoai">Số điện thoại: </string>
     <string name="dien_tich">Diện tích: </string>
     <string name="location">Location </string>

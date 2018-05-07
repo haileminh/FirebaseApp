@@ -1,58 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_view_house"
     android:layout_width="@dimen/_300dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_custom_view"
-    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:padding="@dimen/_4dp">
 
-    <ImageView
-        android:id="@+id/img_view_house"
-        android:layout_width="@dimen/_160dp"
-        android:layout_height="@dimen/_120dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/nhatro1" />
+    <TextView
+        android:id="@+id/txt_view_house_landlord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4dp"
+        android:text="Chủ nhà: Cô Bình"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_120dp"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/_8dp">
+    <TextView
+        android:id="@+id/txt_view_house_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4dp"
+        android:text="Số nhà 19, Lê Văn, Hiến, Từ Liêm, Hà Nội"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12dp" />
 
-        <TextView
-            android:id="@+id/txt_view_house_landlord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4dp"
-            android:text="Chủ nhà: Cô Bình"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12dp" />
+    <TextView
+        android:id="@+id/txt_view_house_acreage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4dp"
+        android:text="Diện tích: 20 m2"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12dp" />
 
-        <TextView
-            android:id="@+id/txt_view_house_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4dp"
-            android:text="Số nhà 19, Lê Văn, Hiến, Từ Liêm, Hà Nội"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12dp" />
-
-        <TextView
-            android:id="@+id/txt_view_house_acreage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4dp"
-            android:text="Diện tích: 20 m2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12dp" />
-
-        <TextView
-            android:id="@+id/txt_view_house_update_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4dp"
-            android:text="Ngày 05/05/2018"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12dp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/txt_view_house_update_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4dp"
+        android:text="Ngày 05/05/2018"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12dp" />
 </LinearLayout>

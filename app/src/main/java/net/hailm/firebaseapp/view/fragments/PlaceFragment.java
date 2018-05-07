@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.AddressListener;
+import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.PlaceDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
@@ -39,7 +44,7 @@ import butterknife.Unbinder;
  * Created by hai.lm on 13/04/2018.
  */
 
-public class PlaceFragment extends Fragment implements OnMapReadyCallback {
+public class PlaceFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private View rootView;
     Unbinder unbinder;
 
@@ -47,11 +52,16 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mSupportMapFragment;
     private SharedPreferences mSharedPreferences;
 
-    private PlaceDbHelper mDbHelper;
-    private List<AddressModel> addressModelList;
+    private HouseDbHelper mDbHelper;
     private MarkerOptions markerOptions;
     private Marker myMarker;
     private MyInfoHouse mMyInfoHouse;
+    private Location currentLocation;
+    private double latitude;
+    private double longitude;
+
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     public PlaceFragment() {
         // Required empty public constructor
@@ -73,22 +83,26 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
         mSupportMapFragment.getMapAsync(this);
         markerOptions = new MarkerOptions();
 
+        mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+        latitude = Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0"));
+        longitude = Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0"));
+        currentLocation = new Location("");
+        currentLocation.setLatitude(latitude);
+        currentLocation.setLongitude(longitude);
     }
 
     private void initializeComponents() {
         mMyInfoHouse = new MyInfoHouse(getActivity());
-        mDbHelper = new PlaceDbHelper();
-        addressModelList = new ArrayList<>();
+        mDbHelper = new HouseDbHelper();
 
-        AddressListener addressListener = new AddressListener() {
+        HouseListener listener = new HouseListener() {
             @Override
-            public void getListAddressModel(AddressModel addressModel) {
-                addressModelList.add(addressModel);
-
-                showMarkerAddress(addressModel);
+            public void getListHouseModel(HouseModel houseModel) {
+                showMarkerAddress(houseModel);
             }
         };
-        mDbHelper.getListAddress(addressListener);
+
+        mDbHelper.getListHouse(listener, currentLocation, 1000, 0);
     }
 
     @Override
@@ -104,10 +118,6 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void showMyMarker(GoogleMap mGoogleMap) {
-        mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
-
-        double latitude = Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0"));
-        double longitude = Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0"));
         LatLng latLng = new LatLng(latitude, longitude);
         LogUtils.d("latLng PlaceFrament: " + latLng);
 
@@ -115,6 +125,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap.addMarker(markerOptions);
         showMyLocation(latitude, longitude, mGoogleMap);
         initializeComponents();
+        mGoogleMap.setOnInfoWindowClickListener(this);
     }
 
     private void showMyLocation(double latitude, double longitude, GoogleMap mGoogleMap) {
@@ -125,7 +136,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void showMarkerAddress(AddressModel addressModel) {
+    private void showMarkerAddress(HouseModel houseModel) {
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
@@ -137,12 +148,30 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
 
-        double latitude = addressModel.getLatitude();
-        double longitude = addressModel.getLongitude();
+        double latitude = houseModel.getAddressModel().getLatitude();
+        double longitude = houseModel.getAddressModel().getLongitude();
 
         LatLng latLng = new LatLng(latitude, longitude);
         markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_view_house));
         myMarker = mGoogleMap.addMarker(markerOptions);
-        myMarker.setTag(addressModel);
+        myMarker.setTag(houseModel);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        LogUtils.d("Info window clicked");
+        HouseDetailFragment houseDetailFragment = new HouseDetailFragment();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        HouseModel houseModel = (HouseModel) marker.getTag();
+        bundle.putParcelable(Constants.HOUSE_MODEL, houseModel);
+        houseDetailFragment.setArguments(bundle);
+
+        transaction.replace(android.R.id.content, houseDetailFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
