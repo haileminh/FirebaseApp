@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -29,6 +31,7 @@ import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.AddressListener;
 import net.hailm.firebaseapp.listener.HouseListener;
+import net.hailm.firebaseapp.listener.PopupSearchCallback;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.PlaceDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
@@ -37,15 +40,21 @@ import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
  * Created by hai.lm on 13/04/2018.
  */
 
-public class PlaceFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class PlaceFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, PopupSearchCallback {
     private View rootView;
+    @BindView(R.id.txt_place_distance)
+    TextView txtDistance;
+    @BindView(R.id.txt_place_content_search)
+    TextView txtContentSearch;
     Unbinder unbinder;
 
     private GoogleMap mGoogleMap;
@@ -173,5 +182,25 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback, Googl
         transaction.replace(android.R.id.content, houseDetailFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @OnClick({R.id.ll_search})
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.ll_search:
+                manager = getActivity().getSupportFragmentManager();
+                PopupSearch popupSearch = new PopupSearch();
+                popupSearch.setTargetFragment(this, 1001);
+                popupSearch.show(manager, "search");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onButtonClick(double distance, long price, long acreage) {
+        txtDistance.setText(String.valueOf(distance));
+        txtContentSearch.setText(String.valueOf(price) + " / " + String.valueOf(acreage));
     }
 }
