@@ -51,15 +51,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
         final CommentModel commentModel = commentModelList.get(position);
 
-//        if (commentModel.getUsers().getName() != null) {
-//            holder.txtTitle.setText(commentModel.getUsers().getName());
-//        } else {
-//            holder.txtTitle.setText(commentModel.getTitle());
-//        }
-//        holder.txtContents.setText(commentModel.getContents());
-//        holder.txtScore.setText(String.valueOf(commentModel.getScore()));
-//        setAvatarComment(holder.imgAvatar, commentModel.getUsers().getAvatar());
-
         String url = "https://pikmail.herokuapp.com/" + commentModel.getEmail();
 
         if (commentModel.getUsers() != null) {

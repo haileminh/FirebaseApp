@@ -155,13 +155,19 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         if (bundle != null) {
             houseModel = (HouseModel) bundle.get(Constants.HOUSE_MODEL);
         } else {
-            LogUtils.d("Bundle nulll in houseFragment");
+            LogUtils.d("Bundle null in houseFragment");
         }
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
         mRegisterHouseDbHelper = new RegisterHouseDbHelper(getActivity());
         mDbHelper = new CommentDbHelper();
+
+        // sepup comment adapter
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        rcvCommentList.setLayoutManager(llm);
+
         setPhotoAdapter();
+        onLongItemClickDeleteCommnent();
         setCommentAdapter();
         showHouseDetail();
 
@@ -174,7 +180,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         vpgPhoto.setCurrentItem(0);
     }
 
-    private void setCommentAdapter() {
+    private void onLongItemClickDeleteCommnent() {
         callback = new CommentApdaterCallback() {
             @Override
             public void onLongItemClick(CommentModel commentModel) {
@@ -193,10 +199,11 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 }
             }
         };
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        rcvCommentList.setLayoutManager(llm);
+    }
 
+    private void setCommentAdapter() {
         commentModelList = new ArrayList<>();
+        LogUtils.d(commentModelList);
         CommentListener listener = new CommentListener() {
             @Override
             public void getListHouseModel(CommentModel commentModel) {
@@ -207,7 +214,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 commentAdapter.notifyDataSetChanged();
             }
         };
-
         mDbHelper.getCommentList(listener, houseModel.getHouseId());
     }
 
@@ -291,7 +297,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                         UtilityModel utilityModel = dataSnapshot.getValue(UtilityModel.class);
 
 
-                        LinearLayout llSub = new LinearLayout(getActivity());
+                        LinearLayout llSub = new LinearLayout(getContext());
                         llSub.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         llSub.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -407,6 +413,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 public void registerSuccess() {
                     LogUtils.d("Register commnet success");
                     edtComment.setText("");
+                    LogUtils.d("commentModelList: " + commentModelList);
                     setCommentAdapter();
                 }
 
@@ -502,4 +509,5 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 break;
         }
     }
+
 }

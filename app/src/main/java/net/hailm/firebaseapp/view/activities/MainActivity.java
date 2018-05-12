@@ -1,11 +1,15 @@
 package net.hailm.firebaseapp.view.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -25,6 +29,10 @@ public class MainActivity extends BaseActivity {
     FragmentTransaction transaction;
 
     boolean checkOnClick = false;
+    private boolean doubleBackToExitPressedOnce = false;
+
+    private long lastPressedTime;
+    private static final int PERIOD = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +86,40 @@ public class MainActivity extends BaseActivity {
         int count = getFragmentManager().getBackStackEntryCount();
 
         if (count == 0) {
-            super.onBackPressed();
-            //additional code
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                //additional code
+                return;
+            }
+            doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         } else {
             getFragmentManager().popBackStack();
         }
     }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+//            switch (event.getAction()) {
+//                case KeyEvent.ACTION_DOWN:
+//                    if (event.getDownTime() - lastPressedTime < PERIOD) {
+//                        // todo your
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Press once again to exit",
+//                                Toast.LENGTH_SHORT).show();
+//                        lastPressedTime = event.getEventTime();
+//                    }
+//                    return true;
+//            }
+//        }
+//        return false;
+//    }
 }

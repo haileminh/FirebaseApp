@@ -202,5 +202,28 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback, Googl
     public void onButtonClick(double distance, long price, long acreage) {
         txtDistance.setText(String.valueOf(distance));
         txtContentSearch.setText(String.valueOf(price) + " / " + String.valueOf(acreage));
+        showHouse(distance, price, acreage);
+    }
+
+    private void showHouse(final double distance, long price, long acreage) {
+        mMyInfoHouse = new MyInfoHouse(getActivity());
+        mDbHelper = new HouseDbHelper();
+
+        myMarker.remove();
+        myMarker.setVisible(true);
+
+        HouseListener listener = new HouseListener() {
+            @Override
+            public void getListHouseModel(HouseModel houseModel) {
+                if (distance > 0) {
+                    if (houseModel.getAddressModel().getDistance() > 50) {
+                        showMarkerAddress(houseModel);
+                    }
+
+                }
+            }
+        };
+
+        mDbHelper.getListHouse(listener, currentLocation, 1000, 0);
     }
 }
