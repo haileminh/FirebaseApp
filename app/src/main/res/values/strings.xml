@@ -16,6 +16,7 @@
     <string name="login_title">Đăng Nhập</string>
     <string name="login_google">Đăng Nhập Google</string>
     <string name="login_facebook">Đăng Nhập Facebook</string>
+    <string name="loign_ngay">Đăng nhập ngay</string>
     <string name="fblogin">Đăng Nhập FaceBook</string>
     <string name="register_new">Đăng Ký Mới</string>
     <string name="verifiation">Truy cập Email để xác thực tài khoản</string>
@@ -96,6 +97,7 @@
     <string name="gui_xe">Gửi xe miễn phí</string>
     <string name="register_house">Đăng tin</string>
     <string name="note">Lưu ý: Tin có ảnh không liên quan đến nhà trọ sẽ bị xóa mà không có thông báo trước.</string>
+    <string name="note2">Bạn chưa đăng nhập vào ứng dụng nên không thể thực hiện chức năng này.</string>
 
 
     <string name="chon_anh">Chọn ảnh</string>

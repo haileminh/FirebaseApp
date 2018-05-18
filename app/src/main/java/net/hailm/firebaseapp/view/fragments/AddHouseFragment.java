@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -48,6 +50,7 @@ import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.utils.Utils;
+import net.hailm.firebaseapp.view.activities.LoginActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -64,6 +67,11 @@ import butterknife.Unbinder;
 public class AddHouseFragment extends Fragment implements OnMapReadyCallback, PopupImageCallback {
     Unbinder unbinder;
     private View rootView;
+
+    @BindView(R.id.ll_login)
+    LinearLayout llLogin;
+    @BindView(R.id.ll_register_house)
+    LinearLayout llRegisterHouse;
 
     @BindView(R.id.img_1)
     ImageView img1;
@@ -106,6 +114,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     @BindView(R.id.cb_ban_ghe)
     CheckBox cbBanGhe;
 
+    private String uid;
     private SharedPreferences mSharedPreferences;
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
     private SupportMapFragment mSupportMapFragment;
@@ -147,6 +156,7 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     private void initializeComponents() {
         mRegisterHouseDbHelper = new RegisterHouseDbHelper(getActivity());
         mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+        uid = mSharedPreferences.getString(Constants.UID, "");
 
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
@@ -154,9 +164,17 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         storageReference = FirebaseStorage.getInstance().getReference();
         bitmapList = new ArrayList<>();
         nameImageList = new ArrayList<>();
+
+        if (!uid.equals("")) {
+            llLogin.setVisibility(View.GONE);
+        } else {
+            llRegisterHouse.setVisibility(View.GONE);
+            llLogin.setVisibility(View.VISIBLE);
+        }
     }
 
-    @OnClick({R.id.btn_register_house, R.id.btn_location, R.id.img_1, R.id.img_2, R.id.img_3, R.id.img_4, R.id.img_5, R.id.img_6})
+    @OnClick({R.id.btn_register_house, R.id.btn_login, R.id.btn_location,
+            R.id.img_1, R.id.img_2, R.id.img_3, R.id.img_4, R.id.img_5, R.id.img_6})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_register_house:
@@ -165,6 +183,9 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
             case R.id.btn_location:
                 onCLickBtnLocation = true;
                 getMyLocation();
+                break;
+            case R.id.btn_login:
+                startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.img_1:
                 checkClickImage = 1;
@@ -266,7 +287,6 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         SimpleDateFormat dateFormat = new SimpleDateFormat(AppConst.DATE_FORMAT);
         houseModel.setUpdateDate(dateFormat.format(date));
 
-        String uid = mSharedPreferences.getString(Constants.UID, "");
         houseModel.setUid(uid);
 
         String lamdlord = edtLamdlord.getText().toString().trim();

@@ -58,7 +58,10 @@ import net.hailm.firebaseapp.model.dbhelpers.CommentDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.model.dbmodels.Users;
 import net.hailm.firebaseapp.model.dbmodels.UtilityModel;
+import net.hailm.firebaseapp.utils.DialogUtils;
+import net.hailm.firebaseapp.view.activities.LoginActivity;
 import net.hailm.firebaseapp.view.adapters.CommentAdapter;
 import net.hailm.firebaseapp.view.adapters.PhotoVpgAdapter;
 
@@ -128,6 +131,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     @BindView(R.id.ratingBar)
     RatingBar ratingBar;
 
+    private String uid;
+    private SharedPreferences mSharedPreferences;
     private HouseModel houseModel;
     private CommentAdapter commentAdapter;
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
@@ -135,6 +140,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private List<CommentModel> commentModelList;
     private CommentApdaterCallback callback;
     private boolean isCheckedLike = false;
+    private DatabaseReference mDataNodeRoot;
 
     public HouseDetailFragment() {
     }
@@ -157,6 +163,10 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         } else {
             LogUtils.d("Bundle null in houseFragment");
         }
+        // Get uid app when user login
+        mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+        uid = mSharedPreferences.getString(Constants.UID, "");
+
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
         mRegisterHouseDbHelper = new RegisterHouseDbHelper(getActivity());
@@ -166,8 +176,12 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rcvCommentList.setLayoutManager(llm);
 
-        setPhotoAdapter();
+        commentModelList = new ArrayList<>();
         onLongItemClickDeleteCommnent();
+        commentAdapter = new CommentAdapter(getContext(), commentModelList, callback);
+        rcvCommentList.setAdapter(commentAdapter);
+
+        setPhotoAdapter();
         setCommentAdapter();
         showHouseDetail();
 
@@ -184,8 +198,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         callback = new CommentApdaterCallback() {
             @Override
             public void onLongItemClick(CommentModel commentModel) {
-                SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
-                final String uid = mSharedPreferences.getString(Constants.UID, "");
                 if (commentModel.getUid().equals(uid)) {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.COMMENTS)
@@ -202,19 +214,41 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void setCommentAdapter() {
-        commentModelList = new ArrayList<>();
-        LogUtils.d(commentModelList);
-        CommentListener listener = new CommentListener() {
+//        CommentListener listener = new CommentListener() {
+//            @Override
+//            public void getListHouseModel(CommentModel commentModel) {
+//                commentModelList.add(commentModel);
+//                sortCommentByDate();
+//                commentAdapter = new CommentAdapter(getContext(), commentModelList, callback);
+//                rcvCommentList.setAdapter(commentAdapter);
+//                commentAdapter.notifyDataSetChanged();
+//            }
+//        };
+//        mDbHelper.getCommentList(listener, houseModel.getHouseId());
+
+        mDataNodeRoot = FirebaseDatabase.getInstance().getReference();
+        mDataNodeRoot.addValueEventListener(new ValueEventListener() {
             @Override
-            public void getListHouseModel(CommentModel commentModel) {
-                commentModelList.add(commentModel);
-                sortCommentByDate();
-                commentAdapter = new CommentAdapter(getContext(), commentModelList, callback);
-                rcvCommentList.setAdapter(commentAdapter);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot dataComments = dataSnapshot.child(Constants.COMMENTS).child(houseModel.getHouseId());
+                commentModelList.clear();
+                for (DataSnapshot valueComment : dataComments.getChildren()) {
+                    CommentModel commentModel = valueComment.getValue(CommentModel.class);
+                    commentModel.setCommentId(valueComment.getKey());
+                    Users users = dataSnapshot.child(Constants.USERS).child(commentModel.getUid()).getValue(Users.class);
+                    commentModel.setUsers(users);
+                    commentModelList.add(commentModel);
+
+                    sortCommentByDate();
+                }
                 commentAdapter.notifyDataSetChanged();
             }
-        };
-        mDbHelper.getCommentList(listener, houseModel.getHouseId());
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sortCommentByDate() {
@@ -358,7 +392,12 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_comment:
-                registerComment();
+                if (!uid.equals("")) {
+                    registerComment();
+                } else {
+                    DialogUtils.showMessage("Bạn chưa đăng nhập", getContext());
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
                 break;
             case R.id.floating_action_btn_call:
                 requesPermisions();

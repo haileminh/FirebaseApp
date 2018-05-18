@@ -11,27 +11,60 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_register_images" />
-
-        <include layout="@layout/layout_register_info_house" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8dp"
-            android:text="@string/edt_utility" />
-
-        <include layout="@layout/layout_register_utility" />
-
-        <include layout="@layout/layout_register_map" />
-
-        <Button
-            android:id="@+id/btn_register_house"
+        <LinearLayout
+            android:id="@+id/ll_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12dp"
-            android:background="@drawable/btn_dang_tin"
-            android:text="@string/register_house"
-            android:textColor="@color/white" />
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="@dimen/_12dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/note2"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12dp"
+                android:background="@drawable/btn_dang_tin"
+                android:text="@string/loign_ngay"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_register_house"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_register_images" />
+
+            <include layout="@layout/layout_register_info_house" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8dp"
+                android:text="@string/edt_utility" />
+
+            <include layout="@layout/layout_register_utility" />
+
+            <include layout="@layout/layout_register_map" />
+
+            <Button
+                android:id="@+id/btn_register_house"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12dp"
+                android:background="@drawable/btn_dang_tin"
+                android:text="@string/register_house"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
