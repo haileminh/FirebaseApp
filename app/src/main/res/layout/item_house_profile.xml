@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_4dp"
+    android:background="@drawable/background_comment"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/img_house_by_id"
+        android:layout_marginTop="@dimen/_2dp"
+        android:layout_width="@dimen/_120dp"
+        android:layout_height="@dimen/_120dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nhatro1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_124dp"
+        android:orientation="vertical"
+        android:padding="@dimen/_8dp">
+
+        <TextView
+            android:id="@+id/txt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Số nhà 19, ngõ 56/46, phố Lê Văn Hiến"
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4dp"
+            android:text="Giá phòng: 2 500 000 đ"
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            android:id="@+id/txt_acreage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4dp"
+            android:text="Diện tích: 20 m2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            android:id="@+id/txt_update_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4dp"
+            android:text="Ngày 08 tháng 04 lúc 22:45"
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_12sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -19,6 +19,7 @@ import net.hailm.firebaseapp.base.BaseActivity;
 import net.hailm.firebaseapp.view.fragments.AddHouseFragment;
 import net.hailm.firebaseapp.view.fragments.HomeFragment;
 import net.hailm.firebaseapp.view.fragments.PlaceFragment;
+import net.hailm.firebaseapp.view.fragments.ProfileFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +71,7 @@ public class MainActivity extends BaseActivity {
                         checkOnClick = false;
                         break;
                     case R.id.item_setting:
+                        transaction.replace(R.id.frame_container, new ProfileFragment());
                         checkOnClick = false;
                         break;
                     default:
