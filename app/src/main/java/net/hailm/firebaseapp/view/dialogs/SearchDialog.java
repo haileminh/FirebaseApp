@@ -1,12 +1,9 @@
-package net.hailm.firebaseapp.view.fragments;
+package net.hailm.firebaseapp.view.dialogs;
 
-import android.os.Bundle;
+import android.app.Dialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -16,8 +13,7 @@ import android.widget.TextView;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.listener.PopupSearchCallback;
 
-public class PopupSearch extends DialogFragment {
-    private View rootView;
+public class SearchDialog extends Dialog {
     private TextView txtDistance;
     private TextView txtPrice;
     private TextView txtAcerage;
@@ -26,43 +22,29 @@ public class PopupSearch extends DialogFragment {
     private SeekBar sbPrice;
     private SeekBar sbAcreage;
 
-    private PopupSearchCallback popupSearchCallback;
-
     private int progressDistance = 0;
     private int progressPrice = 0;
     private int progressAcreage = 0;
 
-    public PopupSearch() {
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.layout_popup_search, container, false);
-        return rootView;
-    }
+    private PopupSearchCallback popupSearchCallback;
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+    public SearchDialog(@NonNull Context context, final PopupSearchCallback popupSearchCallback) {
+        super(context);
+        this.popupSearchCallback = popupSearchCallback;
 
-        getActivity().getWindow().setLayout(
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.layout_popup_search);
+
+        getWindow().setLayout(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT
         );
-        popupSearchCallback = (PopupSearchCallback) getTargetFragment();
-        txtDistance = rootView.findViewById(R.id.txt_popup_distance);
-        txtPrice = rootView.findViewById(R.id.txt_popup_price);
-        txtAcerage = rootView.findViewById(R.id.txt_popup_acrage);
-        sbDistance = rootView.findViewById(R.id.sb_distance);
-        sbPrice = rootView.findViewById(R.id.sb_prices);
-        sbAcreage = rootView.findViewById(R.id.sb_acreage);
-        btnOk = rootView.findViewById(R.id.btn_ok);
-
+        initializeComponents();
         setUpSeekBarDistance();
         setUpSeekBarPrice();
         setUpSeekBarAcreage();
+
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +53,16 @@ public class PopupSearch extends DialogFragment {
                 dismiss();
             }
         });
+    }
+
+    private void initializeComponents() {
+        txtDistance = findViewById(R.id.txt_popup_distance);
+        txtPrice = findViewById(R.id.txt_popup_price);
+        txtAcerage = findViewById(R.id.txt_popup_acrage);
+        sbDistance = findViewById(R.id.sb_distance);
+        sbPrice = findViewById(R.id.sb_prices);
+        sbAcreage = findViewById(R.id.sb_acreage);
+        btnOk = findViewById(R.id.btn_ok);
     }
 
     private void setUpSeekBarDistance() {

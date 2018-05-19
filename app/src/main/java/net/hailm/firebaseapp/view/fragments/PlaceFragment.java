@@ -36,6 +36,7 @@ import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.PlaceDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.view.dialogs.SearchDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,9 @@ import butterknife.Unbinder;
  * Created by hai.lm on 13/04/2018.
  */
 
-public class PlaceFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, PopupSearchCallback {
+public class PlaceFragment extends Fragment implements OnMapReadyCallback,
+        GoogleMap.OnInfoWindowClickListener,
+        PopupSearchCallback {
     private View rootView;
     @BindView(R.id.txt_place_distance)
     TextView txtDistance;
@@ -188,10 +191,13 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback, Googl
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_search:
-                manager = getActivity().getSupportFragmentManager();
-                PopupSearch popupSearch = new PopupSearch();
-                popupSearch.setTargetFragment(this, 1001);
-                popupSearch.show(manager, "search");
+//                manager = getActivity().getSupportFragmentManager();
+//                PopupSearch popupSearch = new PopupSearch();
+//                popupSearch.setTargetFragment(this, 1001);
+//                popupSearch.show(manager, "search");
+
+                SearchDialog dialog = new SearchDialog(getContext(), this);
+                dialog.show();
                 break;
             default:
                 break;
