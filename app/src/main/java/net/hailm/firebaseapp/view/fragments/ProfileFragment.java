@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
@@ -28,6 +30,7 @@ import net.hailm.firebaseapp.listener.HouseProfileListener;
 import net.hailm.firebaseapp.model.dbhelpers.HouseProfileDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.model.dbmodels.Users;
+import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.view.adapters.HouseProfileRcvAdapter;
 
 import java.util.ArrayList;
@@ -38,6 +41,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class ProfileFragment extends Fragment {
     @BindView(R.id.txt_total_house_by_id)
@@ -136,14 +142,36 @@ public class ProfileFragment extends Fragment {
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_logout:
-                mAuth.signOut();
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.clear();
-                editor.commit();
+                if (!uid.equals("")) {
+                    logoutAcount();
+                } else {
+                    Toast.makeText(getContext(), "Bạn chưa đăng nhập mà", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
         }
+    }
+
+    private void logoutAcount() {
+        DialogUtils.showAlertDialog(getContext(),getString(R.string.ban_co_muon_dang_xuat), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        break;
+                    case BUTTON_NEGATIVE:
+                        mAuth.signOut();
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.clear();
+                        editor.commit();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**

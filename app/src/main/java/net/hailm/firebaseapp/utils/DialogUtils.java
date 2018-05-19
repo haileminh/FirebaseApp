@@ -2,6 +2,7 @@ package net.hailm.firebaseapp.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import net.hailm.firebaseapp.R;
@@ -24,6 +25,16 @@ public class DialogUtils {
         builder.create().show();
     }
 
+    public static void showAlertDialog(Context context,
+                                       String message,
+                                       DialogInterface.OnClickListener onClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.no, onClickListener);
+        builder.setNegativeButton(R.string.yes, onClickListener);
+        builder.create().show();
+    }
 
     public static void showProgressDialog(String message, Context context) {
         if (mProgressDialog == null) {

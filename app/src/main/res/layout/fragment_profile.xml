@@ -45,7 +45,7 @@
                     android:layout_below="@+id/civ_avatar"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/_8dp"
-                    android:text="Lê Minh Hải"
+                    android:text="@string/ban_chua_dang_nhap"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_18dp"
                     android:textStyle="bold" />
