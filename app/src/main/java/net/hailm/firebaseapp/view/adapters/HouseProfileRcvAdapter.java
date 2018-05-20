@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -126,6 +128,8 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
                                 break;
                             case BUTTON_NEGATIVE:
                                 Toast.makeText(context, "Xóa chứ sao ko", Toast.LENGTH_SHORT).show();
+                                deleteHouse(houseModel);
+                                notifyDataSetChanged();
                                 break;
                             default:
                                 break;
@@ -135,6 +139,17 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
                 return true;
             }
         });
+        notifyDataSetChanged();
+    }
+
+    private void deleteHouse(HouseModel houseModel) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(Constants.HOUSES).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.HOUSE_IMAGES).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.ADDRESS).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.COMMENTS).child(houseModel.getHouseId()).setValue(null);
+
     }
 
     /**

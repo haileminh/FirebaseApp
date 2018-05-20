@@ -30,6 +30,7 @@ public class MainActivity extends BaseActivity {
     FragmentTransaction transaction;
 
     boolean checkOnClick = false;
+    boolean checkOnClickProfile = false;
     private boolean doubleBackToExitPressedOnce = false;
 
     private long lastPressedTime;
@@ -60,18 +61,23 @@ public class MainActivity extends BaseActivity {
                             transaction.replace(R.id.frame_container, new HomeFragment());
                             checkOnClick = true;
                         }
-                        LogUtils.d("checkOnclick: " + checkOnClick);
+                        checkOnClickProfile = false;
                         break;
                     case R.id.item_search:
                         transaction.replace(R.id.frame_container, new PlaceFragment());
                         checkOnClick = false;
+                        checkOnClickProfile = false;
                         break;
                     case R.id.item_add:
                         transaction.replace(R.id.frame_container, new AddHouseFragment());
                         checkOnClick = false;
+                        checkOnClickProfile = false;
                         break;
                     case R.id.item_setting:
-                        transaction.replace(R.id.frame_container, new ProfileFragment());
+                        if (!checkOnClickProfile) {
+                            transaction.replace(R.id.frame_container, new ProfileFragment());
+                            checkOnClickProfile = true;
+                        }
                         checkOnClick = false;
                         break;
                     default:

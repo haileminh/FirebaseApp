@@ -101,6 +101,7 @@
     <string name="nong_lanh">Nóng lạnh</string>
     <string name="gui_xe">Gửi xe miễn phí</string>
     <string name="register_house">Đăng tin</string>
+    <string name="update_house">Cập nhật</string>
     <string name="note">Lưu ý: Tin có ảnh không liên quan đến nhà trọ sẽ bị xóa mà không có thông báo trước.</string>
     <string name="note2">Bạn chưa đăng nhập vào ứng dụng nên không thể thực hiện chức năng này.</string>
 

@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12dp"
                 android:background="@drawable/btn_dang_tin"
-                android:text="@string/register_house"
+                android:text="@string/update_house"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

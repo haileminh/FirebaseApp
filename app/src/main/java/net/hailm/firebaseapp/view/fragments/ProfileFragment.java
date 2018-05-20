@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.EditHouseRcvAdapterCallback;
 import net.hailm.firebaseapp.listener.HouseProfileByIdListener;
@@ -36,7 +36,12 @@ import net.hailm.firebaseapp.model.dbmodels.Users;
 import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.view.adapters.HouseProfileRcvAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -104,7 +109,6 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
 
     private void initDataProfile() {
         if (!uid.equals("")) {
-
             HouseProfileListener listener = new HouseProfileListener() {
                 @Override
                 public void getProfile(Users users) {
@@ -130,6 +134,7 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
             public void getHouseById(HouseModel houseModel) {
                 houseModelList.add(houseModel);
                 txtTotalHouseById.setText(String.valueOf(houseModelList.size()));
+                sortByUpdateDate();
                 setAdapter(houseModelList);
             }
         };
@@ -144,7 +149,28 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
         mHouseProfileRcvAdapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.btn_logout)
+    private void sortByUpdateDate() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            Date date1;
+            Date date2;
+
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                String updateDate1 = o1.getUpdateDate();
+                String updateDate2 = o2.getUpdateDate();
+                try {
+                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate1);
+                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                LogUtils.d("SortBy Date: " + o1.getUpdateDate());
+                return date2.compareTo(date1);
+            }
+        });
+    }
+
+    @OnClick({R.id.btn_logout, R.id.btn_about})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_logout:
@@ -153,6 +179,9 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
                 } else {
                     Toast.makeText(getContext(), "Bạn chưa đăng nhập mà", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.btn_about:
+                Toast.makeText(getContext(), "Hướng dẫn, bấm vào nhà trọ cần sửa, giữ lâu để xóa nhà trọ", Toast.LENGTH_LONG).show();
                 break;
             default:
                 break;
