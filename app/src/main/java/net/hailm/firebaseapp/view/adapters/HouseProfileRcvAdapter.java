@@ -1,12 +1,18 @@
 package net.hailm.firebaseapp.view.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -17,16 +23,21 @@ import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.DateUtils;
+import net.hailm.firebaseapp.utils.DialogUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcvAdapter.ViewHolder> {
     private List<HouseModel> houseModelList;
@@ -65,7 +76,7 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         HouseModel houseModel = houseModelList.get(position);
 
         if (houseModel.getHouseImages().size() > 0) {
@@ -91,7 +102,34 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
                 + context.getString(R.string.luc) + " " + DateUtils.getTime(date);
         holder.txtUpdatedate.setText(updateDate);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Sửa", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                DialogUtils.showAlertDialog(context, context.getString(R.string.ban_co_muon_xoa_nha_tro), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case BUTTON_POSITIVE:
+                                dialog.dismiss();
+                                break;
+                            case BUTTON_NEGATIVE:
+                                Toast.makeText(context, "Xóa chứ sao ko", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                return true;
+            }
+        });
     }
 
     /**

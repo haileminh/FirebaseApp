@@ -10,6 +10,7 @@
     <color name="black">#000000</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#cbcbcb</color>
+    <color name="very_light_grey">#e1e1e1</color>
 
     <color name="fb_backgound">#3b5998</color>
     <color name="gg_backgound">#d34836</color>

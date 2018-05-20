@@ -37,6 +37,7 @@
     <string name="xoa_comment">Bạn vừa xóa bình luận của mình.</string>
     <string name="chua_cap_quyen">Bạn cần cấp quyền để thực hiện chức năng này.</string>
     <string name="ban_co_muon_dang_xuat">Bạn có muốn đăng xuất tài khoản khỏi ứng dụng.</string>
+    <string name="ban_co_muon_xoa_nha_tro">Bạn có muốn xóa nhà trọ này không.</string>
     <string name="ban_chua_dang_nhap">Bạn chưa đăng nhập.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

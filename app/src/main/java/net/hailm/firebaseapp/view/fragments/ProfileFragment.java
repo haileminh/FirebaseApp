@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment {
                 .child(Constants.MEMBERS)
                 .child(url);
         LogUtils.d("Url img comment: " + mStorageAvatar);
-        Glide.with(getContext()).using(new FirebaseImageLoader()).load(mStorageAvatar).into(imageView);
+        Glide.with(getActivity()).using(new FirebaseImageLoader()).load(mStorageAvatar).into(imageView);
 
     }
 }
