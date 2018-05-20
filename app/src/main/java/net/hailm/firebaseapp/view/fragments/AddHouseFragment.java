@@ -310,22 +310,22 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
         List<String> stringList = new ArrayList<>();
 
         if (cbWifi.isChecked()) {
-            stringList.add("MaTienIch1");
+            stringList.add(getString(R.string.MaTienIch1));
         }
         if (cbMayLanh.isChecked()) {
-            stringList.add("MaTienIch2");
+            stringList.add(getString(R.string.MaTienIch2));
         }
         if (cbBanGhe.isChecked()) {
-            stringList.add("MaTienIch3");
+            stringList.add(getString(R.string.MaTienIch3));
         }
         if (cbGuiXe.isChecked()) {
-            stringList.add("MaTienIch4");
+            stringList.add(getString(R.string.MaTienIch4));
         }
         if (cbNongLanh.isChecked()) {
-            stringList.add("MaTienIch5");
+            stringList.add(getString(R.string.MaTienIch5));
         }
         if (cbGiuong.isChecked()) {
-            stringList.add("MaTienIch6");
+            stringList.add(getString(R.string.MaTienIch6));
         }
         houseModel.setUtility(stringList);
         return houseModel;

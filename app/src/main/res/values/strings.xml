@@ -108,4 +108,14 @@
     <string name="chon_anh">Chọn ảnh</string>
     <string name="chup_anh_moi">Chụp ảnh mới</string>
     <string name="chon_album">Chọn từ album</string>
+
+
+    <string name="MaTienIch1">MaTienIch1</string>
+    <string name="MaTienIch2">MaTienIch2</string>
+    <string name="MaTienIch3">MaTienIch3</string>
+    <string name="MaTienIch4">MaTienIch4</string>
+    <string name="MaTienIch5">MaTienIch5</string>
+    <string name="MaTienIch6">MaTienIch6</string>
+
+
 </resources>

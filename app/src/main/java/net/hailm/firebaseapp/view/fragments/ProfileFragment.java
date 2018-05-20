@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.EditHouseRcvAdapterCallback;
 import net.hailm.firebaseapp.listener.HouseProfileByIdListener;
 import net.hailm.firebaseapp.listener.HouseProfileListener;
 import net.hailm.firebaseapp.model.dbhelpers.HouseProfileDbHelper;
@@ -45,7 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCallback {
     @BindView(R.id.txt_total_house_by_id)
     TextView txtTotalHouseById;
     @BindView(R.id.rcv_house)
@@ -67,6 +70,9 @@ public class ProfileFragment extends Fragment {
     private String email;
     private String userName;
     private SharedPreferences mSharedPreferences;
+
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     @Nullable
     @Override
@@ -133,7 +139,7 @@ public class ProfileFragment extends Fragment {
     private void setAdapter(List<HouseModel> houseModelList) {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         mRcvHouse.setLayoutManager(llm);
-        mHouseProfileRcvAdapter = new HouseProfileRcvAdapter(houseModelList, getActivity());
+        mHouseProfileRcvAdapter = new HouseProfileRcvAdapter(houseModelList, getActivity(), this);
         mRcvHouse.setAdapter(mHouseProfileRcvAdapter);
         mHouseProfileRcvAdapter.notifyDataSetChanged();
     }
@@ -154,7 +160,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void logoutAcount() {
-        DialogUtils.showAlertDialog(getContext(),getString(R.string.ban_co_muon_dang_xuat), new DialogInterface.OnClickListener() {
+        DialogUtils.showAlertDialog(getContext(), getString(R.string.ban_co_muon_dang_xuat), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -187,5 +193,20 @@ public class ProfileFragment extends Fragment {
         LogUtils.d("Url img comment: " + mStorageAvatar);
         Glide.with(getActivity()).using(new FirebaseImageLoader()).load(mStorageAvatar).into(imageView);
 
+    }
+
+    @Override
+    public void onItemCLick(HouseModel houseModel) {
+        EditHouseFragment editHouseFragment = new EditHouseFragment();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.HOUSE_MODEL_EDIT, houseModel);
+        editHouseFragment.setArguments(bundle);
+
+        transaction.replace(android.R.id.content, editHouseFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

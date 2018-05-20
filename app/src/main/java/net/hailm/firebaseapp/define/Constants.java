@@ -39,6 +39,7 @@ public class Constants {
 
     //Bundle
     public static final String HOUSE_MODEL = "House model";
+    public static final String HOUSE_MODEL_EDIT = "House model edit";
 
     public static final String Latitude = "Latitude";
     public static final String Longitude = "Longitude";

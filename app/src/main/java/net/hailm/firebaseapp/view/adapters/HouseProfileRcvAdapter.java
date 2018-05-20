@@ -21,6 +21,8 @@ import com.google.firebase.storage.StorageReference;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
+import net.hailm.firebaseapp.listener.EditHouseRcvAdapterCallback;
+import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.utils.DateUtils;
 import net.hailm.firebaseapp.utils.DialogUtils;
@@ -44,11 +46,13 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
     private Context context;
     private LayoutInflater inflater;
     private StorageReference mStorageImage;
+    private EditHouseRcvAdapterCallback mCallback;
 
-    public HouseProfileRcvAdapter(List<HouseModel> houseModelList, Context context) {
+    public HouseProfileRcvAdapter(List<HouseModel> houseModelList, Context context, EditHouseRcvAdapterCallback callback) {
         this.houseModelList = houseModelList;
         this.context = context;
         inflater = LayoutInflater.from(context);
+        this.mCallback = callback;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,7 +81,7 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        HouseModel houseModel = houseModelList.get(position);
+        final HouseModel houseModel = houseModelList.get(position);
 
         if (houseModel.getHouseImages().size() > 0) {
             mStorageImage = FirebaseStorage.getInstance().getReference()
@@ -106,6 +110,7 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Sửa", Toast.LENGTH_SHORT).show();
+                mCallback.onItemCLick(houseModel);
             }
         });
 
