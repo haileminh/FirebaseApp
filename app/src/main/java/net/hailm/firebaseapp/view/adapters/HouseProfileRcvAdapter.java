@@ -139,7 +139,6 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
                 return true;
             }
         });
-        notifyDataSetChanged();
     }
 
     private void deleteHouse(HouseModel houseModel) {

@@ -3,6 +3,7 @@ package net.hailm.firebaseapp.view.fragments;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +31,11 @@ public class MyInfoHouse implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(Marker marker) {
         View view = inflater.inflate(R.layout.custom_view_house, null);
 
+        LinearLayout llViewHouse = view.findViewById(R.id.ll_view_house);
         TextView txtLandlord = view.findViewById(R.id.txt_view_house_landlord);
         TextView txtAddress = view.findViewById(R.id.txt_view_house_address);
         TextView txtAcreage = view.findViewById(R.id.txt_view_house_acreage);
+        TextView txtDistance = view.findViewById(R.id.txt_distance);
         TextView txtUpdateDate = view.findViewById(R.id.txt_view_house_update_date);
 
         final HouseModel houseModel = (HouseModel) marker.getTag();
@@ -50,6 +53,8 @@ public class MyInfoHouse implements GoogleMap.InfoWindowAdapter {
                     + " " + context.getString(R.string.dong));
             txtAcreage.setText(acreage);
 
+            String distance = String.valueOf(String.format("%.2f", houseModel.getAddressModel().getDistance())) + context.getString(R.string.km);
+            txtDistance.setText(distance);
 
             Date date = getDate(houseModel);
             String updateDate = context.getString(R.string.ngay) + " " + DateUtils.getDay(date) + " "
@@ -59,6 +64,7 @@ public class MyInfoHouse implements GoogleMap.InfoWindowAdapter {
             txtUpdateDate.setText(updateDate);
         } else {
             Toast.makeText(context, "Đây là vị trí của bạn!", Toast.LENGTH_SHORT).show();
+            llViewHouse.setVisibility(View.GONE);
         }
 
         return view;
