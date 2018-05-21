@@ -88,7 +88,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12dp"
             android:paddingBottom="@dimen/_14dp"
-            android:paddingTop="@dimen/_14dp" />
+            android:paddingTop="@dimen/_14dp"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
