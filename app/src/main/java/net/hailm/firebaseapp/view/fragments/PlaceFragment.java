@@ -291,21 +291,21 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                     markerList.clear();
                     showMarkerAddressBySearch();
                 } else if (mPrice != 0 && mAcreage != 0) {
-                    if (houseModel.getPrice() >= mPrice*1000000 && houseModel.getAcreage() >= mAcreage) {
+                    if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
                         houseModelList.add(houseModel);
                         mGoogleMap.clear();
                         markerList.clear();
                         showMarkerAddressBySearch();
                     }
                 } else if (mPrice != 0 && mAcreage == 0) {
-                    if (houseModel.getPrice() >= mPrice*1000000) {
+                    if (houseModel.getPrice() >= mPrice * 1000000) {
                         houseModelList.add(houseModel);
                         mGoogleMap.clear();
                         markerList.clear();
                         showMarkerAddressBySearch();
                     }
                 } else if (mAcreage != 0 && mPrice == 0) {
-                    if (houseModel.getPrice() >= mAcreage) {
+                    if (houseModel.getAcreage() >= mAcreage) {
                         houseModelList.add(houseModel);
                         mGoogleMap.clear();
                         markerList.clear();
@@ -314,7 +314,33 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         } else {
-
+            if (mPrice == 0 && mAcreage == 0) {
+                houseModelList.add(houseModel);
+                mGoogleMap.clear();
+                markerList.clear();
+                showMarkerAddressBySearch();
+            } else if (mPrice != 0 && mAcreage != 0) {
+                if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
+                    houseModelList.add(houseModel);
+                    mGoogleMap.clear();
+                    markerList.clear();
+                    showMarkerAddressBySearch();
+                }
+            } else if (mPrice != 0 && mAcreage == 0) {
+                if (houseModel.getPrice() >= mPrice * 1000000) {
+                    houseModelList.add(houseModel);
+                    mGoogleMap.clear();
+                    markerList.clear();
+                    showMarkerAddressBySearch();
+                }
+            } else if (mAcreage != 0 && mPrice == 0) {
+                if (houseModel.getAcreage() >= mAcreage) {
+                    houseModelList.add(houseModel);
+                    mGoogleMap.clear();
+                    markerList.clear();
+                    showMarkerAddressBySearch();
+                }
+            }
         }
 
     }

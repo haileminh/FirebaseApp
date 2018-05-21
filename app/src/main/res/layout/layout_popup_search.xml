@@ -10,21 +10,22 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Tìm kiếm thông tin nhà trọ theo bộ lọc dưới"
-        android:textSize="@dimen/_16dp" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18dp" />
 
     <TextView
         android:id="@+id/txt_popup_distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_32dp"
         android:text="Trong bán kính"
-        android:textColor="@color/black" />
+        android:textColor="@color/colorPrimary" />
 
     <SeekBar
         android:id="@+id/sb_distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_12dp"
         android:max="30" />
 
     <TextView
@@ -32,14 +33,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
-        android:text="Giá phòng nhỏ hơn 1 triệu"
-        android:textColor="@color/black" />
+        android:text="Giá phòng lớn hơn 1 triệu"
+        android:textColor="@color/colorPrimary" />
 
     <SeekBar
         android:id="@+id/sb_prices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_12dp"
         android:max="10" />
 
     <TextView
@@ -47,14 +48,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
-        android:text="Diên tích nhỏ hơn 20 mét vuông"
-        android:textColor="@color/black" />
+        android:text="Diên tích lớn hơn 20 mét vuông"
+        android:textColor="@color/colorPrimary" />
 
     <SeekBar
         android:id="@+id/sb_acreage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_12dp"
         android:max="50" />
 
     <Button
@@ -63,5 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_12dp"
-        android:text="Áp dụng" />
+        android:background="@drawable/btn_dang_tin"
+        android:text="Áp dụng"
+        android:textColor="@color/white" />
 </LinearLayout>

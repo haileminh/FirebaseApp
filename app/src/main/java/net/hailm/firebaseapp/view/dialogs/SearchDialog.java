@@ -92,14 +92,14 @@ public class SearchDialog extends Dialog {
     }
 
     private void setUpSeekBarPrice() {
-        String price = "Giá phòng nhỏ hơn " + sbPrice.getProgress() + " triệu dồng";
+        String price = "Giá phòng lớn hơn " + sbPrice.getProgress() + " triệu đồng";
         txtPrice.setText(price);
 
         sbPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValues, boolean fromUser) {
                 progressPrice = progressValues;
-                txtPrice.setText("Giá phòng nhỏ hơn " + progressValues + " triệu dồng");
+                txtPrice.setText("Giá phòng lớn hơn " + progressValues + " triệu dồng");
             }
 
             @Override
@@ -109,20 +109,20 @@ public class SearchDialog extends Dialog {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                txtPrice.setText("Giá phòng nhỏ hơn " + progressPrice + " triệu dồng");
+                txtPrice.setText("Giá phòng lớn hơn " + progressPrice + " triệu dồng");
             }
         });
     }
 
     private void setUpSeekBarAcreage() {
-        String acreage = "Diện tích nhỏ hơn " + sbAcreage.getProgress() + " mét vuông";
+        String acreage = "Diện tích lớn hơn " + sbAcreage.getProgress() + " mét vuông";
         txtAcerage.setText(acreage);
 
         sbAcreage.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValues, boolean fromUser) {
                 progressAcreage = progressValues;
-                txtAcerage.setText("Diện tích nhỏ hơn " + progressValues + " mét vuông");
+                txtAcerage.setText("Diện tích lớn hơn " + progressValues + " mét vuông");
             }
 
             @Override
@@ -132,7 +132,7 @@ public class SearchDialog extends Dialog {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                txtAcerage.setText("Diện tích nhỏ hơn " + progressAcreage + " mét vuông");
+                txtAcerage.setText("Diện tích lớn hơn " + progressAcreage + " mét vuông");
             }
         });
     }
