@@ -38,6 +38,16 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txt_total_search"
+        android:layout_width="@dimen/_48dp"
+        android:layout_height="@dimen/_80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_14dp" />
+
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"

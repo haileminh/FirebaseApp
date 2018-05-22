@@ -54,6 +54,8 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private View rootView;
     @BindView(R.id.edt_address)
     EditText edtAddress;
+    @BindView(R.id.txt_total_search)
+    TextView txtTotalSearch;
     @BindView(R.id.txt_place_distance)
     TextView txtDistance;
     @BindView(R.id.txt_place_content_search)
@@ -126,15 +128,15 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.position(latLng);
         markerOptions.title("me");
         mGoogleMap.addMarker(markerOptions);
-        showMyLocation(latitude, longitude);
+        showMyLocation(latitude, longitude, 15);
         initShowIconHouseInMap();
         mGoogleMap.setOnInfoWindowClickListener(this);
     }
 
-    private void showMyLocation(double latitude, double longitude) {
+    private void showMyLocation(double latitude, double longitude, int zoom) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
-                .zoom(15)
+                .zoom(zoom)
                 .build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
@@ -153,8 +155,12 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                     showMarkerAddress(houseModel);
                 } else if (checkSearchHouse) {
                     showHouseBySearch(houseModel);
+                    String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
+                    txtTotalSearch.setText(totalSearch);
                 } else if (checkBtnSearch) {
                     showHouseByAddress(houseModel, edtAddress.getText().toString().trim());
+                    String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
+                    txtTotalSearch.setText(totalSearch);
                 }
             }
         };
@@ -218,11 +224,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         circleOptions.strokeWidth(0);
         mGoogleMap.addCircle(circleOptions);
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(latitude, longitude))
-                .zoom(12)
-                .build();
-        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        showMyLocation(latitude, longitude, 13);
     }
 
     @Override
@@ -250,7 +252,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 //                PopupSearch popupSearch = new PopupSearch();
 //                popupSearch.setTargetFragment(this, 1001);
 //                popupSearch.show(manager, "search");
-
+                edtAddress.setVisibility(View.GONE);
                 SearchDialog dialog = new SearchDialog(getContext(), this);
                 dialog.show();
                 break;
@@ -268,7 +270,6 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onButtonClick(double distance, long price, long acreage) {
-
         String ditacneText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
         txtDistance.setText(ditacneText);
         String boLoc = getString(R.string.gia_phong) + " lớn hơn " + price + " triệu đồng /"
@@ -346,7 +347,10 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void showHouseByAddress(HouseModel houseModel, String address) {
-        if (houseModel.getAddressModel().getAddress().contains(address)) {
+        String a = houseModel.getAddressModel().getAddress().toLowerCase();
+        String b = address.toLowerCase();
+
+        if (a.contains(b)) {
             houseModelList.add(houseModel);
             mGoogleMap.clear();
             markerList.clear();
