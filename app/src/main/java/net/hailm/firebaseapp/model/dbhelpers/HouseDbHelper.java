@@ -127,4 +127,18 @@ public class HouseDbHelper extends BaseFireBase {
             houseListener.getListHouseModel(houseModel);
         }
     }
+
+    private void getListHouseBySearchAddress(final HouseListener houseListener, final Location currentLocation) {
+        mDataNodeRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot dataHouses = dataSnapshot.child(Constants.ADDRESS);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

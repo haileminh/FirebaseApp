@@ -13,12 +13,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,12 +30,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
-import net.hailm.firebaseapp.listener.AddressListener;
 import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.listener.PopupSearchCallback;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
-import net.hailm.firebaseapp.model.dbhelpers.PlaceDbHelper;
-import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.dialogs.SearchDialog;
 
@@ -57,6 +52,8 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener,
         PopupSearchCallback {
     private View rootView;
+    @BindView(R.id.edt_address)
+    EditText edtAddress;
     @BindView(R.id.txt_place_distance)
     TextView txtDistance;
     @BindView(R.id.txt_place_content_search)
@@ -80,6 +77,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 
     private boolean checkAllHouse = true;
     private boolean checkSearchHouse = false;
+    private boolean checkBtnSearch = false;
     private double mDistance;
     private long mPrice;
     private long mAcreage;
@@ -116,12 +114,6 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mGoogleMap = googleMap;
         showMyMarker();
@@ -135,7 +127,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.title("me");
         mGoogleMap.addMarker(markerOptions);
         showMyLocation(latitude, longitude);
-        initializeComponents();
+        initShowIconHouseInMap();
         mGoogleMap.setOnInfoWindowClickListener(this);
     }
 
@@ -147,7 +139,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private void initializeComponents() {
+    private void initShowIconHouseInMap() {
         mMyInfoHouse = new MyInfoHouse(getActivity());
         mDbHelper = new HouseDbHelper();
         markerList = new ArrayList<>();
@@ -161,6 +153,8 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                     showMarkerAddress(houseModel);
                 } else if (checkSearchHouse) {
                     showHouseBySearch(houseModel);
+                } else if (checkBtnSearch) {
+                    showHouseByAddress(houseModel, edtAddress.getText().toString().trim());
                 }
             }
         };
@@ -223,6 +217,12 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         circleOptions.fillColor(Color.argb(40, 100, 30, 80));
         circleOptions.strokeWidth(0);
         mGoogleMap.addCircle(circleOptions);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .zoom(12)
+                .build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
@@ -242,7 +242,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         transaction.commit();
     }
 
-    @OnClick({R.id.ll_search})
+    @OnClick({R.id.ll_search, R.id.img_search})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_search:
@@ -254,6 +254,13 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                 SearchDialog dialog = new SearchDialog(getContext(), this);
                 dialog.show();
                 break;
+            case R.id.img_search:
+                checkBtnSearch = true;
+                checkAllHouse = false;
+                checkSearchHouse = false;
+                edtAddress.setVisibility(View.VISIBLE);
+                initShowIconHouseInMap();
+                break;
             default:
                 break;
         }
@@ -261,28 +268,22 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onButtonClick(double distance, long price, long acreage) {
-        txtDistance.setText(String.valueOf(distance));
-        txtContentSearch.setText(String.valueOf(price) + " / " + String.valueOf(acreage));
+
+        String ditacneText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
+        txtDistance.setText(ditacneText);
+        String boLoc = getString(R.string.gia_phong) + " lớn hơn " + price + " triệu đồng /"
+                + getString(R.string.dien_tich) + " lớn hơn " + acreage + " " + getString(R.string.m2);
+        txtContentSearch.setText(boLoc);
 
         checkSearchHouse = true;
         checkAllHouse = false;
         mDistance = distance;
         mPrice = price;
         mAcreage = acreage;
-        initializeComponents();
-//        showHouse(distance, price, acreage);
-
+        initShowIconHouseInMap();
     }
 
     private void showHouseBySearch(HouseModel houseModel) {
-//        if (houseModel.getAddressModel().getDistance() < mDistance) {
-//            houseModelList.add(houseModel);
-//            mGoogleMap.clear();
-//            markerList.clear();
-//            showMarkerAddressBySearch();
-//        }
-
-        //
         if (mDistance != 0.0) {
             if (houseModel.getAddressModel().getDistance() <= mDistance) {
                 if (mPrice == 0 && mAcreage == 0) {
@@ -342,26 +343,25 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         }
-
     }
 
-    private void showHouse(final double distance, long price, long acreage) {
-        mMyInfoHouse = new MyInfoHouse(getActivity());
-        mDbHelper = new HouseDbHelper();
+    private void showHouseByAddress(HouseModel houseModel, String address) {
+        if (houseModel.getAddressModel().getAddress().contains(address)) {
+            houseModelList.add(houseModel);
+            mGoogleMap.clear();
+            markerList.clear();
+            showMarkerAddressBySearch();
+        }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
-        HouseListener listener = new HouseListener() {
-            @Override
-            public void getListHouseModel(HouseModel houseModel) {
-                if (distance > 0) {
-                    if (houseModel.getAddressModel().getDistance() > 50) {
-                        showMarkerAddress(houseModel);
-                    }
-
-                }
-            }
-        };
-
-        mDbHelper.getListHouse(listener, currentLocation, 1000, 0);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

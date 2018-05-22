@@ -9,15 +9,41 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_80dp" />
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50dp"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:layout_marginRight="@dimen/_48dp"
+        android:layout_marginTop="@dimen/_10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_search" />
+
+        <EditText
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50dp"
+            android:background="@drawable/edt_search"
+            android:hint="@string/nhap_khu_vuc"
+            android:paddingLeft="@dimen/_4dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/txt_16sp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/white"
+        android:layout_marginRight="@dimen/_140dp"
         android:orientation="vertical"
         android:padding="@dimen/_12dp">
 
@@ -27,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Tìm theo khoảng cách"
-            android:textColor="@color/black" />
+            android:text="@string/tim_theo_khoang_cach"
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/txt_place_content_search"
@@ -37,6 +63,6 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="Bộ lọc"
-            android:textColor="@color/black" />
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </RelativeLayout>
