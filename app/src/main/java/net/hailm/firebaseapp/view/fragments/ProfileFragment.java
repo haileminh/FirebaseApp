@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
     private String uid;
     private String email;
     private String userName;
+    private String checkAcountLogin;
     private SharedPreferences mSharedPreferences;
 
     private FragmentManager manager;
@@ -102,6 +103,7 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
         uid = mSharedPreferences.getString(Constants.UID, "");
         email = mSharedPreferences.getString(Constants.EMAIL, "");
         userName = mSharedPreferences.getString(Constants.USER_NAME, "");
+        checkAcountLogin = mSharedPreferences.getString(Constants.CHECK_ACOUNT_LOGIN, "");
 
         initDataProfile();
         initDataHouseById();
@@ -170,7 +172,7 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
         });
     }
 
-    @OnClick({R.id.btn_logout, R.id.btn_about})
+    @OnClick({R.id.btn_logout, R.id.btn_about, R.id.btn_edit_profile})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_logout:
@@ -183,9 +185,26 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
             case R.id.btn_about:
                 Toast.makeText(getContext(), "Hướng dẫn, bấm vào nhà trọ cần sửa, giữ lâu để xóa nhà trọ", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.btn_edit_profile:
+                if (checkAcountLogin.equals("1")) {
+                    goProfileEditFragment();
+                } else {
+                    Toast.makeText(getContext(), "Tài khoản bạn đăng nhập không thể sửa", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
             default:
                 break;
         }
+    }
+
+    private void goProfileEditFragment() {
+        ProfileEditFrament profileEditFrament = new ProfileEditFrament();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.frame_container, profileEditFrament);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void logoutAcount() {
@@ -199,7 +218,11 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
                     case BUTTON_NEGATIVE:
                         mAuth.signOut();
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.clear();
+//                        editor.clear();  Là xoa het data trong SharedPrefernes
+                        editor.remove(Constants.UID);
+                        editor.remove(Constants.USER_NAME);
+                        editor.remove(Constants.EMAIL);
+                        editor.remove(Constants.CHECK_ACOUNT_LOGIN);
                         editor.commit();
                         break;
                     default:
@@ -234,8 +257,20 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
         bundle.putParcelable(Constants.HOUSE_MODEL_EDIT, houseModel);
         editHouseFragment.setArguments(bundle);
 
-        transaction.replace(android.R.id.content, editHouseFragment);
+        transaction.replace(R.id.frame_container, editHouseFragment);
+//        transaction.replace(android.R.id.content, editHouseFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

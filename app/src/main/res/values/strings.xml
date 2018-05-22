@@ -36,6 +36,7 @@
     <string name="khong_pha_chu_comment">Bạn không phải là chủ comment này</string>
     <string name="xoa_comment">Bạn vừa xóa bình luận của mình.</string>
     <string name="tim_theo_khoang_cach">Tìm theo khoảng cách.</string>
+    <string name="sua_thong_tin">Chỉnh sửa thông tin cá nhân.</string>
     <string name="nhap_khu_vuc">Cổ Nhuế, Từ Liêm...</string>
     <string name="chua_cap_quyen">Bạn cần cấp quyền để thực hiện chức năng này.</string>
     <string name="ban_co_muon_dang_xuat">Bạn có muốn đăng xuất tài khoản khỏi ứng dụng.</string>

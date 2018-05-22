@@ -259,6 +259,9 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 public void loginSuccess() {
                     hideProgressDialog();
 //                    Toast.makeText(LoginActivity.this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+                    editor.putString(Constants.CHECK_ACOUNT_LOGIN, String.valueOf(1));
+                    editor.commit();
                     LogUtils.d("Login success");
                 }
 
