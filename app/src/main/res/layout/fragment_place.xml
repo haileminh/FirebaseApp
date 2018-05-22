@@ -24,6 +24,7 @@
             android:layout_width="@dimen/_40dp"
             android:layout_height="@dimen/_40dp"
             android:layout_gravity="center_vertical"
+            android:elevation="@dimen/_10dp"
             android:src="@drawable/ic_search" />
 
         <EditText
@@ -44,6 +45,7 @@
         android:layout_height="@dimen/_80dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:elevation="@dimen/_10dp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/_14dp" />
@@ -54,6 +56,7 @@
         android:layout_height="@dimen/_80dp"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="@dimen/_140dp"
+        android:elevation="@dimen/_10dp"
         android:orientation="vertical"
         android:padding="@dimen/_12dp">
 
