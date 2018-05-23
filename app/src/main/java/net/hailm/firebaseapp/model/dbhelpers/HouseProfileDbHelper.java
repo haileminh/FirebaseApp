@@ -1,5 +1,9 @@
 package net.hailm.firebaseapp.model.dbhelpers;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,6 +13,7 @@ import net.hailm.firebaseapp.base.BaseFireBase;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseProfileByIdListener;
 import net.hailm.firebaseapp.listener.HouseProfileListener;
+import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbmodels.AddressModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.model.dbmodels.Users;
@@ -44,6 +49,12 @@ public class HouseProfileDbHelper extends BaseFireBase {
         });
     }
 
+    /**
+     * get profile by id
+     *
+     * @param listener
+     * @param uid
+     */
     public void getHouseById(final HouseProfileByIdListener listener, final String uid) {
         mDataNodeRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -75,6 +86,29 @@ public class HouseProfileDbHelper extends BaseFireBase {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    /**
+     * update profile
+     *
+     * @param users
+     * @param listener
+     */
+    public void registerProfile(Users users, final RegisterHouseListener listener) {
+        mDataNodeRoot.child(Constants.USERS)
+                .child(users.getUid())
+                .setValue(users)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.registerSuccess();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.registerFailure(e.getMessage());
             }
         });
     }

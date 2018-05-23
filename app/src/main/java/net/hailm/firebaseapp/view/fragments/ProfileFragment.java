@@ -186,12 +186,15 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
                 Toast.makeText(getContext(), "Hướng dẫn, bấm vào nhà trọ cần sửa, giữ lâu để xóa nhà trọ", Toast.LENGTH_LONG).show();
                 break;
             case R.id.btn_edit_profile:
-                if (checkAcountLogin.equals("1")) {
-                    goProfileEditFragment();
+                if (!uid.equals("")) {
+                    if (checkAcountLogin.equals("1")) {
+                        goProfileEditFragment();
+                    } else {
+                        Toast.makeText(getContext(), "Tài khoản bạn đăng nhập không thể sửa", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getContext(), "Tài khoản bạn đăng nhập không thể sửa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Bạn chưa đăng nhập mà", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             default:
                 break;
@@ -199,10 +202,10 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
     }
 
     private void goProfileEditFragment() {
-        ProfileEditFrament profileEditFrament = new ProfileEditFrament();
+        EditProfileFragment editProfileFragment = new EditProfileFragment();
         manager = getActivity().getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.replace(R.id.frame_container, profileEditFrament);
+        transaction.replace(R.id.frame_container, editProfileFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

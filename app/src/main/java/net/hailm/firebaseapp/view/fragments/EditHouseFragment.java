@@ -453,7 +453,7 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
     }
 
     private void deleteImage(final int i) {
-        DialogUtils.showAlertDialog(getContext(), "Bạn có chắc chắc xóa hình ảnh này", new DialogInterface.OnClickListener() {
+        DialogUtils.showAlertDialog(getContext(), getString(R.string.xoa_hinh_anh), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {

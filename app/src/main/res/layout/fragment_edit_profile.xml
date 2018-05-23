@@ -41,8 +41,16 @@
             android:layout_marginTop="@dimen/_80dp"
             android:src="@drawable/male" />
 
+        <ImageView
+            android:id="@+id/btn_delete_image"
+            android:layout_width="@dimen/_24dp"
+            android:layout_height="@dimen/_24dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/civ_avatar"
+            android:src="@drawable/ic_close" />
+
         <TextView
-            android:id="@+id/txt_mail"
+            android:id="@+id/txt_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/civ_avatar"
@@ -76,6 +84,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
