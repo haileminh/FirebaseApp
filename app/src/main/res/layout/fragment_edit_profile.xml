@@ -83,6 +83,65 @@
                 android:textSize="@dimen/txt_15sp" />
         </android.support.design.widget.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_8dp">
+
+            <TextView
+                android:id="@+id/txt_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Giới tính"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_15sp" />
+
+            <RadioGroup
+                android:layout_width="139dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_18dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rd_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:id="@+id/rd_famale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/famale" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_birthDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8dp"
+            android:paddingLeft="@dimen/_4dp"
+            android:text="Ngày sinh: "
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_15sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/dia_chi"
+                android:singleLine="true"
+                android:textSize="@dimen/txt_15sp" />
+        </android.support.design.widget.TextInputLayout>
+
         <Button
             android:id="@+id/btn_update"
             android:layout_width="wrap_content"

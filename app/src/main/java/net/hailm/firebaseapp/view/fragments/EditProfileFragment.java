@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,20 +29,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseProfileListener;
 import net.hailm.firebaseapp.listener.PopupImageCallback;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.HouseProfileDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.Users;
+import net.hailm.firebaseapp.utils.DateUtils;
 import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -58,10 +67,20 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
     private View rootView;
     @BindView(R.id.edt_name)
     EditText edtName;
+    @BindView(R.id.txt_birthDay)
+    TextView txtBirthDay;
+    @BindView(R.id.rd_male)
+    RadioButton rdMale;
+    @BindView(R.id.rd_famale)
+    RadioButton rdFamale;
+    @BindView(R.id.edt_address)
+    EditText edtAddress;
     @BindView(R.id.civ_avatar)
     CircleImageView civAvatar;
     @BindView(R.id.txt_email)
     TextView txtEmail;
+
+    private SwitchDateTimeDialogFragment dateTimeFragment;
 
     private String uid;
     private String nameImage;
@@ -75,6 +94,7 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
 
     private int checkClickImage = 0;
     private boolean checkIsImage = false;
+    private boolean checkSetImage = true;
 
     @Nullable
     @Override
@@ -89,6 +109,7 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeComponents();
+        initDateTime();
         initDataEditProfile();
     }
 
@@ -101,6 +122,27 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
         uid = mSharedPreferences.getString(Constants.UID, "");
     }
 
+    private void initDateTime() {
+        dateTimeFragment = (SwitchDateTimeDialogFragment) getChildFragmentManager().findFragmentByTag(AppConst.DATE_DEFAULT);
+        if (dateTimeFragment == null) {
+            dateTimeFragment = SwitchDateTimeDialogFragment.newInstance(
+                    getString(R.string.birthday),
+                    getString(R.string.ok),
+                    getString(R.string.cancel),
+                    getString(R.string.clean)
+            );
+        }
+        dateTimeFragment.set24HoursMode(false);
+        dateTimeFragment.setMinimumDateTime(new GregorianCalendar(1970, Calendar.JANUARY, 1).getTime());
+        dateTimeFragment.setMaximumDateTime(new GregorianCalendar(2030, Calendar.DECEMBER, 31).getTime());
+
+        try {
+            dateTimeFragment.setSimpleDateMonthAndDayFormat(new SimpleDateFormat(AppConst.DATE_DEFAULT, Locale.getDefault()));
+        } catch (SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException e) {
+            LogUtils.e(AppConst.TAG, e.getMessage());
+        }
+    }
+
     private void initDataEditProfile() {
         if (!uid.equals("")) {
             HouseProfileListener listener = new HouseProfileListener() {
@@ -110,6 +152,25 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
                         edtName.setText(users.getName());
                         txtEmail.setText(users.getEmail());
                         nameImage = users.getAvatar();
+                        edtAddress.setText(users.getAddress());
+
+                        if (users.getBirthDay() == null) {
+                            txtBirthDay.setText("Ngày sinh: ");
+                        } else {
+                            txtBirthDay.setText(users.getBirthDay());
+                        }
+
+                        if (users.getSex() == null) {
+
+                        } else {
+                            if (users.getSex().equals("Nam")) {
+                                rdMale.setChecked(true);
+                            } else if (users.getSex().equals("Nữ")) {
+                                rdFamale.setChecked(true);
+                            }
+                        }
+
+
                         setAvatarProfile(civAvatar, users.getAvatar());
                     }
                 }
@@ -131,7 +192,7 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
         Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference).into(imageView);
     }
 
-    @OnClick({R.id.civ_avatar, R.id.btn_update, R.id.btn_delete_image})
+    @OnClick({R.id.civ_avatar, R.id.btn_update, R.id.btn_delete_image, R.id.btn_back_profile, R.id.txt_birthDay})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.civ_avatar:
@@ -145,6 +206,24 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
                 break;
             case R.id.btn_update:
                 updateProfile();
+                break;
+            case R.id.btn_back_profile:
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
+            case R.id.txt_birthDay:
+                if (!dateTimeFragment.isAdded()) {
+                    dateTimeFragment.show(getChildFragmentManager(), AppConst.DATE_DEFAULT);
+                    dateTimeFragment.setOnButtonClickListener(new DateTimePickerFragment(txtBirthDay,
+                            new DateTimePickerFragment.OnClickPositiveButtonListener() {
+                                @Override
+                                public void onClickPositiveButton(Date date) {
+                                    String dateTime = getString(R.string.ngay) + " " + DateUtils.getDay(date) + " "
+                                            + getString(R.string.thang) + " " + DateUtils.getMonth(date) + " "
+                                            + getString(R.string.nam) + " " + DateUtils.getYear(date);
+                                    txtBirthDay.setText(dateTime);
+                                }
+                            }));
+                }
                 break;
             default:
                 break;
@@ -214,11 +293,22 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
         users.setUid(uid);
         users.setName(edtName.getText().toString().trim());
         users.setAvatar(nameImage);
+        users.setBirthDay(txtBirthDay.getText().toString());
+        if (rdMale.isChecked()) {
+            users.setSex("Nam");
+        } else {
+            users.setSex("Nữ");
+        }
+        users.setAddress(edtAddress.getText().toString());
         return users;
     }
 
     private boolean checkInputData() {
         if (Utils.isEmpty(edtName)) {
+            if (!checkSetImage) {
+                Toast.makeText(getContext(), "Bạn chưa nhập ảnh", Toast.LENGTH_SHORT).show();
+                return false;
+            }
             return true;
         } else {
             return false;
@@ -242,6 +332,7 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
                         break;
                     case BUTTON_NEGATIVE:
                         checkIsImage = true;
+                        checkSetImage = false;
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                                 .child(Constants.USERS)
                                 .child(uid)
@@ -260,6 +351,7 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
     public void onButtonClick(Bitmap bitmap) {
         switch (checkClickImage) {
             case 1:
+                checkSetImage = true;
                 civAvatar.setImageBitmap(bitmap);
                 bitmapList.add(bitmap);
                 break;

@@ -227,12 +227,22 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
                         editor.remove(Constants.EMAIL);
                         editor.remove(Constants.CHECK_ACOUNT_LOGIN);
                         editor.commit();
+                        Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+                        goEditHouseFragment();
                         break;
                     default:
                         break;
                 }
             }
         });
+    }
+
+    private void goEditHouseFragment() {
+        AddHouseFragment addHouseFragment = new AddHouseFragment();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.frame_container, addHouseFragment);
+        transaction.commit();
     }
 
     /**

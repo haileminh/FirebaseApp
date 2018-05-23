@@ -58,6 +58,12 @@
     <string name="reviews">Reviews</string>
     <string name="blog">Blogs</string>
 
+    <string name="birthday">Chọn ngày sinh.</string>
+    <string name="ok">Ok</string>
+    <string name="clean">Clean</string>
+    <string name="cancel">Cancel</string>
+
+
     <string name="thong_tin_chi_tiet">Thông tin chi tiết</string>
     <string name="lien_he_ngay">Liên hệ ngay</string>
     <string name="dia_chi">Địa chỉ: </string>
@@ -83,6 +89,8 @@
     <string name="setting">Setting </string>
     <string name="gui">Gửi </string>
     <string name="read_more">Xem thêm </string>
+    <string name="male">Nam</string>
+    <string name="famale">Nữ</string>
 
 
     <!--Dang tin-->

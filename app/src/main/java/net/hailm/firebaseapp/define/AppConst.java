@@ -8,4 +8,8 @@ public interface AppConst {
     String DATE_FORMAT = "HH:mm 'at' dd.MM.yyyy";
     String DATE_FORMAT_COMMENT = "HH:mm:ss 'at' dd.MM.yyyy";
     String GMT = "GMT";
+
+    String DATE_DEFAULT = "MMMM dd";
+    String DEFAULT_VALUE = "";
+    String TAG = "Tag";
 }

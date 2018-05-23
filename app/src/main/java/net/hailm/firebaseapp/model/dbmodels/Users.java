@@ -14,6 +14,9 @@ public class Users implements Serializable, Parcelable {
     private String name;
     private String avatar;
     private String email;
+    private String sex;
+    private String address;
+    private String birthDay;
 
     public Users() {
     }
@@ -29,6 +32,9 @@ public class Users implements Serializable, Parcelable {
         name = in.readString();
         avatar = in.readString();
         email = in.readString();
+        address = in.readString();
+        birthDay = in.readString();
+        sex = in.readString();
     }
 
     public static final Creator<Users> CREATOR = new Creator<Users>() {
@@ -42,6 +48,30 @@ public class Users implements Serializable, Parcelable {
             return new Users[size];
         }
     };
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -95,5 +125,8 @@ public class Users implements Serializable, Parcelable {
         dest.writeString(name);
         dest.writeString(avatar);
         dest.writeString(email);
+        dest.writeString(address);
+        dest.writeString(sex);
+        dest.writeString(birthDay);
     }
 }
