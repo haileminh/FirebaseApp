@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -150,6 +151,7 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
     private double currentLongitude;
     private double currentLatidude;
     private Marker myMarker;
+    private Marker mMarker;
 
     private boolean onCLickBtnLocation = false;
     private List<ImageView> listImage;
@@ -543,6 +545,30 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
         mGoogleMap.addMarker(markerOptions);
 
         showMyLocation(latitude, longitude, mGoogleMap);
+
+        getLocationOnMapClickListener();
+
+    }
+
+    private void getLocationOnMapClickListener() {
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (mMarker != null) {
+                    mMarker.remove();
+                }
+
+                if (myMarker != null) {
+                    myMarker.remove();
+                }
+
+                myLatitude = latLng.latitude;
+                myLongtitude = latLng.longitude;
+
+                mMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí bạn vừa chọn.")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+            }
+        });
     }
 
     private void getMyLocation() {
@@ -576,11 +602,17 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
     }
 
     private void showMyMarker() {
-        if (myMarker == null) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLng(myLatitude, myLongtitude));
-            mGoogleMap.addMarker(markerOptions);
+        mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
+
+        if (mMarker != null) {
+            mMarker.remove();
         }
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(myLatitude, myLongtitude));
+        myMarker = mGoogleMap.addMarker(markerOptions);
     }
 
     private void showMyLocation() {

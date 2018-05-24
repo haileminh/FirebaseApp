@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -119,12 +120,14 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     private RegisterHouseDbHelper mRegisterHouseDbHelper;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
+    private LatLng mLatLng;
 
     // Lấy myLocation
     private FusedLocationProviderClient fusedLocationProviderClient;
     private double myLatitude;
     private double myLongtitude;
     private Marker myMarker;
+    private Marker mMarker;
 
     private boolean onCLickBtnLocation = false;
 
@@ -379,6 +382,31 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mGoogleMap = googleMap;
+
+        getLocationOnMapClickListener();
+    }
+
+    private void getLocationOnMapClickListener() {
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mLatLng = latLng;
+
+                if (mMarker != null) {
+                    mMarker.remove();
+                }
+
+                if (myMarker != null) {
+                    myMarker.remove();
+                }
+
+                myLatitude = latLng.latitude;
+                myLongtitude = latLng.longitude;
+
+                mMarker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí bạn vừa chọn.")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+            }
+        });
     }
 
     private void getMyLocation() {
@@ -404,11 +432,16 @@ public class AddHouseFragment extends Fragment implements OnMapReadyCallback, Po
     }
 
     private void showMyMarker() {
-        if (myMarker == null) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLng(myLatitude, myLongtitude));
-            mGoogleMap.addMarker(markerOptions);
+        mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
+
+        if (mMarker != null) {
+            mMarker.remove();
         }
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(myLatitude, myLongtitude));
+        myMarker = mGoogleMap.addMarker(markerOptions);
     }
 
     private void showMyLocation() {
