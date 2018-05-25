@@ -64,7 +64,7 @@ public class MyInfoHouse implements GoogleMap.InfoWindowAdapter {
             txtUpdateDate.setText(updateDate);
         } else {
             Toast.makeText(context, "Đây là vị trí của bạn!", Toast.LENGTH_SHORT).show();
-            llViewHouse.setVisibility(View.GONE);
+            llViewHouse.removeAllViews();
         }
 
         return view;
