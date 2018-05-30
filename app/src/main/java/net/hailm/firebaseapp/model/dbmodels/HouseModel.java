@@ -24,6 +24,7 @@ public class HouseModel implements Parcelable {
     private String videoIntro;
     private String contents;
     private long likeNumber;
+    private List<String> totalLikeNumber;
     private List<String> utility;
     private List<String> houseImages;
     private List<CommentModel> commentModelList;
@@ -50,6 +51,7 @@ public class HouseModel implements Parcelable {
         videoIntro = in.readString();
         contents = in.readString();
         likeNumber = in.readLong();
+        totalLikeNumber = in.createStringArrayList();
         utility = in.createStringArrayList();
         houseImages = in.createStringArrayList();
         commentModelList = new ArrayList<>();
@@ -188,6 +190,14 @@ public class HouseModel implements Parcelable {
         this.likeNumber = likeNumber;
     }
 
+    public List<String> getTotalLikeNumber() {
+        return totalLikeNumber;
+    }
+
+    public void setTotalLikeNumber(List<String> totalLikeNumber) {
+        this.totalLikeNumber = totalLikeNumber;
+    }
+
     public List<String> getUtility() {
         return utility;
     }
@@ -214,6 +224,7 @@ public class HouseModel implements Parcelable {
         dest.writeString(videoIntro);
         dest.writeString(contents);
         dest.writeLong(likeNumber);
+        dest.writeStringList(totalLikeNumber);
         dest.writeStringList(utility);
         dest.writeStringList(houseImages);
         dest.writeTypedList(commentModelList);

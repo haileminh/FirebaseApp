@@ -333,11 +333,11 @@ public class EditProfileFragment extends Fragment implements PopupImageCallback 
                     case BUTTON_NEGATIVE:
                         checkIsImage = true;
                         checkSetImage = false;
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
-                                .child(Constants.USERS)
-                                .child(uid)
-                                .child("avatar");
-                        databaseReference.setValue(null);
+//                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+//                                .child(Constants.USERS)
+//                                .child(uid)
+//                                .child("avatar");
+//                        databaseReference.setValue(null);
                         civAvatar.setImageResource(R.drawable.ic_camara);
                         break;
                     default:

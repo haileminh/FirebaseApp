@@ -130,6 +130,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     EditText edtComment;
     @BindView(R.id.ratingBar)
     RatingBar ratingBar;
+    @BindView(R.id.ic_like)
+    ImageView imgIcLike;
 
     private String uid;
     private SharedPreferences mSharedPreferences;
@@ -139,8 +141,13 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private CommentDbHelper mDbHelper;
     private List<CommentModel> commentModelList;
     private CommentApdaterCallback callback;
-    private boolean isCheckedLike = false;
+    private boolean isCheckedLike;
     private DatabaseReference mDataNodeRoot;
+
+    private int checkLike = 0;
+
+    List<String> listUidCurrentLike;
+    List<String> listUidLike;
 
     public HouseDetailFragment() {
     }
@@ -163,6 +170,9 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         } else {
             LogUtils.d("Bundle null in houseFragment");
         }
+        listUidCurrentLike = new ArrayList<>();
+        listUidLike = new ArrayList<>();
+
         // Get uid app when user login
         mSharedPreferences = getActivity().getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
         uid = mSharedPreferences.getString(Constants.UID, "");
@@ -184,7 +194,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         setPhotoAdapter();
         setCommentAdapter();
         showHouseDetail();
-
     }
 
     private void setPhotoAdapter() {
@@ -295,7 +304,22 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         String contents = getString(R.string.chi_tiet) + " " + houseModel.getContents();
         txtContents.setText(contents);
 
-        txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber()));
+//        txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber()));
+
+        // Check xem ng dung like chưa
+
+        if (houseModel.getTotalLikeNumber() != null) {
+            txtTotalLike.setText(String.valueOf(houseModel.getTotalLikeNumber().size()));
+            for (int i = 0; i < houseModel.getTotalLikeNumber().size(); i++) {
+                if (uid.equals(houseModel.getTotalLikeNumber().get(i))) {
+                    isCheckedLike = true;
+                }
+            }
+
+        } else {
+            isCheckedLike = false;
+        }
+
 
         String tel = getString(R.string.so_dien_thoai) + " " + houseModel.getTel().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
         txtTel.setText(tel);
@@ -379,14 +403,32 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             case R.id.txt_tel_detail:
                 break;
             case R.id.txt_like_detail:
-                if (!isCheckedLike) {
-                    txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber() + 1));
-                    isCheckedLike = true;
+                if (!uid.equals("")) {
+                    if (!isCheckedLike) {
+                        if (houseModel.getTotalLikeNumber() == null) {
+                            addLikeToDb();
+                            txtTotalLike.setText(String.valueOf(1));
+                            isCheckedLike = true;
+                        } else {
+//                            txtTotalLike.setText(String.valueOf(houseModel.getTotalLikeNumber().size() + 1));
+                            addLikeToDb();
+                            isCheckedLike = true;
+                        }
+
+                    } else {
+                        if (houseModel.getTotalLikeNumber() == null) {
+                            removeLikeToDb();
+                            txtTotalLike.setText("0");
+                            isCheckedLike = false;
+                        } else {
+                            removeLikeToDb();
+                            isCheckedLike = false;
+                        }
+                    }
+                    Toast.makeText(getContext(), "LIke", Toast.LENGTH_SHORT).show();
                 } else {
-                    txtTotalLike.setText(String.valueOf(houseModel.getLikeNumber()));
-                    isCheckedLike = false;
+                    DialogUtils.showMessage("Hãy đăng nhập để sử dụng chức năng này", getContext());
                 }
-                Toast.makeText(getContext(), "LIke", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.txt_share_detail:
                 Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
@@ -407,6 +449,50 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Xoa uid trong tinh luot like
+     */
+    private void removeLikeToDb() {
+        getListCurrentUidLike();
+        listUidLike.remove(uid);
+        txtTotalLike.setText(String.valueOf(listUidLike.size()));
+        mDataNodeRoot = FirebaseDatabase.getInstance().getReference();
+        mDataNodeRoot.child(Constants.HOUSES)
+                .child(houseModel.getHouseId())
+                .child("totalLikeNumber")
+                .setValue(listUidLike);
+    }
+
+    private void addLikeToDb() {
+        boolean isUid = false;
+        getListCurrentUidLike();
+        for (int i = 0; i < listUidLike.size(); i++) {
+            if (uid.equals(listUidLike.get(i))) {
+                isUid = true;
+            }
+        }
+        if (!isUid) {
+            listUidLike.add(uid);
+        }
+        txtTotalLike.setText(String.valueOf(listUidLike.size()));
+        mDataNodeRoot = FirebaseDatabase.getInstance().getReference();
+        mDataNodeRoot.child(Constants.HOUSES)
+                .child(houseModel.getHouseId())
+                .child("totalLikeNumber")
+                .setValue(listUidLike);
+    }
+
+    private void getListCurrentUidLike() {
+        listUidLike = new ArrayList<>();
+        if (houseModel.getTotalLikeNumber() != null) {
+            if (houseModel.getTotalLikeNumber().size() > 0) {
+                for (int i = 0; i < houseModel.getTotalLikeNumber().size(); i++) {
+                    listUidLike.add(houseModel.getTotalLikeNumber().get(i));
+                }
+            }
         }
     }
 
