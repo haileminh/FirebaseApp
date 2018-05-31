@@ -22,7 +22,7 @@
     <item
         android:id="@+id/item_setting"
         android:enabled="true"
-        android:icon="@drawable/ic_setting"
-        android:title="@string/setting"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile"
         app:showAsAction="ifRoom" />
 </menu>
