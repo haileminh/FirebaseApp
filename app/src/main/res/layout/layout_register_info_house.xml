@@ -104,7 +104,7 @@
             android:inputType="textMultiLine"
             android:id="@+id/edt_contents"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:hint="@string/edt_contents"
             android:textSize="@dimen/txt_15sp" />
     </android.support.design.widget.TextInputLayout>

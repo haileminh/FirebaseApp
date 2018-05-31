@@ -21,6 +21,8 @@ import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -275,6 +277,38 @@ public class ProfileFragment extends Fragment implements EditHouseRcvAdapterCall
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    @Override
+    public void deleteHouse(final HouseModel houseModel) {
+        DialogUtils.showAlertDialog(getContext(), getString(R.string.ban_co_muon_xoa_nha_tro), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        break;
+                    case BUTTON_NEGATIVE:
+                        Toast.makeText(getContext(), "Xóa chứ sao ko", Toast.LENGTH_SHORT).show();
+                        deleteHouseOK(houseModel);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    private void deleteHouseOK(HouseModel houseModel) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(Constants.HOUSES).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.HOUSE_IMAGES).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.ADDRESS).child(houseModel.getHouseId()).setValue(null);
+        databaseReference.child(Constants.COMMENTS).child(houseModel.getHouseId()).setValue(null);
+
+        initDataHouseById();
+    }
+
 
     @Override
     public void onStart() {

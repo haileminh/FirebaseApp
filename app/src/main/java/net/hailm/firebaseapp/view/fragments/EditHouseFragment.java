@@ -209,29 +209,31 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
 
         List<String> utility = houseModel.getUtility();
         LogUtils.d("utility: " + utility);
-        for (int i = 0; i < utility.size(); i++) {
-            if (utility.get(i).equals(getString(R.string.MaTienIch1))) {
-                cbWifi.setChecked(true);
-            }
+        if (utility != null) {
+            for (int i = 0; i < utility.size(); i++) {
+                if (utility.get(i).equals(getString(R.string.MaTienIch1))) {
+                    cbWifi.setChecked(true);
+                }
 
-            if (utility.get(i).equals(getString(R.string.MaTienIch2))) {
-                cbMayLanh.setChecked(true);
-            }
+                if (utility.get(i).equals(getString(R.string.MaTienIch2))) {
+                    cbMayLanh.setChecked(true);
+                }
 
-            if (utility.get(i).equals(getString(R.string.MaTienIch3))) {
-                cbBanGhe.setChecked(true);
-            }
+                if (utility.get(i).equals(getString(R.string.MaTienIch3))) {
+                    cbBanGhe.setChecked(true);
+                }
 
-            if (utility.get(i).equals(getString(R.string.MaTienIch4))) {
-                cbGuiXe.setChecked(true);
-            }
+                if (utility.get(i).equals(getString(R.string.MaTienIch4))) {
+                    cbGuiXe.setChecked(true);
+                }
 
-            if (utility.get(i).equals(getString(R.string.MaTienIch5))) {
-                cbNongLanh.setChecked(true);
-            }
+                if (utility.get(i).equals(getString(R.string.MaTienIch5))) {
+                    cbNongLanh.setChecked(true);
+                }
 
-            if (utility.get(i).equals(getString(R.string.MaTienIch6))) {
-                cbGiuong.setChecked(true);
+                if (utility.get(i).equals(getString(R.string.MaTienIch6))) {
+                    cbGiuong.setChecked(true);
+                }
             }
         }
 

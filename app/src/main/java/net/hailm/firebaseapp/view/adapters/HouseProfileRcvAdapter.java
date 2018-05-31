@@ -119,36 +119,10 @@ public class HouseProfileRcvAdapter extends RecyclerView.Adapter<HouseProfileRcv
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                DialogUtils.showAlertDialog(context, context.getString(R.string.ban_co_muon_xoa_nha_tro), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case BUTTON_POSITIVE:
-                                dialog.dismiss();
-                                break;
-                            case BUTTON_NEGATIVE:
-                                Toast.makeText(context, "Xóa chứ sao ko", Toast.LENGTH_SHORT).show();
-                                deleteHouse(houseModel);
-                                notifyDataSetChanged();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
+                mCallback.deleteHouse(houseModel);
                 return true;
             }
         });
-    }
-
-    private void deleteHouse(HouseModel houseModel) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        databaseReference.child(Constants.HOUSES).child(houseModel.getHouseId()).setValue(null);
-        databaseReference.child(Constants.HOUSE_IMAGES).child(houseModel.getHouseId()).setValue(null);
-        databaseReference.child(Constants.ADDRESS).child(houseModel.getHouseId()).setValue(null);
-        databaseReference.child(Constants.COMMENTS).child(houseModel.getHouseId()).setValue(null);
-
     }
 
     /**
