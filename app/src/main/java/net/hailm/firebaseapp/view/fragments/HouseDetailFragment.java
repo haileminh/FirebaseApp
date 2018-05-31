@@ -144,8 +144,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     private boolean isCheckedLike;
     private DatabaseReference mDataNodeRoot;
 
-    private int checkLike = 0;
-
     List<String> listUidCurrentLike;
     List<String> listUidLike;
 
@@ -223,18 +221,6 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void setCommentAdapter() {
-//        CommentListener listener = new CommentListener() {
-//            @Override
-//            public void getListHouseModel(CommentModel commentModel) {
-//                commentModelList.add(commentModel);
-//                sortCommentByDate();
-//                commentAdapter = new CommentAdapter(getContext(), commentModelList, callback);
-//                rcvCommentList.setAdapter(commentAdapter);
-//                commentAdapter.notifyDataSetChanged();
-//            }
-//        };
-//        mDbHelper.getCommentList(listener, houseModel.getHouseId());
-
         mDataNodeRoot = FirebaseDatabase.getInstance().getReference();
         mDataNodeRoot.addValueEventListener(new ValueEventListener() {
             @Override
@@ -313,10 +299,12 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             for (int i = 0; i < houseModel.getTotalLikeNumber().size(); i++) {
                 if (uid.equals(houseModel.getTotalLikeNumber().get(i))) {
                     isCheckedLike = true;
+                    imgIcLike.setBackgroundResource(R.drawable.ic_like_2);
                 }
             }
 
         } else {
+            imgIcLike.setBackgroundResource(R.drawable.ic_like);
             isCheckedLike = false;
         }
 
@@ -331,15 +319,21 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             txtTotalComments.setText("0");
         }
 
-        int totalImageComment = 0;
-        for (CommentModel values : houseModel.getCommentModelList()) {
-            totalImageComment += values.getListCommentImages().size();
-        }
-        if (totalImageComment > 0) {
-            txtTotalImages.setText(String.valueOf(totalImageComment));
+//        int totalImageComment = 0;
+//        for (CommentModel values : houseModel.getCommentModelList()) {
+//            totalImageComment += values.getListCommentImages().size();
+//        }
+//        if (totalImageComment > 0) {
+//            txtTotalImages.setText(String.valueOf(totalImageComment));
+//        } else {
+//            txtTotalImages.setText("0");
+//        }
+        if (houseModel.getHouseImages().size() > 0) {
+            txtTotalImages.setText(String.valueOf(houseModel.getHouseImages().size()));
         } else {
             txtTotalImages.setText("0");
         }
+
 
         loadUtility();
     }
@@ -410,11 +404,10 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                             txtTotalLike.setText(String.valueOf(1));
                             isCheckedLike = true;
                         } else {
-//                            txtTotalLike.setText(String.valueOf(houseModel.getTotalLikeNumber().size() + 1));
                             addLikeToDb();
                             isCheckedLike = true;
                         }
-
+                        imgIcLike.setBackgroundResource(R.drawable.ic_like_2);
                     } else {
                         if (houseModel.getTotalLikeNumber() == null) {
                             removeLikeToDb();
@@ -424,8 +417,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                             removeLikeToDb();
                             isCheckedLike = false;
                         }
+                        imgIcLike.setBackgroundResource(R.drawable.ic_like);
                     }
-                    Toast.makeText(getContext(), "LIke", Toast.LENGTH_SHORT).show();
                 } else {
                     DialogUtils.showMessage("Hãy đăng nhập để sử dụng chức năng này", getContext());
                 }

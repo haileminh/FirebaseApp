@@ -98,9 +98,7 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     public void onBindViewHolder(final HouseRcvAdapter.ViewHolder holder, int position) {
 
         final HouseModel houseModel = houseModelList.get(position);
-//        if (houseModel.getAddressModel().getDistance() < 1) {
         showData(holder, position);
-//        }
 
         holder.llHouse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,28 +153,28 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
 
         // Fill data comment house
         if (houseModel.getCommentModelList().size() > 0) {
-            holder.txtTotalComment.setText(String.valueOf(houseModel.getCommentModelList().size()));
-
-            int totalImageComment = 0;
             double totalScore = 0;
             double totalScoreMedium = 0;
+            holder.txtTotalComment.setText(String.valueOf(houseModel.getCommentModelList().size()));
+
             for (CommentModel values : houseModel.getCommentModelList()) {
-                totalImageComment += values.getListCommentImages().size();
                 totalScore += values.getScore();
             }
 
             totalScoreMedium = totalScore / (houseModel.getCommentModelList().size());
             holder.txtScoreMedium.setText(String.format("%.1f", totalScoreMedium));
 
-            if (totalImageComment > 0) {
-                holder.getTxtTotalImages.setText(String.valueOf(totalImageComment));
-            } else {
-                holder.getTxtTotalImages.setText("0");
-            }
         } else {
             holder.txtTotalComment.setText("0");
+        }
+
+        // Fill toatl houseImage
+        if (houseModel.getHouseImages().size() > 0) {
+            holder.getTxtTotalImages.setText(String.valueOf(houseModel.getHouseImages().size()));
+        } else {
             holder.getTxtTotalImages.setText("0");
         }
+
 
         String address = context.getString(R.string.dia_chi) + " " + houseModel.getAddressModel().getAddress();
         holder.txtAddress.setText(address);

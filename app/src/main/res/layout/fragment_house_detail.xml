@@ -197,16 +197,9 @@
 
                     <ImageView
                         android:id="@+id/ic_like"
-                        android:layout_width="@dimen/_24dp"
-                        android:layout_height="@dimen/_24dp"
+                        android:layout_width="@dimen/_32dp"
+                        android:layout_height="@dimen/_32dp"
                         android:src="@drawable/ic_like" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="@dimen/_4dp"
-                        android:text="Like" />
 
                     <TextView
                         android:id="@+id/txt_total_like"
@@ -218,6 +211,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
@@ -238,6 +232,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
@@ -258,6 +253,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 

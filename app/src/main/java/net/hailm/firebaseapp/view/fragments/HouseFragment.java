@@ -68,7 +68,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     private HouseRcvAdapter mHouseRcvAdapter;
     private List<HouseModel> houseModelList;
     private List<HouseModel> listData = new ArrayList<>();
-    private int itemLoaded = 10;
+    private int itemLoaded = 20;
 
     private SharedPreferences mSharedPreferences;
     private Location currentLocation;
@@ -147,8 +147,8 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (v.getChildAt(v.getChildCount() - 1) != null) {
                     if (scrollY >= v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight()) {
-                        itemLoaded += 10;
-                        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, itemLoaded - 10);
+                        itemLoaded += 20;
+                        mDbHelper.getListHouse(listener, currentLocation, itemLoaded, itemLoaded - 20);
                     }
                 }
             }
