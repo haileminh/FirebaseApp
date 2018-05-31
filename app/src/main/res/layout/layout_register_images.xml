@@ -33,7 +33,6 @@
             android:src="@drawable/ic_camara" />
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/img_2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -43,10 +42,10 @@
             android:layout_marginTop="@dimen/_4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_register_image"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_camara" />
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/img_3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -56,6 +55,7 @@
             android:layout_marginTop="@dimen/_4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_register_image"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_camara" />
     </LinearLayout>
 
@@ -78,7 +78,6 @@
             android:src="@drawable/ic_camara" />
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/img_5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -88,10 +87,10 @@
             android:layout_marginTop="@dimen/_4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_register_image"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_camara" />
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/img_6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -101,6 +100,7 @@
             android:layout_marginTop="@dimen/_4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_register_image"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_camara" />
     </LinearLayout>
 </LinearLayout>

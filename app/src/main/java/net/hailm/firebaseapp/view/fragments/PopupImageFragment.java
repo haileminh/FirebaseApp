@@ -24,6 +24,7 @@ import android.widget.Toast;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.listener.PopupImageCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -129,17 +130,21 @@ public class PopupImageFragment extends DialogFragment implements View.OnClickLi
         switch (requestCode) {
             case REQUEST_CODE_CAMERA:
                 if (resultCode == RESULT_OK && data != null) {
+                    dismiss();
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    popupImageCallback.onButtonClick(bitmap);
+                    Bitmap resizeBitmap = resizeBitmap(bitmap);
+                    popupImageCallback.onButtonClick(resizeBitmap);
                 }
                 break;
             case REQUEST_CODE_IMAGES:
                 if (resultCode == RESULT_OK && data != null) {
+                    dismiss();
                     Uri uri = data.getData();
                     try {
                         InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                        popupImageCallback.onButtonClick(bitmap);
+                        Bitmap resizeBitmap = resizeBitmap(bitmap);
+                        popupImageCallback.onButtonClick(resizeBitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -148,5 +153,16 @@ public class PopupImageFragment extends DialogFragment implements View.OnClickLi
             default:
                 break;
         }
+    }
+
+    public Bitmap resizeBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] bytes = outputStream.toByteArray();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; //Chỉ đọc thông tin ảnh, không đọc dữ liệu
+        options.inSampleSize = 5; //Scale bitmap xuống 5 lần
+        options.inJustDecodeBounds = false; //Cho phép đọc dữ liệu ảnh ảnh
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     }
 }
