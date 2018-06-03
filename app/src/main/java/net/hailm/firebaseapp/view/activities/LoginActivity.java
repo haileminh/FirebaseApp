@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
@@ -30,6 +31,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -58,6 +61,7 @@ import butterknife.OnClick;
 public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStateListener,
         GoogleApiClient.OnConnectionFailedListener {
     private static final int REQUEST_CODE_SIGN_IN = 1000;
+    private static final String TAG = "LoginActivity";
     private static int CHECK_PROVIDE_LOGIN = 0;
     @BindView(R.id.edt_username)
     EditText edtUsername;
@@ -112,7 +116,9 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
 
     private void initializeComponents() {
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+
+//        mAuth.signOut();
+
         mLoginService = new LoginService();
         mCallbackManager = CallbackManager.Factory.create();
         mSharedPreferences = getSharedPreferences(Constants.LOCATION, MODE_PRIVATE);
@@ -128,6 +134,35 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, mSignInOptions)
                 .build();
+
+        // User logged out when start Login Activity
+        logout();
+    }
+
+    public void logout() {
+        mApiClient.connect();
+        mApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+
+                mAuth.signOut();
+                if (mApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            if (status.isSuccess()) {
+                                LogUtils.d("User logged out when start Login Activity.");
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+                Log.d(TAG, "Google API Client Connection Suspended");
+            }
+        });
     }
 
     @OnClick({R.id.btn_login_email, R.id.btn_login_google, R.id.btn_register, R.id.tv_lost_pass, R.id.btn_login_facebook})
