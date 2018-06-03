@@ -46,13 +46,13 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="house">House</string>
-    <string name="place">Place</string>
+    <string name="house">Nhà trọ</string>
+    <string name="place">Vị trí</string>
     <string name="latest">Latest</string>
-    <string name="recent_date">Date</string>
+    <string name="recent_date">Theo ngày, tháng</string>
     <string name="category">Category</string>
     <string name="area">Area</string>
-    <string name="price">Price</string>
+    <string name="price">Theo giá phòng</string>
     <string name="nearby">Nearby</string>
     <string name="top_member">Top member</string>
     <string name="reviews">Reviews</string>
@@ -81,13 +81,14 @@
     <string name="chu_nha">Chủ nhà: </string>
     <string name="so_dien_thoai">Số điện thoại: </string>
     <string name="dien_tich">Diện tích: </string>
-    <string name="location">Location </string>
+    <string name="location">Theo khoảng cách</string>
     <string name="km">km </string>
-    <string name="home">Home </string>
-    <string name="search">Search </string>
+
+    <string name="home">Trang chủ </string>
+    <string name="search">Tìm kiếm </string>
     <string name="add">Đăng tin </string>
     <string name="setting">Setting </string>
-    <string name="profile">Profile </string>
+    <string name="profile">Cá nhân </string>
     <string name="gui">Gửi </string>
     <string name="read_more">Xem thêm </string>
     <string name="male">Nam</string>
