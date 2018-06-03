@@ -270,8 +270,14 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onButtonClick(double distance, long price, long acreage) {
-        String ditacneText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
-        txtDistance.setText(ditacneText);
+        if (distance == 0.0) {
+            String ditacneText = getString(R.string.tim_theo_khoang_cach) + " Tất cả";
+            txtDistance.setText(ditacneText);
+        } else {
+            String ditacneText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
+            txtDistance.setText(ditacneText);
+        }
+
         String boLoc = getString(R.string.gia_phong) + " lớn hơn " + price + " triệu đồng /"
                 + getString(R.string.dien_tich) + " lớn hơn " + acreage + " " + getString(R.string.m2);
         txtContentSearch.setText(boLoc);

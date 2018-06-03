@@ -48,12 +48,13 @@
         android:elevation="@dimen/_10dp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_14dp" />
+        android:textSize="@dimen/_14dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_80dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="@dimen/_140dp"
         android:elevation="@dimen/_10dp"
