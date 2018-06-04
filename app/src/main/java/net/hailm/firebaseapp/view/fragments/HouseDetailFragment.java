@@ -60,6 +60,7 @@ import net.hailm.firebaseapp.model.dbmodels.CommentModel;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.model.dbmodels.Users;
 import net.hailm.firebaseapp.model.dbmodels.UtilityModel;
+import net.hailm.firebaseapp.utils.DateUtils;
 import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.view.activities.LoginActivity;
 import net.hailm.firebaseapp.view.adapters.CommentAdapter;
@@ -96,6 +97,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     CircleIndicator indicator;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.txt_score_medium)
+    TextView txtScoreMedium;
     @BindView(R.id.txt_address_detail)
     TextView txtAddress;
     @BindView(R.id.txt_landlord_detail)
@@ -268,6 +271,13 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void showHouseDetail() {
+        Date date = getDate(houseModel);
+        String updateDate = getString(R.string.ngay) + " " + DateUtils.getDay(date) + " "
+                + getString(R.string.thang) + " " + DateUtils.getMonth(date) + " "
+                + getString(R.string.nam) + " " + DateUtils.getYear(date) + " "
+                + getString(R.string.luc) + " " + DateUtils.getTime(date);
+        txtDate.setText(updateDate);
+
         txtLandord.setText(houseModel.getLandlord());
         if (houseModel.getQuantity() > 0) {
             String quantity = getString(R.string.con) + " " + String.valueOf(houseModel.getQuantity()) + " " + getString(R.string.phong);
@@ -319,15 +329,23 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             txtTotalComments.setText("0");
         }
 
-//        int totalImageComment = 0;
-//        for (CommentModel values : houseModel.getCommentModelList()) {
-//            totalImageComment += values.getListCommentImages().size();
-//        }
-//        if (totalImageComment > 0) {
-//            txtTotalImages.setText(String.valueOf(totalImageComment));
-//        } else {
-//            txtTotalImages.setText("0");
-//        }
+        // Fill data comment house
+        if (houseModel.getCommentModelList().size() > 0) {
+            double totalScore = 0;
+            double totalScoreMedium = 0;
+            txtTotalComments.setText(String.valueOf(houseModel.getCommentModelList().size()));
+
+            for (CommentModel values : houseModel.getCommentModelList()) {
+                totalScore += values.getScore();
+            }
+
+            totalScoreMedium = totalScore / (houseModel.getCommentModelList().size());
+            txtScoreMedium.setText(String.format("%.1f", totalScoreMedium));
+
+        } else {
+            txtTotalComments.setText("0");
+        }
+
         if (houseModel.getHouseImages().size() > 0) {
             txtTotalImages.setText(String.valueOf(houseModel.getHouseImages().size()));
         } else {
@@ -385,6 +403,24 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             txtUtility.setText(getString(R.string.no_utility));
         }
 
+    }
+
+    /**
+     * getDateTime
+     *
+     * @param houseModel
+     * @return
+     */
+    private Date getDate(HouseModel houseModel) {
+        String updateDate = houseModel.getUpdateDate();
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm 'at' dd.MM.yyyy");
+        try {
+            Date date = format.parse(updateDate);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @OnClick({R.id.img_back_house_detail, R.id.txt_tel_detail, R.id.txt_like_detail,

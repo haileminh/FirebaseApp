@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
             android:drawablePadding="@dimen/_5dp"
-            android:text="99"
+            android:text="0"
             android:textAlignment="center" />
 
         <TextView
@@ -140,7 +140,7 @@
             android:layout_marginLeft="@dimen/_8dp"
             android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
             android:drawablePadding="@dimen/_5dp"
-            android:text="109"
+            android:text="0"
             android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>
