@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +34,12 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +48,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,7 +62,6 @@ import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.CommentApdaterCallback;
-import net.hailm.firebaseapp.listener.CommentListener;
 import net.hailm.firebaseapp.listener.RegisterHouseListener;
 import net.hailm.firebaseapp.model.dbhelpers.CommentDbHelper;
 import net.hailm.firebaseapp.model.dbhelpers.RegisterHouseDbHelper;
@@ -150,6 +159,9 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
     List<String> listUidCurrentLike;
     List<String> listUidLike;
 
+    private ShareDialog shareDialog;
+    private ShareLinkContent shareLinkContent;
+
     public HouseDetailFragment() {
     }
 
@@ -171,6 +183,8 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         } else {
             LogUtils.d("Bundle null in houseFragment");
         }
+        shareDialog = new ShareDialog(HouseDetailFragment.this);
+
         listUidCurrentLike = new ArrayList<>();
         listUidLike = new ArrayList<>();
 
@@ -460,7 +474,14 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
                 }
                 break;
             case R.id.txt_share_detail:
-                Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Share", Toast.LENGTH_SHORT).show();
+//                if (ShareDialog.canShow(ShareLinkContent.class)) {
+//                    shareLinkContent = new ShareLinkContent.Builder()
+//                            .setQuote("Lê Minh Hải")
+//                            .build();
+//                }
+//                shareDialog.show(shareLinkContent);
+                shareHouse();
                 break;
             case R.id.btn_comment:
                 if (!uid.equals("")) {
@@ -581,8 +602,35 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
-    @Override
+    private void shareHouse() {
+        if (houseModel.getHouseImages().size() > 0) {
+            StorageReference mStorageImage = FirebaseStorage.getInstance().getReference()
+                    .child(Constants.IMAGES)
+                    .child(houseModel.getHouseImages().get(0));
+            final long ONE_MEGABYTE = 1024 * 1024;
+            mStorageImage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    // Data for "images/island.jpg" is returns, use this as needed
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    SharePhoto photo = new SharePhoto.Builder()
+                            .setBitmap(bitmap)
+                            .build();
+                    SharePhotoContent content = new SharePhotoContent.Builder()
+                            .addPhoto(photo)
+                            .build();
+                    shareDialog.show(content);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+        }
+    }
 
+    @Override
     public void onStart() {
         super.onStart();
     }
