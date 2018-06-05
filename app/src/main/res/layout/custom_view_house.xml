@@ -9,30 +9,34 @@
     android:padding="@dimen/_4dp">
 
     <TextView
+        android:gravity="center_horizontal"
         android:id="@+id/txt_view_house_landlord"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4dp"
         android:textColor="@color/black"
         android:textSize="@dimen/_12dp" />
 
     <TextView
+        android:gravity="center_horizontal"
         android:id="@+id/txt_view_house_address"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4dp"
         android:textColor="@color/black"
         android:textSize="@dimen/_12dp" />
 
     <TextView
+        android:gravity="center_horizontal"
         android:id="@+id/txt_view_house_acreage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4dp"
         android:textColor="@color/black"
         android:textSize="@dimen/_12dp" />
 
     <LinearLayout
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
