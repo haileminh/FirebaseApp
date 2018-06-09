@@ -1,20 +1,30 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,9 +41,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
+import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.listener.PopupSearchCallback;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 import net.hailm.firebaseapp.view.dialogs.SearchDialog;
 
 import java.util.ArrayList;
@@ -50,7 +62,8 @@ import butterknife.Unbinder;
 
 public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnInfoWindowClickListener,
-        PopupSearchCallback {
+        PopupSearchCallback, HouseRcvAdapterCallback {
+    private static final int REQUEST_CODE_PERMISSION_CALL_PHONE = 1000;
     private View rootView;
     @BindView(R.id.edt_address)
     EditText edtAddress;
@@ -60,6 +73,11 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     TextView txtDistance;
     @BindView(R.id.txt_place_content_search)
     TextView txtContentSearch;
+    @BindView(R.id.bottom_sheet)
+    View bottomSheet;
+    @BindView(R.id.rcv_house_search)
+    RecyclerView mRcvHouseSearch;
+
     Unbinder unbinder;
 
     private GoogleMap mGoogleMap;
@@ -87,6 +105,10 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private List<Marker> markerList;
     private List<HouseModel> houseModelList;
 
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private HouseRcvAdapter mHouseRcvAdapter;
+    private String mTel;
+
     public PlaceFragment() {
         // Required empty public constructor
     }
@@ -113,6 +135,21 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         currentLocation = new Location("");
         currentLocation.setLatitude(latitude);
         currentLocation.setLongitude(longitude);
+
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    mBottomSheetBehavior.setPeekHeight(0);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     @Override
@@ -157,10 +194,12 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                     showHouseBySearch(houseModel);
                     String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
                     txtTotalSearch.setText(totalSearch);
+                    setAdapter(houseModelList, getActivity());
                 } else if (checkBtnSearch) {
                     showHouseByAddress(houseModel, edtAddress.getText().toString().trim());
                     String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
                     txtTotalSearch.setText(totalSearch);
+                    setAdapter(houseModelList, getActivity());
                 }
             }
         };
@@ -244,7 +283,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         transaction.commit();
     }
 
-    @OnClick({R.id.ll_search, R.id.img_search})
+    @OnClick({R.id.ll_search, R.id.img_search, R.id.txt_total_search})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_search:
@@ -262,6 +301,11 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                 checkSearchHouse = false;
                 edtAddress.setVisibility(View.VISIBLE);
                 initShowIconHouseInMap();
+                break;
+            case R.id.txt_total_search:
+                bottomSheet.setVisibility(View.VISIBLE);
+                mBottomSheetBehavior.setPeekHeight(300);
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 break;
             default:
                 break;
@@ -373,5 +417,80 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void setAdapter(List<HouseModel> houseModelList, Context context) {
+        if (context != null) {
+            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            mRcvHouseSearch.setLayoutManager(llm);
+            mHouseRcvAdapter = new HouseRcvAdapter(houseModelList, context, this);
+            mRcvHouseSearch.setAdapter(mHouseRcvAdapter);
+            mHouseRcvAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onItemCLick(HouseModel houseModel) {
+        HouseDetailFragment houseDetailFragment = new HouseDetailFragment();
+        manager = getActivity().getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.HOUSE_MODEL, houseModel);
+        houseDetailFragment.setArguments(bundle);
+
+        transaction.replace(android.R.id.content, houseDetailFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onBtnClick(String tel) {
+        mTel = tel;
+        requesPermisions();
+    }
+
+    private void phoneCall() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String call = "tel:" + mTel;
+        intent.setData(Uri.parse(call));
+        startActivity(intent);
+    }
+
+    private void requesPermisions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isPermissionGranted(android.Manifest.permission.CALL_PHONE)) {
+                phoneCall();
+            } else {
+                String[] permissions = new String[]{
+                        android.Manifest.permission.CALL_PHONE
+                };
+                ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_CODE_PERMISSION_CALL_PHONE);
+            }
+        } else {
+            phoneCall();
+        }
+    }
+
+    private Boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION_CALL_PHONE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    phoneCall();
+                } else {
+                    Toast.makeText(getActivity(), "Bạn cần cấp quyền để thực hiện chức năng này", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
