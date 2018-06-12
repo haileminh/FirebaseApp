@@ -161,7 +161,7 @@ public class PopupImageFragment extends DialogFragment implements View.OnClickLi
         byte[] bytes = outputStream.toByteArray();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; //Chỉ đọc thông tin ảnh, không đọc dữ liệu
-        options.inSampleSize = 5; //Scale bitmap xuống 5 lần
+        options.inSampleSize = 2; //Scale bitmap xuống 5 lần
         options.inJustDecodeBounds = false; //Cho phép đọc dữ liệu ảnh ảnh
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     }

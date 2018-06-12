@@ -23,7 +23,6 @@ public class HouseModel implements Parcelable {
     private long quantity;
     private String videoIntro;
     private String contents;
-    private long likeNumber;
     private List<String> totalLikeNumber;
     private List<String> utility;
     private List<String> houseImages;
@@ -32,11 +31,6 @@ public class HouseModel implements Parcelable {
     private List<Bitmap> bitmapList;
 
     public HouseModel() {
-    }
-
-    public HouseModel(String contents, long likeNumber) {
-        this.contents = contents;
-        this.likeNumber = likeNumber;
     }
 
     protected HouseModel(Parcel in) {
@@ -50,7 +44,6 @@ public class HouseModel implements Parcelable {
         quantity = in.readLong();
         videoIntro = in.readString();
         contents = in.readString();
-        likeNumber = in.readLong();
         totalLikeNumber = in.createStringArrayList();
         utility = in.createStringArrayList();
         houseImages = in.createStringArrayList();
@@ -182,14 +175,6 @@ public class HouseModel implements Parcelable {
         this.contents = contents;
     }
 
-    public long getLikeNumber() {
-        return likeNumber;
-    }
-
-    public void setLikeNumber(long likeNumber) {
-        this.likeNumber = likeNumber;
-    }
-
     public List<String> getTotalLikeNumber() {
         return totalLikeNumber;
     }
@@ -223,7 +208,6 @@ public class HouseModel implements Parcelable {
         dest.writeLong(quantity);
         dest.writeString(videoIntro);
         dest.writeString(contents);
-        dest.writeLong(likeNumber);
         dest.writeStringList(totalLikeNumber);
         dest.writeStringList(utility);
         dest.writeStringList(houseImages);
