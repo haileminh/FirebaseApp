@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,6 +28,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
@@ -34,6 +38,7 @@ import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
 import net.hailm.firebaseapp.model.dbhelpers.HouseDbHelper;
 import net.hailm.firebaseapp.model.dbmodels.HouseModel;
+import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 
 import java.text.ParseException;
@@ -48,6 +53,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
  * Created by hai.lm on 13/04/2018.
@@ -81,6 +89,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     private boolean onClickPrice = false;
 
     private String mTel;
+    private String uid;
 
     public HouseFragment() {
         // Required empty public constructor
@@ -115,6 +124,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
 
         currentLocation.setLatitude(Double.parseDouble(mSharedPreferences.getString(Constants.LATITUDE, "0")));
         currentLocation.setLongitude(Double.parseDouble(mSharedPreferences.getString(Constants.LONGITUDE, "0")));
+        uid = mSharedPreferences.getString(Constants.UID, "");
     }
 
     private void initializeListHouse() {
@@ -206,7 +216,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
             pgbHouse.setVisibility(View.GONE);
         }
     }
-    
+
     @OnClick({R.id.rd_recent_date, R.id.rd_location, R.id.rd_price})
     public void onViewClicked(View v) {
         switch (v.getId()) {
@@ -269,6 +279,38 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
     public void onBtnClick(String tel) {
         mTel = tel;
         requesPermisions();
+    }
+
+    @Override
+    public void deleteHouseByAdmin(final HouseModel houseModel) {
+        DialogUtils.showAlertDialog(getContext(), getString(R.string.ban_co_muon_xoa_nha_tro), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        break;
+                    case BUTTON_NEGATIVE:
+                        Toast.makeText(getContext(), "Xóa chứ sao ko", Toast.LENGTH_SHORT).show();
+                        deleteHouseOK(houseModel);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    private void deleteHouseOK(HouseModel houseModel) {
+        if (uid.equals(Constants.UID_ADMIN)) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+            databaseReference.child(Constants.HOUSES).child(houseModel.getHouseId()).setValue(null);
+            databaseReference.child(Constants.HOUSE_IMAGES).child(houseModel.getHouseId()).setValue(null);
+            databaseReference.child(Constants.ADDRESS).child(houseModel.getHouseId()).setValue(null);
+            databaseReference.child(Constants.COMMENTS).child(houseModel.getHouseId()).setValue(null);
+            initializeListHouse();
+        }
     }
 
     private void phoneCall() {

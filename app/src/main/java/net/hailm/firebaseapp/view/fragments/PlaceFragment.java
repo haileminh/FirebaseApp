@@ -450,6 +450,11 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         requesPermisions();
     }
 
+    @Override
+    public void deleteHouseByAdmin(HouseModel houseModel) {
+        // Delete house neu thich
+    }
+
     private void phoneCall() {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

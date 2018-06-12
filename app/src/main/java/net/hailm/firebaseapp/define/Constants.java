@@ -5,6 +5,10 @@ package net.hailm.firebaseapp.define;
  */
 
 public class Constants {
+    // UID ADMIN
+    public static  final String UID_ADMIN = "PTv47vc0oEN16DUiAlpZZh1yXXq2";
+
+
     // NOTE IN FIREBASE
     public static final String ORDERS = "ORDERS";
     public static final String DETAIL_ORDER = "DETAIL_ORDER";

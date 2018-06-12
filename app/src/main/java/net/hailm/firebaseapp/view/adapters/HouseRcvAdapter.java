@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,11 +49,16 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
     private StorageReference mStorageImage;
     private HouseRcvAdapterCallback mCallback;
 
+    private SharedPreferences mSharedPreferences;
+    private String uid;
+
     public HouseRcvAdapter(List<HouseModel> houseModelList, Context context, HouseRcvAdapterCallback callback) {
         this.houseModelList = houseModelList;
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.mCallback = callback;
+        mSharedPreferences = context.getSharedPreferences(Constants.LOCATION, Context.MODE_PRIVATE);
+        uid = mSharedPreferences.getString(Constants.UID, "");
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -107,6 +113,16 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 mCallback.onItemCLick(houseModel);
             }
         });
+
+        if (uid.equals(Constants.UID_ADMIN)) {
+            holder.llHouse.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mCallback.deleteHouseByAdmin(houseModel);
+                    return true;
+                }
+            });
+        }
 
         holder.btnContact.setOnClickListener(new View.OnClickListener() {
             @Override

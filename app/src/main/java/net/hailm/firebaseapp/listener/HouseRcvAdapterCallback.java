@@ -8,4 +8,6 @@ public interface HouseRcvAdapterCallback {
 
     void onBtnClick(String tel);
 
+    void deleteHouseByAdmin(HouseModel houseModel);
+
 }
