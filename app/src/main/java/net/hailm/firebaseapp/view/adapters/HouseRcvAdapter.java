@@ -131,7 +131,7 @@ public class HouseRcvAdapter extends RecyclerView.Adapter<HouseRcvAdapter.ViewHo
                 + context.getString(R.string.luc) + " " + DateUtils.getTime(date);
         holder.txtUpdateDate.setText(updateDate);
 
-        NumberFormat formatPrice = new DecimalFormat("$##,###,###");
+        NumberFormat formatPrice = new DecimalFormat("##,###,###");
         String price = context.getResources().getString(R.string.gia_phong) + " " + formatPrice.format(houseModel.getPrice()) + " " + context.getString(R.string.dong);
         holder.txtPrice.setText(price);
 

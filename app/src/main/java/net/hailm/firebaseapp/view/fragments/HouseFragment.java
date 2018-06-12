@@ -206,7 +206,7 @@ public class HouseFragment extends Fragment implements HouseRcvAdapterCallback {
             pgbHouse.setVisibility(View.GONE);
         }
     }
-
+    
     @OnClick({R.id.rd_recent_date, R.id.rd_location, R.id.rd_price})
     public void onViewClicked(View v) {
         switch (v.getId()) {

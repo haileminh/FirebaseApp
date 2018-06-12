@@ -307,7 +307,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         String acreage = getString(R.string.dien_tich) + " " + String.valueOf(houseModel.getAcreage()) + " " + getString(R.string.m2);
         txtAcreage.setText(acreage);
 
-        NumberFormat formatPrice = new DecimalFormat("$##,###,###");
+        NumberFormat formatPrice = new DecimalFormat("##,###,###");
         String price = getString(R.string.gia_phong) + " " + formatPrice.format(houseModel.getPrice()) + " " + getString(R.string.dong);
         txtPrice.setText(price);
 
