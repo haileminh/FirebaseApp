@@ -222,7 +222,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         callback = new CommentApdaterCallback() {
             @Override
             public void onLongItemClick(CommentModel commentModel) {
-                if (commentModel.getUid().equals(uid)) {
+                if (commentModel.getUid().equals(uid) || uid.equals(Constants.UID_ADMIN)) {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                             .child(Constants.COMMENTS)
                             .child(houseModel.getHouseId())
