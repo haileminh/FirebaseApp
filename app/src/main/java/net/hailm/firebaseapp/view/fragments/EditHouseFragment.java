@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,10 +58,12 @@ import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -194,8 +198,63 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
 
         mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mSupportMapFragment.getMapAsync(this);
-
+        inputText();
         showData();
+    }
+
+    private void inputText() {
+        edtPrice.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    edtPrice.removeTextChangedListener(this);
+
+                    Locale local = new Locale("id", "id");
+                    String replaceable = String.format("[Rp,.\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String cleanString = s.toString().replaceAll(replaceable,
+                            "");
+
+                    double parsed;
+                    try {
+                        parsed = Double.parseDouble(cleanString);
+                    } catch (NumberFormatException e) {
+                        parsed = 0.00;
+                    }
+
+                    NumberFormat formatter = NumberFormat
+                            .getCurrencyInstance(local);
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setParseIntegerOnly(true);
+                    String formatted = formatter.format((parsed));
+
+                    String replace = String.format("[Rp\\s]",
+                            NumberFormat.getCurrencyInstance().getCurrency()
+                                    .getSymbol(local));
+                    String clean = formatted.replaceAll(replace, "");
+
+                    current = formatted;
+                    edtPrice.setText(clean);
+                    edtPrice.setSelection(clean.length());
+                    edtPrice.addTextChangedListener(this);
+                }
+            }
+        });
     }
 
     private void showData() {
@@ -399,8 +458,17 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
         String lamdlord = edtLamdlord.getText().toString().trim();
         houseModel.setLandlord(lamdlord);
 
-        long price = Long.parseLong(edtPrice.getText().toString().trim());
-        houseModel.setPrice(price);
+        String price = "";
+        String text = edtPrice.getText().toString().trim();
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) != '.') {
+                price += text.charAt(i);
+            }
+        }
+
+//        long priceLong = Long.parseLong(edtPrice.getText().toString().trim());
+        long priceLong = Long.parseLong(price);
+        houseModel.setPrice(priceLong);
 
         long acreage = Long.parseLong(edtAcreage.getText().toString().trim());
         houseModel.setAcreage(acreage);
