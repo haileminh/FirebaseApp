@@ -9,6 +9,7 @@ public class AddressModel {
     private double latitude;
     private double longitude;
     private double distance;
+    private String addressByLocation;
 
     public AddressModel() {
     }
@@ -43,6 +44,14 @@ public class AddressModel {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public String getAddressByLocation() {
+        return addressByLocation;
+    }
+
+    public void setAddressByLocation(String addressByLocation) {
+        this.addressByLocation = addressByLocation;
     }
 }
 

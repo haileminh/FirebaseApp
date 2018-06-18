@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +60,7 @@ import net.hailm.firebaseapp.utils.DialogUtils;
 import net.hailm.firebaseapp.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -512,16 +515,39 @@ public class EditHouseFragment extends Fragment implements OnMapReadyCallback, P
         if (onCLickBtnLocation) {
             addressModel.setLatitude(myLatitude);
             addressModel.setLongitude(myLongtitude);
+
+
+            String addressByLocation = getAddress(myLatitude, myLongtitude);
+            addressModel.setAddressByLocation(addressByLocation);
         } else {
 
             addressModel.setLatitude(currentLatidude);
             addressModel.setLongitude(currentLongitude);
+
+
+            String addressByLocation = getAddress(currentLatidude, currentLongitude);
+            addressModel.setAddressByLocation(addressByLocation);
         }
 
 
         String address = edtAddress.getText().toString().trim();
         addressModel.setAddress(address);
         return addressModel;
+    }
+
+    public String getAddress(double latitude, double longitude) {
+        String address = " ";
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<android.location.Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addressList.size() > 0) {
+                Address address1 = addressList.get(0);
+                address = address1.getAddressLine(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     private void deleteImage(final int i) {
