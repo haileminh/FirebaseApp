@@ -397,10 +397,14 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void showHouseByAddress(HouseModel houseModel, String address) {
+        String addressByLocation = "";
         String a = houseModel.getAddressModel().getAddress().toLowerCase();
+        if (houseModel.getAddressModel().getAddressByLocation() != null) {
+            addressByLocation = houseModel.getAddressModel().getAddressByLocation().toLowerCase();
+        }
         String b = address.toLowerCase();
 
-        if (a.contains(b)) {
+        if (a.contains(b) || addressByLocation.contains(b)) {
             houseModelList.add(houseModel);
             mGoogleMap.clear();
             markerList.clear();
