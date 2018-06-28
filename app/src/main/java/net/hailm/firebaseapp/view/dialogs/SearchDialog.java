@@ -7,8 +7,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.blankj.utilcode.util.LogUtils;
 
 import net.hailm.firebaseapp.R;
 import net.hailm.firebaseapp.listener.PopupSearchCallback;
@@ -21,10 +24,17 @@ public class SearchDialog extends Dialog {
     private SeekBar sbDistance;
     private SeekBar sbPrice;
     private SeekBar sbAcreage;
+    private RadioButton rdSortByDate;
+    private RadioButton rdSortByLocation;
+    private RadioButton rdSortByPrice;
 
     private int progressDistance = 0;
     private int progressPrice = 0;
     private int progressAcreage = 0;
+
+    private boolean mSortByDate;
+    private boolean mSortByLocation;
+    private boolean mSortByPrice;
 
 
     private PopupSearchCallback popupSearchCallback;
@@ -45,11 +55,15 @@ public class SearchDialog extends Dialog {
         setUpSeekBarPrice();
         setUpSeekBarAcreage();
 
-
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupSearchCallback.onButtonClick(Double.valueOf(progressDistance), Long.valueOf(progressPrice), Long.valueOf(progressAcreage));
+                popupSearchCallback.onButtonClick(Double.valueOf(progressDistance)
+                        , Long.valueOf(progressPrice)
+                        , Long.valueOf(progressAcreage)
+                        , rdSortByDate.isChecked()
+                        , rdSortByLocation.isChecked()
+                        , rdSortByPrice.isChecked());
                 dismiss();
             }
         });
@@ -63,6 +77,9 @@ public class SearchDialog extends Dialog {
         sbPrice = findViewById(R.id.sb_prices);
         sbAcreage = findViewById(R.id.sb_acreage);
         btnOk = findViewById(R.id.btn_ok);
+        rdSortByDate = findViewById(R.id.rd_sort_by_date);
+        rdSortByLocation = findViewById(R.id.rd_sort_by_location);
+        rdSortByPrice = findViewById(R.id.rd_sort_by_price);
     }
 
     private void setUpSeekBarDistance() {

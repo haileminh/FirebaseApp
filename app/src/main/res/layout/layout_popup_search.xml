@@ -58,6 +58,47 @@
         android:layout_marginTop="@dimen/_12dp"
         android:max="50" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12dp"
+        android:gravity="center_horizontal"
+        android:text="@string/sap_xep_theo"
+        android:textColor="@color/colorPrimary" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rd_sort_by_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_8dp"
+            android:checked="true"
+            android:text="Thời gian"
+            android:textColor="@color/colorPrimary" />
+
+        <RadioButton
+            android:id="@+id/rd_sort_by_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_8dp"
+            android:text="Khoảng cách"
+            android:textColor="@color/colorPrimary" />
+
+        <RadioButton
+            android:id="@+id/rd_sort_by_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_8dp"
+            android:text="Giá phòng"
+            android:textColor="@color/colorPrimary" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="wrap_content"

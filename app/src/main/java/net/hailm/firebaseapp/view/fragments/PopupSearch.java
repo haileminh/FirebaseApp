@@ -67,7 +67,10 @@ public class PopupSearch extends DialogFragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupSearchCallback.onButtonClick(Double.valueOf(progressDistance), Long.valueOf(progressPrice), Long.valueOf(progressAcreage));
+                popupSearchCallback.onButtonClick(Double.valueOf(progressDistance)
+                        , Long.valueOf(progressPrice)
+                        , Long.valueOf(progressAcreage)
+                        , false, false, false);
                 dismiss();
             }
         });

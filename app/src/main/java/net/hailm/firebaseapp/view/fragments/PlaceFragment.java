@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.hailm.firebaseapp.R;
+import net.hailm.firebaseapp.define.AppConst;
 import net.hailm.firebaseapp.define.Constants;
 import net.hailm.firebaseapp.listener.HouseListener;
 import net.hailm.firebaseapp.listener.HouseRcvAdapterCallback;
@@ -48,7 +49,12 @@ import net.hailm.firebaseapp.model.dbmodels.HouseModel;
 import net.hailm.firebaseapp.view.adapters.HouseRcvAdapter;
 import net.hailm.firebaseapp.view.dialogs.SearchDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -101,6 +107,9 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private double mDistance;
     private long mPrice;
     private long mAcreage;
+    private boolean mSortByLocation = false;
+    private boolean mSortByDate = false;
+    private boolean mSortByPrice = false;
 
     private List<Marker> markerList;
     private List<HouseModel> houseModelList;
@@ -193,12 +202,18 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
                 } else if (checkSearchHouse) {
                     showHouseBySearch(houseModel);
                     String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
-                    txtTotalSearch.setText(totalSearch);
+                    if (totalSearch != null) {
+                        txtTotalSearch.setText(totalSearch);
+                    }
+
                     setAdapter(houseModelList, getActivity());
                 } else if (checkBtnSearch) {
                     showHouseByAddress(houseModel, edtAddress.getText().toString().trim());
                     String totalSearch = String.valueOf(houseModelList.size()) + " phòng";
-                    txtTotalSearch.setText(totalSearch);
+                    if (totalSearch != null) {
+                        txtTotalSearch.setText(totalSearch);
+                    }
+
                     setAdapter(houseModelList, getActivity());
                 }
             }
@@ -313,7 +328,8 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onButtonClick(double distance, long price, long acreage) {
+    public void onButtonClick(double distance, long price, long acreage
+            , boolean sortByDate, boolean sortByLocation, boolean sortByPrice) {
         if (distance == 0.0) {
             String ditacneText = getString(R.string.tim_theo_khoang_cach) + " Tất cả";
             txtDistance.setText(ditacneText);
@@ -331,6 +347,10 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         mDistance = distance;
         mPrice = price;
         mAcreage = acreage;
+
+        mSortByDate = sortByDate;
+        mSortByLocation = sortByLocation;
+        mSortByPrice = sortByPrice;
         initShowIconHouseInMap();
     }
 
@@ -338,59 +358,35 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         if (mDistance != 0.0) {
             if (houseModel.getAddressModel().getDistance() <= mDistance) {
                 if (mPrice == 0 && mAcreage == 0) {
-                    houseModelList.add(houseModel);
-                    mGoogleMap.clear();
-                    markerList.clear();
-                    showMarkerAddressBySearch();
+                    processData(houseModel);
                 } else if (mPrice != 0 && mAcreage != 0) {
                     if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
-                        houseModelList.add(houseModel);
-                        mGoogleMap.clear();
-                        markerList.clear();
-                        showMarkerAddressBySearch();
+                        processData(houseModel);
                     }
                 } else if (mPrice != 0 && mAcreage == 0) {
                     if (houseModel.getPrice() >= mPrice * 1000000) {
-                        houseModelList.add(houseModel);
-                        mGoogleMap.clear();
-                        markerList.clear();
-                        showMarkerAddressBySearch();
+                        processData(houseModel);
                     }
                 } else if (mAcreage != 0 && mPrice == 0) {
                     if (houseModel.getAcreage() >= mAcreage) {
-                        houseModelList.add(houseModel);
-                        mGoogleMap.clear();
-                        markerList.clear();
-                        showMarkerAddressBySearch();
+                        processData(houseModel);
                     }
                 }
             }
         } else {
             if (mPrice == 0 && mAcreage == 0) {
-                houseModelList.add(houseModel);
-                mGoogleMap.clear();
-                markerList.clear();
-                showMarkerAddressBySearch();
+                processData(houseModel);
             } else if (mPrice != 0 && mAcreage != 0) {
                 if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
-                    houseModelList.add(houseModel);
-                    mGoogleMap.clear();
-                    markerList.clear();
-                    showMarkerAddressBySearch();
+                    processData(houseModel);
                 }
             } else if (mPrice != 0 && mAcreage == 0) {
                 if (houseModel.getPrice() >= mPrice * 1000000) {
-                    houseModelList.add(houseModel);
-                    mGoogleMap.clear();
-                    markerList.clear();
-                    showMarkerAddressBySearch();
+                    processData(houseModel);
                 }
             } else if (mAcreage != 0 && mPrice == 0) {
                 if (houseModel.getAcreage() >= mAcreage) {
-                    houseModelList.add(houseModel);
-                    mGoogleMap.clear();
-                    markerList.clear();
-                    showMarkerAddressBySearch();
+                    processData(houseModel);
                 }
             }
         }
@@ -410,6 +406,59 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
             markerList.clear();
             showMarkerAddressBySearch();
         }
+    }
+
+    private void processData(HouseModel houseModel) {
+        houseModelList.add(houseModel);
+        if (mSortByLocation) {
+            sortByUpdateLocation();
+        } else if (mSortByDate) {
+            sortByUpdateDate();
+        } else if (mSortByPrice) {
+            sortByUpdatePrice();
+        }
+        mGoogleMap.clear();
+        markerList.clear();
+        showMarkerAddressBySearch();
+    }
+
+    private void sortByUpdateDate() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            Date date1;
+            Date date2;
+
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                String updateDate1 = o1.getUpdateDate();
+                String updateDate2 = o2.getUpdateDate();
+                try {
+                    date1 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate1);
+                    date2 = new SimpleDateFormat(AppConst.DATE_FORMAT).parse(updateDate2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                LogUtils.d("SortBy Date: " + o1.getUpdateDate());
+                return date2.compareTo(date1);
+            }
+        });
+    }
+
+    private void sortByUpdateLocation() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                return o1.getAddressModel().getDistance() > o2.getAddressModel().getDistance() ? 1 : -1;
+            }
+        });
+    }
+
+    private void sortByUpdatePrice() {
+        Collections.sort(houseModelList, new Comparator<HouseModel>() {
+            @Override
+            public int compare(HouseModel o1, HouseModel o2) {
+                return o1.getPrice() > o2.getPrice() ? 1 : -1;
+            }
+        });
     }
 
     @Override
