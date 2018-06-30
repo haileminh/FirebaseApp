@@ -105,8 +105,10 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private boolean checkSearchHouse = false;
     private boolean checkBtnSearch = false;
     private double mDistance;
-    private long mPrice;
-    private long mAcreage;
+    private long mPriceMin;
+    private long mPriceMax;
+    private long mAcreageMin;
+    private long mAcreageMax;
     private boolean mSortByLocation = false;
     private boolean mSortByDate = false;
     private boolean mSortByPrice = false;
@@ -328,25 +330,39 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onButtonClick(double distance, long price, long acreage
+    public void onButtonClick(double distance, long priceMin, long priceMax, long acreageMin, long acreageMax
             , boolean sortByDate, boolean sortByLocation, boolean sortByPrice) {
         if (distance == 0.0) {
-            String ditacneText = getString(R.string.tim_theo_khoang_cach) + " Tất cả";
-            txtDistance.setText(ditacneText);
+            String distanceText = getString(R.string.tim_theo_khoang_cach) + " Tất cả";
+            txtDistance.setText(distanceText);
         } else {
-            String ditacneText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
-            txtDistance.setText(ditacneText);
+            String distanceText = getString(R.string.tim_theo_khoang_cach) + " " + distance + " " + getString(R.string.km);
+            txtDistance.setText(distanceText);
+        }
+        String textPrice, txtAcreage;
+        if (priceMin == -1) {
+            textPrice = " Tất cả \n";
+        } else {
+            textPrice = "Từ " + priceMin + " đến " + priceMax + " đồng \n ";
         }
 
-        String boLoc = getString(R.string.gia_phong) + " lớn hơn " + price + " triệu đồng /"
-                + getString(R.string.dien_tich) + " lớn hơn " + acreage + " " + getString(R.string.m2);
+        if (acreageMin == -1) {
+            txtAcreage = " Tất cả \n";
+        } else {
+            txtAcreage = " từ " + acreageMin + " m2 đến " + acreageMax + " m2";
+        }
+
+        String boLoc = getString(R.string.gia_phong) + textPrice
+                + getString(R.string.dien_tich) + txtAcreage;
         txtContentSearch.setText(boLoc);
 
         checkSearchHouse = true;
         checkAllHouse = false;
         mDistance = distance;
-        mPrice = price;
-        mAcreage = acreage;
+        mPriceMin = priceMin;
+        mPriceMax = priceMax;
+        mAcreageMin = acreageMin;
+        mAcreageMax = acreageMax;
 
         mSortByDate = sortByDate;
         mSortByLocation = sortByLocation;
@@ -357,35 +373,37 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private void showHouseBySearch(HouseModel houseModel) {
         if (mDistance != 0.0) {
             if (houseModel.getAddressModel().getDistance() <= mDistance) {
-                if (mPrice == 0 && mAcreage == 0) {
+                if (mPriceMin == -1 && mPriceMax == -1 && mAcreageMin == -1 && mAcreageMax == -1) {
                     processData(houseModel);
-                } else if (mPrice != 0 && mAcreage != 0) {
-                    if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
+                } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin != -1 && mAcreageMax != -1) {
+                    if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax
+                            && houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
                         processData(houseModel);
                     }
-                } else if (mPrice != 0 && mAcreage == 0) {
-                    if (houseModel.getPrice() >= mPrice * 1000000) {
+                } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin == -1 && mAcreageMax == -1) {
+                    if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax) {
                         processData(houseModel);
                     }
-                } else if (mAcreage != 0 && mPrice == 0) {
-                    if (houseModel.getAcreage() >= mAcreage) {
+                } else if (mAcreageMin != -1 && mAcreageMax != -1 && mPriceMin == -1 && mPriceMax == -1) {
+                    if (houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
                         processData(houseModel);
                     }
                 }
             }
         } else {
-            if (mPrice == 0 && mAcreage == 0) {
+            if (mPriceMin == -1 && mPriceMax == -1 && mAcreageMin == -1 && mAcreageMax == -1) {
                 processData(houseModel);
-            } else if (mPrice != 0 && mAcreage != 0) {
-                if (houseModel.getPrice() >= mPrice * 1000000 && houseModel.getAcreage() >= mAcreage) {
+            } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin != -1 && mAcreageMax != -1) {
+                if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax
+                        && houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
                     processData(houseModel);
                 }
-            } else if (mPrice != 0 && mAcreage == 0) {
-                if (houseModel.getPrice() >= mPrice * 1000000) {
+            } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin == -1 && mAcreageMax == -1) {
+                if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax) {
                     processData(houseModel);
                 }
-            } else if (mAcreage != 0 && mPrice == 0) {
-                if (houseModel.getAcreage() >= mAcreage) {
+            } else if (mAcreageMin != -1 && mAcreageMax != -1 && mPriceMin == -1 && mPriceMax == -1) {
+                if (houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
                     processData(houseModel);
                 }
             }
