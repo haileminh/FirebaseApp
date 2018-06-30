@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +30,11 @@ public class SearchDialog extends Dialog {
     private TextView txtDistance;
     private Button btnOk;
     private SeekBar sbDistance;
+    private LinearLayout llDistance;
 
+    private RadioGroup radioGroup;
+
+    private EditText edtAddress;
     private EditText edtPriceMin;
     private EditText edtPriceMax;
     private EditText edtAcreageMin;
@@ -37,8 +44,9 @@ public class SearchDialog extends Dialog {
     private RadioButton rdSortByLocation;
     private RadioButton rdSortByPrice;
 
-    private int progressDistance = 0;
+    private double progressDistance = 0.0;
 
+    private String mAddress = "";
     private long mPriceMin = -1;
     private long mPriceMax = -1;
     private long mAcreageMin = -1;
@@ -66,7 +74,8 @@ public class SearchDialog extends Dialog {
             public void onClick(View v) {
                 getData();
                 if (checkInputPrices() == true && checkInputAcreage() == true) {
-                    popupSearchCallback.onButtonClick(Double.valueOf(progressDistance)
+                    popupSearchCallback.onButtonClick(mAddress
+                            , Double.valueOf(progressDistance)
                             , mPriceMin
                             , mPriceMax
                             , mAcreageMin
@@ -79,13 +88,31 @@ public class SearchDialog extends Dialog {
 
             }
         });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.rd_address) {
+                    llDistance.setVisibility(View.GONE);
+                    edtAddress.setVisibility(View.VISIBLE);
+                }
+                if (checkedId == R.id.rd_vitri) {
+                    llDistance.setVisibility(View.VISIBLE);
+                    edtAddress.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void initializeComponents() {
         txtDistance = findViewById(R.id.txt_popup_distance);
         sbDistance = findViewById(R.id.sb_distance);
+        llDistance = findViewById(R.id.ll_distance);
         btnOk = findViewById(R.id.btn_ok);
 
+        radioGroup = findViewById(R.id.rd_group);
+
+        edtAddress = findViewById(R.id.edt_address_search);
         edtPriceMin = findViewById(R.id.edt_price_min);
         edtPriceMax = findViewById(R.id.edt_price_max);
         edtAcreageMin = findViewById(R.id.edt_acreage_min);
@@ -100,6 +127,11 @@ public class SearchDialog extends Dialog {
     }
 
     private void getData() {
+        String address = edtAddress.getText().toString().trim();
+        if (!address.equals("")) {
+            mAddress = address;
+        }
+
         String priceMin = String.valueOf(edtPriceMin.getText());
         if (!priceMin.equals("")) {
             mPriceMin = getPrice(edtPriceMin);
@@ -176,8 +208,8 @@ public class SearchDialog extends Dialog {
             // Khi giá trị progress thay đổi.
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValues, boolean fromUser) {
-                progressDistance = progressValues;
-                txtDistance.setText("Trong bán kính " + progressValues + " km");
+                progressDistance = progressValues * 0.5;
+                txtDistance.setText("Trong bán kính " + progressValues * 0.5+ " km");
             }
 
             // Khi người dùng bắt đầu cử chỉ kéo thanh gạt.

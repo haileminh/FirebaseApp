@@ -104,6 +104,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     private boolean checkAllHouse = true;
     private boolean checkSearchHouse = false;
     private boolean checkBtnSearch = false;
+    private String mAddress = "";
     private double mDistance;
     private long mPriceMin;
     private long mPriceMax;
@@ -330,7 +331,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onButtonClick(double distance, long priceMin, long priceMax, long acreageMin, long acreageMax
+    public void onButtonClick(String address, double distance, long priceMin, long priceMax, long acreageMin, long acreageMax
             , boolean sortByDate, boolean sortByLocation, boolean sortByPrice) {
         if (distance == 0.0) {
             String distanceText = getString(R.string.tim_theo_khoang_cach) + " Tất cả";
@@ -358,6 +359,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
 
         checkSearchHouse = true;
         checkAllHouse = false;
+        mAddress = address;
         mDistance = distance;
         mPriceMin = priceMin;
         mPriceMax = priceMax;
@@ -371,6 +373,14 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void showHouseBySearch(HouseModel houseModel) {
+        if (!mAddress.equals("")) {
+            showHouseByAddress(houseModel, mAddress);
+        } else {
+            showHouseByLocation(houseModel);
+        }
+    }
+
+    private void showHouseByLocation(HouseModel houseModel) {
         if (mDistance != 0.0) {
             if (houseModel.getAddressModel().getDistance() <= mDistance) {
                 if (mPriceMin == -1 && mPriceMax == -1 && mAcreageMin == -1 && mAcreageMax == -1) {
@@ -419,10 +429,22 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
         String b = address.toLowerCase();
 
         if (a.contains(b) || addressByLocation.contains(b)) {
-            houseModelList.add(houseModel);
-            mGoogleMap.clear();
-            markerList.clear();
-            showMarkerAddressBySearch();
+            if (mPriceMin == -1 && mPriceMax == -1 && mAcreageMin == -1 && mAcreageMax == -1) {
+                processData(houseModel);
+            } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin != -1 && mAcreageMax != -1) {
+                if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax
+                        && houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
+                    processData(houseModel);
+                }
+            } else if (mPriceMin != -1 && mPriceMax != -1 && mAcreageMin == -1 && mAcreageMax == -1) {
+                if (houseModel.getPrice() >= mPriceMin && houseModel.getPrice() <= mPriceMax) {
+                    processData(houseModel);
+                }
+            } else if (mAcreageMin != -1 && mAcreageMax != -1 && mPriceMin == -1 && mPriceMax == -1) {
+                if (houseModel.getAcreage() >= mAcreageMin && houseModel.getAcreage() <= mAcreageMax) {
+                    processData(houseModel);
+                }
+            }
         }
     }
 

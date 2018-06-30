@@ -13,20 +13,60 @@
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/_18dp" />
 
-    <TextView
-        android:id="@+id/txt_popup_distance"
-        android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/rd_group"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_32dp"
-        android:text="Trong bán kính"
-        android:textColor="@color/colorPrimary" />
+        android:layout_gravity="right">
 
-    <SeekBar
-        android:id="@+id/sb_distance"
+        <RadioButton
+            android:id="@+id/rd_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Theo khu vực" />
+
+        <RadioButton
+            android:id="@+id/rd_vitri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Theo vị trị hiện tại" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/ll_distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12dp"
-        android:max="30" />
+        android:layout_marginTop="@dimen/_16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_popup_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trong bán kính"
+            android:textColor="@color/colorPrimary" />
+
+        <SeekBar
+            android:id="@+id/sb_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12dp"
+            android:max="30" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edt_address_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:background="@drawable/background_edit_text"
+        android:hint="@string/nhap_khu_vuc"
+        android:paddingLeft="@dimen/_6dp"
+        android:singleLine="true"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/txt_16sp"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="match_parent"
