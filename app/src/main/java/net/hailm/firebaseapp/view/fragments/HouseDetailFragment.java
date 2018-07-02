@@ -625,7 +625,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
+                    Toast.makeText(getContext(), "Bạn không chia sẻ nhà trọ này, do kích thước ảnh quá lớn", Toast.LENGTH_SHORT).show();
                 }
             });
         }

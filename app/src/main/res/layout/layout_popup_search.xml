@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Tìm kiếm thông tin nhà trọ theo bộ lọc dưới"
+        android:text="@string/content_search"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_18dp" />
+        android:textSize="@dimen/txt_18sp" />
 
     <RadioGroup
         android:id="@+id/rd_group"
@@ -23,14 +23,14 @@
             android:id="@+id/rd_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Theo khu vực" />
+            android:text="@string/search_by_area" />
 
         <RadioButton
             android:id="@+id/rd_vitri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Theo vị trị hiện tại" />
+            android:text="@string/search_by_location" />
     </RadioGroup>
 
     <LinearLayout
@@ -44,7 +44,7 @@
             android:id="@+id/txt_popup_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trong bán kính"
+            android:text="@string/trong_ban_kinh"
             android:textColor="@color/colorPrimary" />
 
         <SeekBar
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
-        android:text="Lọc theo giá (đồng)"
+        android:text="@string/loc_theo_gia"
         android:textColor="@color/colorPrimary" />
 
     <LinearLayout
@@ -88,19 +88,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_edit_text"
             android:gravity="center_horizontal"
-            android:hint="Thấp nhất"
+            android:hint="@string/edt_min"
             android:inputType="number"
             android:paddingBottom="@dimen/_3dp"
             android:paddingTop="@dimen/_5dp"
-            android:textSize="@dimen/_16dp" />
+            android:textSize="@dimen/txt_16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_12dp"
             android:layout_marginRight="@dimen/_12dp"
-            android:inputType="number"
-            android:text="đến" />
+            android:text="@string/txt_den" />
 
         <EditText
             android:id="@+id/edt_price_max"
@@ -108,18 +107,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_edit_text"
             android:gravity="center_horizontal"
-            android:hint="cao nhất"
+            android:hint="@string/edt_max"
             android:inputType="number"
             android:paddingBottom="@dimen/_3dp"
             android:paddingTop="@dimen/_5dp"
-            android:textSize="@dimen/_16dp" />
+            android:textSize="@dimen/txt_16sp" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
-        android:text="Lọc theo diện tích (mét vuông)"
+        android:text="@string/loc_theo_dien_tich"
         android:textColor="@color/colorPrimary" />
 
     <LinearLayout
@@ -135,19 +134,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_edit_text"
             android:gravity="center_horizontal"
-            android:hint="Thấp nhất"
+            android:hint="@string/edt_min"
             android:inputType="number"
             android:paddingBottom="@dimen/_3dp"
             android:paddingTop="@dimen/_5dp"
-            android:textSize="@dimen/_16dp" />
+            android:textSize="@dimen/txt_16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_12dp"
             android:layout_marginRight="@dimen/_12dp"
-            android:inputType="number"
-            android:text="đến" />
+            android:text="@string/txt_den" />
 
         <EditText
             android:id="@+id/edt_acreage_max"
@@ -155,11 +153,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_edit_text"
             android:gravity="center_horizontal"
-            android:hint="cao nhất"
+            android:hint="@string/edt_max"
             android:inputType="number"
             android:paddingBottom="@dimen/_3dp"
             android:paddingTop="@dimen/_5dp"
-            android:textSize="@dimen/_16dp" />
+            android:textSize="@dimen/txt_16sp" />
     </LinearLayout>
 
     <TextView
@@ -181,25 +179,25 @@
             android:id="@+id/rd_sort_by_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_8dp"
+            android:layout_weight="1"
             android:checked="true"
-            android:text="Thời gian"
+            android:text="@string/txt_thoi_gian"
             android:textColor="@color/colorPrimary" />
 
         <RadioButton
             android:id="@+id/rd_sort_by_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_8dp"
-            android:text="Khoảng cách"
+            android:layout_weight="1"
+            android:text="@string/txt_khoan_cach"
             android:textColor="@color/colorPrimary" />
 
         <RadioButton
             android:id="@+id/rd_sort_by_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_8dp"
-            android:text="Giá phòng"
+            android:layout_weight="1"
+            android:text="@string/txt_gia_phong"
             android:textColor="@color/colorPrimary" />
     </RadioGroup>
 
@@ -210,6 +208,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_12dp"
         android:background="@drawable/btn_dang_tin"
-        android:text="Áp dụng"
+        android:text="@string/txt_ap_dung"
         android:textColor="@color/white" />
 </LinearLayout>

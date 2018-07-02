@@ -73,7 +73,7 @@ public class SearchDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 getData();
-                if (checkInputPrices() == true && checkInputAcreage() == true) {
+                if (checkInputPrices() == true && checkInputAcreage() == true && checkCompareDataPrice() == true && checkCompareDataAcreage() == true) {
                     popupSearchCallback.onButtonClick(mAddress
                             , Double.valueOf(progressDistance)
                             , mPriceMin
@@ -167,6 +167,38 @@ public class SearchDialog extends Dialog {
         return priceLong;
     }
 
+    private boolean checkCompareDataPrice() {
+        String priceMin = edtPriceMin.getText().toString().trim();
+        String priceMax = edtPriceMax.getText().toString().trim();
+
+        if (!priceMin.equals("") && !priceMax.equals("")) {
+            if (getPrice(edtPriceMin) > getPrice(edtPriceMax)) {
+                Toast.makeText(getContext(), "Giá lớn nhất phải lớn hơn giá nhỏ nhất", Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private boolean checkCompareDataAcreage() {
+        String acreageMin = edtAcreageMin.getText().toString().trim();
+        String acreageMax = edtAcreageMax.getText().toString().trim();
+        if (!acreageMin.equals("") && !acreageMax.equals("")) {
+            if (Long.parseLong(acreageMin) > Long.parseLong(acreageMax)) {
+                Toast.makeText(getContext(), "Giá lớn nhất phải lớn hơn giá nhỏ nhất", Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
+    }
+
     private boolean checkInputPrices() {
         String priceMin = edtPriceMin.getText().toString().trim();
         String priceMax = edtPriceMax.getText().toString().trim();
@@ -209,7 +241,7 @@ public class SearchDialog extends Dialog {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValues, boolean fromUser) {
                 progressDistance = progressValues * 0.5;
-                txtDistance.setText("Trong bán kính " + progressValues * 0.5+ " km");
+                txtDistance.setText("Trong bán kính " + progressValues * 0.5 + " km");
             }
 
             // Khi người dùng bắt đầu cử chỉ kéo thanh gạt.

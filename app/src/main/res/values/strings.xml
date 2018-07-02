@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firebase App</string>
+    <string name="app_name">Tìm trọ</string>
     <string name="phien_ban">Phiên bản </string>
     <string name="facebook_app_id">434133683705239</string>
     <string name="fb_login_protocol_scheme">fb434133683705239</string>
@@ -63,6 +63,21 @@
     <string name="ok">Ok</string>
     <string name="clean">Clean</string>
     <string name="cancel">Cancel</string>
+
+
+    <string name="content_search">Tìm kiếm thông tin nhà trọ theo bộ lọc dưới.</string>
+    <string name="search_by_area">Theo khu vực</string>
+    <string name="search_by_location">Theo vị trí hiện tại</string>
+    <string name="trong_ban_kinh">Trong bán kính</string>
+    <string name="loc_theo_gia">Lọc theo giá (đồng)</string>
+    <string name="loc_theo_dien_tich">Lọc theo diện tích (mét vuông)</string>
+    <string name="edt_min">Thấp nhất</string>
+    <string name="txt_den">đến</string>
+    <string name="edt_max">cao nhất</string>
+    <string name="txt_thoi_gian">Thời gian</string>
+    <string name="txt_khoan_cach">Khoảng cách</string>
+    <string name="txt_gia_phong">Giá phòng</string>
+    <string name="txt_ap_dung">Áp dụng</string>
 
 
     <string name="thong_tin_chi_tiet">Thông tin chi tiết</string>
