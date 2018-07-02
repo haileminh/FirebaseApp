@@ -1,6 +1,7 @@
 package net.hailm.firebaseapp.view.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.ShareMediaContent;
@@ -482,7 +484,7 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
 //                            .build();
 //                }
 //                shareDialog.show(shareLinkContent);
-                shareHouse();
+                showBottomSheetShare();
                 break;
             case R.id.btn_comment:
                 if (!uid.equals("")) {
@@ -601,6 +603,28 @@ public class HouseDetailFragment extends Fragment implements OnMapReadyCallback 
         } else {
             Toast.makeText(getActivity(), getString(R.string.chua_nhap_noi_dung_binh_luan), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showBottomSheetShare() {
+        new BottomSheet.Builder(getActivity()).title(getString(R.string.share_facebook))
+                .sheet(R.menu.share_data)
+                .listener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case R.id.facebook:
+                                try {
+                                    shareHouse();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(getActivity(), getString(R.string.no_facebook), Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }).grid().show();
     }
 
     private void shareHouse() {

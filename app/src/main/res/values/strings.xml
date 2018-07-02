@@ -58,6 +58,10 @@
     <string name="top_member">Top member</string>
     <string name="reviews">Reviews</string>
     <string name="blog">Blogs</string>
+    <string name="share_facebook">Chia sẻ facebook</string>
+    <string name="facebook">Facebook</string>
+    <string name="no_facebook">Máy của bạn chưa cài ứng dụng Facebook</string>
+    <string name="twitter">Twitter</string>
 
     <string name="birthday">Chọn ngày sinh.</string>
     <string name="ok">Ok</string>
