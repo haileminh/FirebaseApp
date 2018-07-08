@@ -6,15 +6,16 @@
     android:padding="12dp">
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo_dse2" />
+        android:src="@drawable/ic_logo_house" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16dp"
         android:text="@string/khoi_phuc_mat_khau"
         android:textColor="@color/home_color"
         android:textSize="@dimen/txt_14sp" />
