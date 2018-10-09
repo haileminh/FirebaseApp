@@ -296,7 +296,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
 //                    Toast.makeText(LoginActivity.this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
                     editor.putString(Constants.CHECK_ACOUNT_LOGIN, String.valueOf(1));
-                    editor.commit();
+                    editor.apply();
                     LogUtils.d("Login success");
                 }
 
@@ -363,7 +363,7 @@ public class LoginActivity extends BaseActivity implements FirebaseAuth.AuthStat
                 editor.putString(Constants.UID, String.valueOf(user.getUid()));
                 editor.putString(Constants.USER_NAME, String.valueOf(user.getDisplayName()));
                 editor.putString(Constants.EMAIL, String.valueOf(user.getEmail()));
-                editor.commit();
+                editor.apply();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {

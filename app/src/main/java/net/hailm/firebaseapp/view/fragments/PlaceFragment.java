@@ -1,5 +1,6 @@
 package net.hailm.firebaseapp.view.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -467,6 +468,7 @@ public class PlaceFragment extends Fragment implements OnMapReadyCallback,
             Date date1;
             Date date2;
 
+            @SuppressLint("SimpleDateFormat")
             @Override
             public int compare(HouseModel o1, HouseModel o2) {
                 String updateDate1 = o1.getUpdateDate();
